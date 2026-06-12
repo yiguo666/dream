@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream 的空间</title>
+    <style>
+        /* 1. 基础氛围：干净、清透、散漫 */
+        body {
+            font-family: '-apple-system', 'Noto Sans SC', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc; /* 依旧是你喜欢的明亮清透微蓝底 */
+            color: #334155;
+        }
+
+        /* 2. 页头：保留深邃色调，但整体调轻盈，更像个人工作室 */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
+            color: #fff;
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 3px solid #0069f3;
+        }
+
+        header h1 {
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+        }
+
+        header p {
+            color: #94a3b8;
+            margin: 0;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        header p span {
+            color: #0069f3;
+            font-weight: bold;
+        }
+
+        /* 3. 经典导航：保留最基础的顶部锚点导航 */
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #ffffff; 
+            padding: 6px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        nav a {
+            color: #64748b;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #0069f3;
+            transform: scale(1.05);
+        }
+
+        /* 4. 核心容器 */
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* 找回旧版的休闲区 */
+        .welcome-section {
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 105, 243, 0.03);
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 105, 243, 0.04);
+        }
+
+        .welcome-section h2 {
+            color: #0069f3;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+
+        .welcome-section p {
+            color: #475569;
+            font-size: 1.05rem;
+        }
+
+        /* 【全新互动玩法：功能卡片网格】 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        /* 卡片做成可点击的便签样式 */
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .interactive-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0,0,0,0.02);
+            /* 延续你最钟爱的 1.2s 慢速率呼吸过渡 */
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                        box-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+                        border-color 0.6s ease;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 鼠标悬停：缓缓浮起，边框变蓝，产生温柔的蓝色光晕 */
+        .interactive-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 105, 243, 0.08);
+            border-color: rgba(0, 105, 243, 0.3);
+        }
+
+        .interactive-card h3 {
+            margin: 0 0 10px 0;
+            color: #0069f3;
+            font-size: 1.25rem;
+        }
+
+        .interactive-card p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* 联系我板块 */
+        .contact-section {
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 105, 243, 0.03);
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .contact-section h2 { color: #0069f3; margin-top: 0; }
+        .highlight { font-weight: bold; color: #0069f3; }
+
+        /* 5. 底部 */
+        footer {
+            background-color: #1e293b;
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            font-size: 0.85rem;
+        }
+
+        /* 入场动画 */
+        @keyframes containerFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-wrapper {
+            animation: containerFade 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fade-in-wrapper">
+        <header>
+            <h1>Dream的主页</h1>
+            <p>Dream <span>|</span> Designer <span>|</span> Website</p>
+        </header>
+
+        <nav>
+            <a href="#home">首页</a>
+            <a href="webmaster.html">关于我</a>
+            <!--a href="picture.html">畅览</a-->
+		    <!-- test_暂时关闭此功能区-->
+            <a href="shopindex.html">畅享</a>
+        </nav>
+
+        <main>
+            <!-- 找回旧版：原汁原味的无负担休闲简介 -->
+            <section class="welcome-section" id="home">
+                <h2>欢迎来到dream的个人主页！</h2>
+                <p>在这里，我将分享我的创意和经验，畅享一切资源。</p>
+            </section>
+
+            <!-- 【新增好玩的互动区】：把去处变成可以摆弄、点击的方块 -->
+            <div class="grid-container">
+                
+                <a href="webmaster.html" class="card-link">
+                    <div class="interactive-card">
+                        <h3>🔍 关于站长</h3>
+                        <p>推开这扇门，里面藏着一个正在实时运转的黑客帝国控制台...</p>
+                    </div>
+                </a>
+
+                <a href="picture.html" class="card-link">
+                    <div class="interactive-card">
+                        <h3>🎨 畅览画廊</h3>
+                        <p>随手收集的日系幻想风插画与视觉灵感，进来坐坐，洗洗眼睛。</p>
+                    </div>
+                </a>
+
+                <a href="shopindex.html" class="card-link">
+                    <div class="interactive-card">
+                        <h3>📦 畅享工坊</h3>
+                        <p>我日常打磨出的各种绿色、免安装、解压即用的效率小工具中心。</p>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- 联系板块 -->
+            <section class="contact-section">
+                <h2>联系我</h2>
+                <p>如果你对我感兴趣，欢迎随时联系我。</p>
+                <p><span class="highlight">Email:</span> 1771232219@qq.com</p>
+            </section>
+        </main>
+
+        <footer>
+            &copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.
+        </footer>
+    </div>
+
+</body>
+</html>

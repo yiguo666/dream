@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">作品详情 - Dream 的个人网站</title>
+    <style>
+        /* 1. 基础氛围与列表页绝对统一 */
+        body { 
+            font-family: '-apple-system', 'Noto Sans SC', "Microsoft YaHei", sans-serif; 
+            background-color: #f4f7fc; 
+            margin: 0; 
+            padding: 0; 
+            color: #334155;
+        }
+        
+        .header-site { 
+            background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
+            padding: 45px 0; 
+            text-align: center; 
+            border-bottom: 3px solid #0069f3;
+        }
+        .header-site h1 { 
+            color: #ffffff; 
+            font-size: 2.2rem; 
+            margin: 0; 
+            font-weight: 500;
+            letter-spacing: 3px;
+        }
+        .header-site p { 
+            color: #94a3b8; 
+            font-size: 14px; 
+            margin: 8px 0 0 0; 
+            letter-spacing: 1px;
+        }
+
+        nav { 
+            background-color: #ffffff; 
+            padding: 12px 0; 
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        nav a { 
+            color: #64748b; 
+            text-decoration: none; 
+            margin: 0 25px; 
+            font-weight: bold; 
+            font-size: 0.95rem;
+            transition: all 0.5s ease;
+            display: inline-block;
+        }
+        nav a:hover { 
+            color: #0069f3; 
+            transform: scale(1.05);
+        }
+
+        /* 2. 主卡片区：空气感十足的圆角白卡 */
+        main { 
+            max-width: 1200px; /* 稍微拉宽，提升呼吸感 */
+            margin: 40px auto; 
+            padding: 45px; /* 适当增加内边距，让布局更高级 */
+            background: #ffffff; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 35px rgba(160, 174, 192, 0.06); 
+            /* 1.5s 的极其温和的入场浮动 */
+            transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), 
+                        box-shadow 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            box-sizing: border-box;
+        }
+        main:hover {
+            transform: translateY(-2px); /* 轻微浮动，防止动作过大破坏稳重感 */
+            box-shadow: 0 20px 45px rgba(0, 105, 243, 0.06);
+        }
+
+        .detail-flex { 
+            display: flex; 
+            gap: 45px; /* 略微收紧间距，使视觉中心更紧凑 */
+        }
+        
+        /* 轮播展示区优化 */
+        .img-side { 
+            flex: 1; /* 左右均分，让比例更加和谐平衡 */
+            position: relative; 
+            min-width: 0; /* 预防图片撑爆容器 */
+        }
+        .main-img-box { 
+            border: 1px solid rgba(0,0,0,0.03); 
+            height: 460px; /* 适度拉高主图区，给作品截图更完美的视觉焦点 */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: #fcfdfe; 
+            border-radius: 14px; 
+            position: relative; 
+            overflow: hidden;
+        }
+        .main-img-box img { 
+            max-width: 95%; 
+            max-height: 95%; 
+            object-fit: contain; 
+            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+
+        /* 轮播左右切换小按钮 */
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 40px; height: 40px; background: rgba(15, 23, 42, 0.3); color: #fff;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 16px; border: none; backdrop-filter: blur(4px);
+            transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 10;
+        }
+        .nav-btn:hover { background: rgba(0, 105, 243, 0.8); }
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
+
+        /* 底部缩略图滚动列表 */
+        .thumb-list { display: flex; gap: 12px; margin-top: 18px; justify-content: center; flex-wrap: wrap; }
+        .thumb { 
+            width: 64px; height: 64px; border: 2px solid transparent; cursor: pointer; 
+            opacity: 0.4; border-radius: 8px; object-fit: cover; 
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .thumb.active { border-color: #0069f3; opacity: 1; transform: scale(1.05); }
+
+        /* 右侧信息排版区 */
+        .info-side { 
+            flex: 1; /* 与左侧等宽 */
+            display: flex; 
+            flex-direction: column; 
+            min-width: 0;
+        }
+        .info-side h1 { margin: 0; font-size: 1.8rem; color: #1e293b; font-weight: 600; line-height: 1.3; }
+        .p-price { 
+            color: #ff5722; 
+            font-size: 30px; 
+            font-weight: 700; 
+            margin: 15px 0; 
+            font-family: 'Georgia', serif;
+        }
+        
+        /* 核心特点打勾列表 */
+        .feature-list { list-style: none; padding: 0; margin: 20px 0; }
+        .feature-list li { color: #475569; margin-bottom: 12px; font-size: 15px; display: flex; align-items: center; line-height: 1.5; }
+        .feature-list li::before { 
+            content: "✦"; 
+            color: #0069f3; 
+            font-weight: bold; 
+            margin-right: 12px; 
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* 授权展示框 */
+        .auth-box { 
+            background: #f0fdf4; 
+            border: 1px dashed #22c55e; 
+            color: #16a34a; 
+            padding: 10px 18px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            margin-bottom: 25px; 
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        /* 技术参数展台 */
+        .specs-table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 25px; }
+        .specs-table th { text-align: left; padding: 12px 5px; border-bottom: 2px solid #0069f3; font-size: 16px; color: #1e293b; font-weight: 600; }
+        .specs-table td { padding: 14px 5px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .specs-table td:first-child { color: #94a3b8; width: 35%; }
+        .specs-table td:last-child { color: #334155; font-weight: 500; }
+
+        /* 按钮功能组 */
+        .btn-group { display: flex; gap: 15px; margin-top: auto; padding-top: 20px; }
+        .btn-buy { 
+            background: #0069f3; color: white; padding: 14px 45px; text-decoration: none; 
+            border-radius: 10px; font-weight: bold; font-size: 15px; transition: background 0.4s;
+            box-shadow: 0 4px 14px rgba(0, 105, 243, 0.2); cursor: pointer; border: none;
+        }
+        .btn-buy:hover { background: #0056c7; }
+        .btn-back { 
+            border: 1px solid #cbd5e1; color: #64748b; padding: 13px 35px; text-decoration: none; 
+            border-radius: 10px; font-weight: bold; font-size: 15px; transition: all 0.4s;
+            text-align: center;
+        }
+        .btn-back:hover { background: #f8fafc; color: #1e293b; border-color: #94a3b8; }
+
+        /* 多渠道下载优雅展示区面板 */
+        .channels-wrapper {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: none; /* 默认隐藏，点击后展开 */
+            animation: fadeInChannel 0.4s ease-out;
+        }
+        .channels-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .channels-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .channel-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+        .channel-link-btn:hover {
+            border-color: #0069f3;
+            color: #0069f3;
+            background: #f0f7ff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,105,243,0.06);
+        }
+
+        footer { background: #1e293b; color: #94a3b8; text-align: center; padding: 25px; margin-top: 60px; font-size: 0.85rem; }
+        
+        /* 动画过渡区 */
+        @keyframes pageUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInChannel {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-wrapper {
+            animation: pageUp 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* 移动端/平板设备响应式自适应布局 */
+        @media (max-width: 850px) {
+            main { margin: 20px; padding: 20px; }
+            .detail-flex { flex-direction: column; gap: 30px; }
+            .main-img-box { height: 320px; }
+            .channels-list { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
+            .btn-buy, .btn-back { width: 100%; box-sizing: border-box; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fade-wrapper">
+        <div class="header-site">
+            <h1>Dream 的个人网站</h1>
+            <p>Dream <span>|</span> Designer <span>|</span> Website</p>
+        </div>
+        <nav><a href="shopindex.html">← 返回工坊列表</a></nav>
+
+        <main>
+            <div id="loading" style="text-align:center; padding:100px; font-size:18px; color:#94a3b8;">🪐 正在从星空节点载入作品详情...</div>
+            
+            <div id="content" class="detail-flex" style="display:none;">
+                <div class="img-side" id="slide-container">
+                    <div class="main-img-box">
+                        <button class="nav-btn prev-btn" onclick="changeImg(-1)">❮</button>
+                        <img id="main-display-img" src="">
+                        <button class="nav-btn next-btn" onclick="changeImg(1)">❯</button>
+                    </div>
+                    <div class="thumb-list" id="thumb-container"></div>
+                </div>
+                
+                <div class="info-side">
+                    <h1 id="p-name">加载中...</h1>
+                    <div class="p-price" id="p-price"></div>
+                    <p id="p-desc" style="color:#475569; line-height:1.8; white-space: pre-wrap; font-size: 14px; margin-bottom: 20px;"></p>
+                    
+                    <ul class="feature-list" id="p-features"></ul>
+                    
+                    <div>
+                        <div class="auth-box" id="p-auth">授权方式：加载中...</div>
+                    </div>
+                    
+                    <table class="specs-table">
+                        <thead><tr><th colspan="2">技术规格</th></tr></thead>
+                        <tbody id="p-specs"></tbody>
+                    </table>
+                    
+                    <div class="channels-wrapper" id="download-panel">
+                        <div class="channels-title">🚀 请选择高速下载航道：</div>
+                        <div class="channels-list" id="channels-btn-container"></div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button id="btn-download" onclick="toggleDownloadPanel()" class="btn-buy">立即获取</button>
+                        <a href="shopindex.html" class="btn-back">返回工坊</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>&copy; 2026 Designed by Dream. All Rights Reserved.</footer>
+    </div>
+
+    <script src="products.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('id') || 'office';
+        const p = (typeof ALL_PRODUCTS !== 'undefined') ? ALL_PRODUCTS[pid] : null;
+        
+        let currentIdx = 0;
+        let timer = null;
+
+        if(p) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'flex';
+            
+            document.getElementById('p-name').innerText = p.name;
+            document.getElementById('p-price').innerText = p.price;
+            document.getElementById('p-desc').innerText = p.desc;
+            document.title = p.name + " - 作品详情";
+
+            const authText = p.authType ? p.authType.trim() : "免费软件";
+            document.getElementById('p-auth').innerText = "💡 授权方式：" + authText;
+            
+            if (/购买|付费|订阅|永久/.test(authText)) {
+                const authBox = document.getElementById('p-auth');
+                authBox.style.backgroundColor = '#fff3e0';
+                authBox.style.borderColor = '#ffe0b2';
+                authBox.style.color = '#e65100';
+            }
+
+            // 【关键重构】：多渠道动态渲染逻辑
+            const panelContainer = document.getElementById('channels-btn-container');
+            
+            if (p.downloadLinks && Object.keys(p.downloadLinks).length > 0) {
+                let buttonsHtml = '';
+                Object.entries(p.downloadLinks).forEach(([channelName, channelUrl]) => {
+                    buttonsHtml += `<a href="${channelUrl}" target="_blank" class="channel-link-btn">⚡ ${channelName}</a>`;
+                });
+                panelContainer.innerHTML = buttonsHtml;
+            } 
+            else if (p.panLink && p.panLink.trim() !== '') {
+                panelContainer.innerHTML = `<a href="${p.panLink}" target="_blank" class="channel-link-btn">⚡ 默认高速下载通道</a>`;
+            } 
+            else {
+                panelContainer.innerHTML = `<a href="javascript:alert('该作品暂未开放下载\\n请通过邮箱联系作者获取：1771232219@qq.com')" class="channel-link-btn" style="grid-column: span 2;">📬 联络作者获取 (1771232219@qq.com)</a>`;
+            }
+
+            if (p.features && p.features.length > 0) {
+                document.getElementById('p-features').innerHTML = p.features.map(f => `<li>${f}</li>`).join('');
+            } else {
+                document.getElementById('p-features').innerHTML = '<li>暂无核心特性介绍</li>';
+            }
+            
+            if (p.specs && Object.keys(p.specs).length > 0) {
+                document.getElementById('p-specs').innerHTML = Object.entries(p.specs).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+            } else {
+                document.getElementById('p-specs').innerHTML = `
+                    <tr><td>版本</td><td>${p.ver || 'V1.0.0'}</td></tr>
+                    <tr><td>文件大小</td><td>${p.size || '未知大小'}</td></tr>
+                    <tr><td>运行环境</td><td>${p.env || 'Windows'}</td></tr>
+                `;
+            }
+            
+            const carouselImages = (p.imgs && p.imgs.length > 0) ? p.imgs : [p.logo];
+            p.imgs = carouselImages; 
+
+            document.getElementById('thumb-container').innerHTML = carouselImages.map((src, i) => 
+                `<img src="${src}" class="thumb" onclick="setImg(${i})">`
+            ).join('');
+
+            updateDisplay();
+            startAuto();
+
+            const slideArea = document.getElementById('slide-container');
+            slideArea.onmouseenter = stopAuto;
+            slideArea.onmouseleave = startAuto;
+        } else {
+            document.getElementById('loading').innerText = "🪐 抱歉，该作品已被下架或航道不存在！";
+        }
+
+        function toggleDownloadPanel() {
+            const panel = document.getElementById('download-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function updateDisplay() {
+            const mainImg = document.getElementById('main-display-img');
+            mainImg.style.opacity = '0.1';
+            setTimeout(() => {
+                mainImg.src = p.imgs[currentIdx];
+                mainImg.style.opacity = '1';
+            }, 150);
+            const thumbs = document.querySelectorAll('.thumb');
+            thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+        }
+
+        function changeImg(step) {
+            currentIdx = (currentIdx + step + p.imgs.length) % p.imgs.length;
+            updateDisplay();
+        }
+
+        function setImg(i) {
+            currentIdx = i;
+            updateDisplay();
+        }
+
+        function startAuto() {
+            if(p && p.imgs && p.imgs.length > 1) timer = setInterval(() => changeImg(1), 4000);
+        }
+
+        function stopAuto() {
+            clearInterval(timer);
+        }
+    </script>
+</body>
+</html>

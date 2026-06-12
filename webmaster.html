@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于 Dream - 站长个人主页</title>
+    <style>
+        /* 1. 物理层级：锁定一页占满 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 禁止溢出滚动 */
+            background-color: #f4f7fc; /* 微蓝灰底 */
+            position: relative;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* 纵向排列：头-中-尾 */
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. 头部 */
+        header {
+            background-color: #1e293b; /* 雅黑色 */
+            color: #fff;
+            text-align: center;
+            padding: 4vh 0; /* 略微缩窄，给核心卡片留空间 */
+            flex-shrink: 0;
+            border-bottom: 3px solid #0069f3;
+        }
+
+        header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        header h1 span {
+            color: #0069f3;
+        }
+
+        /* 3. 中间主体 */
+        main {
+            flex: 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        section {
+            width: 95%;
+            max-width: 650px;
+            padding: 30px 35px;
+            background-color: #fff;
+            box-shadow: 0 15px 35px rgba(0, 105, 243, 0.04), 0 5px 15px rgba(0,0,0,0.02);
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(0, 105, 243, 0.08);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); /* 延续慢速率 */
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 105, 243, 0.08);
+        }
+
+        /* 头像 */
+        .profile-img {
+            border-radius: 50%;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px;
+            display: block;
+            border: 4px solid #0069f3;
+            background-color: #fff;
+            transition: transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 1s ease;
+            cursor: pointer;
+        }
+
+        .profile-img:hover {
+            transform: rotate(360deg);
+            box-shadow: 0 0 20px 8px rgba(0, 105, 243, 0.15);
+        }
+
+        h2 { color: #0f172a; margin-bottom: 12px; font-size: 1.4rem; font-weight: 700; }
+        p { line-height: 1.7; color: #334155; margin: 8px 0; font-size: 0.98rem; }
+        .highlight { color: #0069f3; font-weight: 600; }
+
+        /* 【核心重构：黑客帝国动态控制台】 */
+        .status-terminal {
+            background: #0d1117; /* 深黑客色 */
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #58a6ff; /* 极客蓝 */
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        /* 黑客帝国背景画布（隐藏在终端下层做特效） */
+        #matrix-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.12; /* 淡淡的绿雨，不影响文字阅读 */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .terminal-content {
+            position: relative;
+            z-index: 1; /* 保证文字在画布上方 */
+            min-height: 90px;
+        }
+
+        .command-line {
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            visibility: hidden; /* 默认隐藏，由JS动态打字显现 */
+        }
+
+        /* 正在打印的行显示光标 */
+        .command-line.typing::after {
+            content: '█';
+            animation: blink 0.6s infinite;
+            color: #58a6ff;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .social-icons {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin: 0 20px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.5s ease;
+        }
+
+        .social-icons a::after {
+            content: ''; position: absolute; width: 100%; transform: scaleX(0);
+            height: 2px; bottom: -4px; left: 0; background-color: #0069f3;
+            transform-origin: bottom right; transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .social-icons a:hover { color: #0069f3; }
+        .social-icons a:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+
+        /* 4. 底部：把返回按钮整合进卡片尾部，防止上下分裂 */
+        .action-area {
+            margin-top: 25px;
+            padding-top: 15px;
+        }
+
+        button {
+            padding: 12px 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background-color: #0069f3;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0, 105, 243, 0.15);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        button:hover {
+            background-color: #1e293b;
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(30, 41, 59, 0.2);
+        }
+
+        /* 入场动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Dream <span>//</span> Space</h1>
+    </header>
+
+    <main>
+        <section class="fade-in">
+            <img src="picture/dlam.png" alt="Dream" class="profile-img">
+            
+            <h2>你好，我是 <span class="highlight">Dream</span></h2>
+            
+            <p>基于兴趣与直觉构建的空间，是我的第四维度。</p>
+            <p>在这里，我不定义身份，只沉淀逻辑、工具与值得被固化的灵感。</p>
+            <p>在 <span class="highlight">畅享工坊</span> 计划中,自制轻量工具均以绿色纯净形式不定期共享给大家。</p>
+
+            <div class="status-terminal">
+                <canvas id="matrix-canvas"></canvas>
+                
+                <div class="terminal-content">
+                    <div class="command-line" data-text="> Initialize Identity... Done."></div>
+                    <div class="command-line" data-text="> OS Environment: Windows 10 [x64]"></div>
+                    <div class="command-line" data-text="> Mission: Optimize Logic & Build Tools"></div>
+                    <div class="command-line" data-text="> Status: Core Engine is running smoothly..."></div>
+                </div>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://space.bilibili.com/2027317299" target="_blank">BiliBili 空间</a>
+                <a href="#" onclick="alert('摄影画廊还在整理中，敬请期待！'); return false;">500PX 画廊</a>
+            </div>
+
+            <div class="action-area">
+                <a href="index.html" style="text-decoration: none;">
+                    <button>返回主页世界</button>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 1. 黑客帝国「数字/代码雨」后台特效
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // 让画布自适应卡片大小
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const katakana = "010101ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>//$$";
+        const alphabet = katakana.split("");
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(13, 17, 23, 0.06)'; // 产生拖尾阴影
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0'; // 经典的黑客帝国绿色数字雨
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 40); // 维持流畅刷新频率
+
+
+        // 2. 仿极客终端「动态逐行打字机」逻辑
+        const lines = document.querySelectorAll('.command-line');
+        let currentLineIndex = 0;
+
+        function typeLine() {
+            if (currentLineIndex >= lines.length) return; // 全部打字完成
+
+            const line = lines[currentLineIndex];
+            const fullText = line.getAttribute('data-text');
+            line.style.visibility = 'visible';
+            line.classList.add('typing');
+
+            let currentCharIndex = 0;
+            line.innerText = '';
+
+            const timer = setInterval(() => {
+                if (currentCharIndex < fullText.length) {
+                    line.innerText += fullText.charAt(currentCharIndex);
+                    currentCharIndex++;
+                } else {
+                    clearInterval(timer);
+                    line.classList.remove('typing'); // 移除当前光标
+                    currentLineIndex++;
+                    setTimeout(typeLine, 300); // 停顿0.3秒后开始打印下一行
+                }
+            }, 35); // 掌控打字速度（单位：毫秒）
+        }
+
+        // 页面缓冲完毕后 0.5 秒正式启动打印程序
+        setTimeout(typeLine, 500);
+    </script>
+</body>
+</html>

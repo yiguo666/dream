@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>畅享工坊 - Dream 的个人空间</title>
+    <style>
+        /* 1. 基础氛围：干净、清透、散漫休闲 */
+        body { 
+            font-family: '-apple-system', 'Noto Sans SC', "Microsoft YaHei", sans-serif; 
+            background-color: #f4f7fc; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+            color: #334155;
+        }
+        
+        /* 2. 页头：完美继承主页的午夜星空蓝 */
+        .header-site { 
+            background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
+            padding: 45px 0; 
+            text-align: center; 
+            border-bottom: 3px solid #0069f3;
+        }
+        .header-site h1 { 
+            color: #ffffff; 
+            font-size: 2.2rem; 
+            margin: 0; 
+            font-weight: 500;
+            letter-spacing: 3px; 
+        }
+        .header-site p { 
+            color: #94a3b8; 
+            font-size: 14px; 
+            margin: 8px 0 0 0; 
+            letter-spacing: 1px;
+        }
+
+        /* 3. 导航栏：轻盈干净的白色悬浮条 */
+        nav { 
+            background-color: #ffffff; 
+            padding: 10px 0; 
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        nav a { 
+            color: #64748b; 
+            text-decoration: none; 
+            margin: 0 25px; 
+            font-weight: bold; 
+            font-size: 0.95rem;
+            transition: all 0.5s ease;
+            display: inline-block;
+        }
+        nav a:hover, nav a.active { 
+            color: #0069f3; 
+            transform: scale(1.05);
+        }
+
+        /* 主容器限制 */
+        main { 
+            flex: 1; 
+            max-width: 1100px; 
+            margin: 40px auto; 
+            padding: 0 20px; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+        
+        /* 代替死板粗边框，换成精致的标题下晕染线 */
+        .section-title { 
+            color: #1e293b; 
+            font-size: 1.4rem; 
+            font-weight: 600; 
+            margin-bottom: 30px; 
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -6px; width: 50%; height: 3px;
+            background-color: rgba(0, 105, 243, 0.4);
+            border-radius: 2px;
+        }
+
+        /* 网格布局：保持高级感的3列 */
+        .products-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+        }
+
+        /* 4. 软件卡片：彻底剥离商业硬线条，注入 1.2s 极慢呼吸动效 */
+        .product-card { 
+            background: #ffffff; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 8px 25px rgba(160, 174, 192, 0.05); 
+            /* 1.2s 的慢速率动画，滑过去的时候极为解压舒适 */
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                        box-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+                        border-color 0.6s ease; 
+            display: flex; 
+            flex-direction: column; 
+            border: 1px solid rgba(0, 0, 0, 0.01);
+        }
+        .product-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 35px rgba(0, 105, 243, 0.08); 
+            border-color: rgba(0, 105, 243, 0.2);
+        }
+
+        /* 图片容器：等比，清透干净 */
+        .img-box { 
+            width: 100%; 
+            aspect-ratio: 16 / 10; 
+            background: #fcfdfe; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-bottom: 1px solid #f1f5f9;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .img-box img { 
+            max-width: 90%; 
+            max-height: 90%; 
+            object-fit: contain; 
+        }
+
+        .content-box { 
+            padding: 25px; 
+            text-align: center; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+        }
+        .content-box h3 { 
+            margin: 0 0 12px; 
+            font-size: 1.15rem; 
+            color: #1e293b; 
+            font-weight: 600;
+        }
+        .price { 
+            color: #ff5722; 
+            font-size: 22px; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            font-family: 'Georgia', serif;
+        }
+
+        /* 授权方式小标签（调低了饱和度，更有温度） */
+        .auth-badge {
+            display: inline-block;
+            align-self: center;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border: 1px solid #bae6fd;
+            letter-spacing: 0.5px;
+        }
+        /* 付费或特定类型的高级色标签 */
+        .auth-badge.premium {
+            background-color: #fff3e0;
+            color: #e65100;
+            border-color: #ffe0b2;
+        }
+
+        /* 按钮升级：带有一点点圆角与平滑变色效果 */
+        .btn-view { 
+            display: block; 
+            background: #0069f3; 
+            color: white; 
+            text-decoration: none; 
+            padding: 12px 0; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: background 0.4s ease, transform 0.4s ease;
+        }
+        .btn-view:hover { 
+            background: #0056c7; 
+            transform: scale(1.01);
+        }
+
+        /* 5. 页脚 */
+        footer { 
+            background: #1e293b; 
+            color: #94a3b8; 
+            text-align: center; 
+            padding: 25px; 
+            margin-top: auto; 
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        /* 暂无商品提示样式 */
+        .no-data { 
+            grid-column: span 3; 
+            text-align: center; 
+            padding: 100px 20px; 
+            color: #94a3b8; 
+            font-size: 16px; 
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(160, 174, 192, 0.03);
+        }
+
+        /* 出场平滑淡入动画 */
+        @keyframes containerFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-wrapper {
+            animation: containerFade 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fade-in-wrapper" style="display: flex; flex-direction: column; min-height: 100vh;">
+        <div class="header-site">
+            <h1>Dream 的个人网站</h1>
+            <p>Dream <span>|</span> Designer <span>|</span> Website</p>
+        </div>
+
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="webmaster.html">关于我</a>
+            <a href="shopindex.html" class="active">畅享</a>
+        </nav>
+
+        <main>
+            <div class="section-title">我的工坊作品集</div>
+            <div class="products-grid" id="products-container"></div>
+        </main>
+
+        <footer>&copy; 2026 Designed by Dream. All Rights Reserved.</footer>
+    </div>
+
+    <script src="products.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById('products-container');
+            
+            if (typeof ALL_PRODUCTS === 'undefined' || Object.keys(ALL_PRODUCTS).length === 0) {
+                container.innerHTML = '<div class="no-data">🪐 树屋工坊目前空空如也，请先去 WPF 后台添加属于你的独立作品吧！</div>';
+                return;
+            }
+
+            let htmlContent = '';
+            
+            Object.keys(ALL_PRODUCTS).forEach(id => {
+                const product = ALL_PRODUCTS[id];
+                const authText = product.authType ? product.authType.trim() : "免费软件";
+                const isPremium = /购买|付费|订阅|永久/.test(authText);
+                const badgeClass = isPremium ? "auth-badge premium" : "auth-badge";
+
+                htmlContent += `
+                    <div class="product-card">
+                        <div class="img-box">
+                            <img src="${product.logo || 'logo/default.png'}" alt="${product.name}">
+                        </div>
+                        <div class="content-box">
+                            <h3>${product.name}</h3>
+                            <div class="price">${product.price || '免费'}</div>
+                            <div class="${badgeClass}">✨ ${authText}</div>
+                            <a href="shopdetail.html?id=${id}" class="btn-view">查看详情</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = htmlContent;
+        });
+    </script>
+</body>
+</html>
