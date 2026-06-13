@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>畅享工坊 - Dream 的个人空间</title>
     <style>
         /* 1. 基础氛围：干净、清透、散漫休闲 */
@@ -15,12 +15,13 @@
             flex-direction: column; 
             min-height: 100vh; 
             color: #334155;
+            overflow-x: hidden;
         }
         
         /* 2. 页头：完美继承主页的午夜星空蓝 */
         .header-site { 
             background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
-            padding: 45px 0; 
+            padding: 50px 0; /* PC端保持大气的舒展度 */
             text-align: center; 
             border-bottom: 3px solid #0069f3;
         }
@@ -34,23 +35,26 @@
         .header-site p { 
             color: #94a3b8; 
             font-size: 14px; 
-            margin: 8px 0 0 0; 
+            margin: 10px 0 0 0; 
             letter-spacing: 1px;
         }
 
         /* 3. 导航栏：轻盈干净的白色悬浮条 */
         nav { 
             background-color: #ffffff; 
-            padding: 10px 0; 
+            padding: 14px 0; 
             text-align: center; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         nav a { 
             color: #64748b; 
             text-decoration: none; 
             margin: 0 25px; 
             font-weight: bold; 
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             transition: all 0.5s ease;
             display: inline-block;
         }
@@ -59,22 +63,22 @@
             transform: scale(1.05);
         }
 
-        /* 主容器限制 */
+        /* 主容器限制：PC大屏纵深 */
         main { 
             flex: 1; 
-            max-width: 1100px; 
-            margin: 40px auto; 
-            padding: 0 20px; 
+            max-width: 1140px; 
+            margin: 45px auto; 
+            padding: 0 24px; 
             width: 100%; 
             box-sizing: border-box; 
         }
         
-        /* 代替死板粗边框，换成精致的标题下晕染线 */
+        /* 精致的标题下晕染线 */
         .section-title { 
             color: #1e293b; 
-            font-size: 1.4rem; 
+            font-size: 1.5rem; 
             font-weight: 600; 
-            margin-bottom: 30px; 
+            margin-bottom: 35px; 
             position: relative;
             display: inline-block;
         }
@@ -86,31 +90,26 @@
             border-radius: 2px;
         }
 
-        /* 网格布局：保持高级感的3列 */
+        /* 网格布局：【核心升级】默认PC端大气3列网格 */
         .products-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
             gap: 30px; 
         }
 
-        /* 4. 软件卡片：彻底剥离商业硬线条，注入 1.2s 极慢呼吸动效 */
+        /* 4. 软件卡片：融入 1.2s 极慢呼吸动效 */
         .product-card { 
             background: #ffffff; 
             border-radius: 16px; 
             overflow: hidden; 
             box-shadow: 0 8px 25px rgba(160, 174, 192, 0.05); 
-            /* 1.2s 的慢速率动画，滑过去的时候极为解压舒适 */
             transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
                         box-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
                         border-color 0.6s ease; 
             display: flex; 
             flex-direction: column; 
-            border: 1px solid rgba(0, 0, 0, 0.01);
-        }
-        .product-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 20px 35px rgba(0, 105, 243, 0.08); 
-            border-color: rgba(0, 105, 243, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            box-sizing: border-box;
         }
 
         /* 图片容器：等比，清透干净 */
@@ -122,13 +121,14 @@
             align-items: center; 
             justify-content: center; 
             border-bottom: 1px solid #f1f5f9;
-            padding: 15px;
+            padding: 20px;
             box-sizing: border-box;
         }
         .img-box img { 
-            max-width: 90%; 
-            max-height: 90%; 
+            max-width: 85%; 
+            max-height: 85%; 
             object-fit: contain; 
+            transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .content-box { 
@@ -139,53 +139,58 @@
             flex-direction: column; 
             justify-content: space-between; 
         }
+        
         .content-box h3 { 
             margin: 0 0 12px; 
-            font-size: 1.15rem; 
+            font-size: 1.2rem; 
             color: #1e293b; 
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 防爆：防止超长软件名撑开变形 */
         }
+        
         .price { 
             color: #ff5722; 
-            font-size: 22px; 
+            font-size: 24px; 
             font-weight: 700; 
             margin-bottom: 12px; 
             font-family: 'Georgia', serif;
         }
 
-        /* 授权方式小标签（调低了饱和度，更有温度） */
+        /* 授权方式小标签 */
         .auth-badge {
             display: inline-block;
             align-self: center;
             background-color: #e0f2fe;
             color: #0369a1;
             font-size: 12px;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             font-weight: 600;
             border: 1px solid #bae6fd;
             letter-spacing: 0.5px;
         }
-        /* 付费或特定类型的高级色标签 */
         .auth-badge.premium {
             background-color: #fff3e0;
             color: #e65100;
             border-color: #ffe0b2;
         }
 
-        /* 按钮升级：带有一点点圆角与平滑变色效果 */
+        /* 按钮升级 */
         .btn-view { 
             display: block; 
             background: #0069f3; 
             color: white; 
             text-decoration: none; 
-            padding: 12px 0; 
+            padding: 13px 0; 
             border-radius: 10px; 
             font-weight: bold; 
             font-size: 0.95rem;
             letter-spacing: 1px;
             transition: background 0.4s ease, transform 0.4s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         .btn-view:hover { 
             background: #0056c7; 
@@ -197,7 +202,7 @@
             background: #1e293b; 
             color: #94a3b8; 
             text-align: center; 
-            padding: 25px; 
+            padding: 30px 20px; 
             margin-top: auto; 
             font-size: 0.85rem;
             border-top: 1px solid rgba(255,255,255,0.05);
@@ -207,9 +212,9 @@
         .no-data { 
             grid-column: span 3; 
             text-align: center; 
-            padding: 100px 20px; 
+            padding: 90px 20px; 
             color: #94a3b8; 
-            font-size: 16px; 
+            font-size: 15px; 
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 8px 25px rgba(160, 174, 192, 0.03);
@@ -222,6 +227,82 @@
         }
         .fade-in-wrapper {
             animation: containerFade 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* ===================================================
+           高级响应式分流战：拦截移动端与窄屏幕
+           =================================================== */
+        
+        /* 中等屏幕（如 iPad 或小屏显示器）：切换为两列 */
+        @media (max-width: 950px) {
+            main {
+                margin: 30px auto;
+                padding: 0 20px;
+            }
+            .products-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 24px; 
+            }
+            .no-data {
+                grid-column: span 2;
+            }
+        }
+
+        /* 手机端超窄屏幕：全面降维成单列流，防爆防堆叠 */
+        @media (max-width: 600px) {
+            .header-site {
+                padding: 35px 0;
+            }
+            .header-site h1 {
+                font-size: 1.6rem;
+            }
+            nav a {
+                margin: 0 15px;
+                font-size: 0.92rem;
+            }
+            main {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+            .section-title {
+                font-size: 1.25rem;
+                margin-bottom: 22px;
+            }
+            .products-grid { 
+                grid-template-columns: 1fr; /* 直接变成单列，体验极佳 */
+                gap: 20px; 
+            }
+            .no-data {
+                grid-column: span 1;
+                padding: 60px 15px;
+            }
+            .product-card {
+                border-radius: 12px; /* 手机端圆角稍微收敛，更贴合手机壳 */
+            }
+            .content-box {
+                padding: 20px;
+            }
+            .content-box h3 {
+                font-size: 1.1rem;
+            }
+            .price {
+                font-size: 21px;
+            }
+            .auth-badge {
+                margin-bottom: 18px;
+            }
+        }
+
+        /* PC端专属平滑呼吸特权 */
+        @media (min-width: 951px) {
+            .product-card:hover { 
+                transform: translateY(-8px); 
+                box-shadow: 0 20px 35px rgba(0, 105, 243, 0.08); 
+                border-color: rgba(0, 105, 243, 0.2);
+            }
+            .product-card:hover .img-box img {
+                transform: scale(1.04);
+            }
         }
     </style>
 </head>
