@@ -12,7 +12,7 @@ const ALL_PRODUCTS = {
     "downloadLinks": {
       "通道一 夸克下载（推荐，速度最快）": "https://www.4399.com/"
     },
-    "authType": "开源软件 (免费)",
+    "authType": "免费软件",
     "desc": "Office系列办公组件的VBS管理助手\r\n基于COM接口提供一键部署各种功能的服务，安装使用助手即可集成管理VBS的文件夹，您可以自由地增减，使用对应的模块来一键办公。",
     "imgs": [
       "ShopPicture/shop2.png",
@@ -25,7 +25,9 @@ const ALL_PRODUCTS = {
       "兼容Office 2016及以上版本和大部分Wps版本",
       "内测版暂不开放下载"
     ],
-    "specs": {}
+    "specs": {},
+    "extractCode": "",
+    "unzipPassword": ""
   },
   "product_05675141": {
     "id": "product_05675141",
@@ -49,7 +51,9 @@ const ALL_PRODUCTS = {
       "可自定义延迟",
       "可自定义连招宏"
     ],
-    "specs": {}
+    "specs": {},
+    "extractCode": "",
+    "unzipPassword": ""
   },
   "new_software_43627592": {
     "id": "new_software_43627592",
@@ -74,7 +78,9 @@ const ALL_PRODUCTS = {
       "支持 PNG（透明背景）、BMP、JPEG等格式输出",
       "内测版暂不开放下载"
     ],
-    "specs": {}
+    "specs": {},
+    "extractCode": "",
+    "unzipPassword": ""
   },
   "new_software_43229090": {
     "id": "new_software_43229090",
@@ -96,7 +102,9 @@ const ALL_PRODUCTS = {
       "单击使用即时互转",
       "小体积无需安装，下载即用"
     ],
-    "specs": {}
+    "specs": {},
+    "extractCode": "",
+    "unzipPassword": ""
   },
   "new_software_28511216": {
     "id": "new_software_28511216",
@@ -121,6 +129,8 @@ const ALL_PRODUCTS = {
       "✓种植植物无冷却",
       "✓兼容PVZ原版和PVZHE杂交版"
     ],
-    "specs": {}
+    "specs": {},
+    "extractCode": "",
+    "unzipPassword": ""
   }
 };
