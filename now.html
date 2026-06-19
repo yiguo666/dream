@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>此刻 · Now - Dream</title>
+    <style>
+        /* ==========================================
+          还是那么帅气的主页~
+          ========================================== */
+        body {
+            font-family: '-apple-system', 'Noto Sans SC', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F4F7FA;
+            color: #334155;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
+            color: #fff;
+            padding: 60px 20px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: none;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+        }
+
+        header .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        header h1 {
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 2;
+        }
+        header h1 .sub {
+            font-weight: 300;
+            font-size: 1rem;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            color: rgba(255,255,255,0.85);
+            margin: 0;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 移除导航栏，不再需要 nav 样式 */
+
+        main {
+            max-width: 720px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .now-date {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .now-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 24px 30px;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: border-color 0.3s ease;
+        }
+
+        .now-card:hover {
+            border-color: rgba(74, 144, 226, 0.15);
+        }
+
+        .now-card .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #4A90E2;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .now-card .content {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .now-card .content .quote {
+            display: block;
+            font-style: italic;
+            color: #64748b;
+            padding-left: 16px;
+            border-left: 3px solid #4A90E2;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        .now-card .content .meta {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-left: 6px;
+        }
+
+        .now-card .content a {
+            color: #4A90E2;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(74, 144, 226, 0.3);
+        }
+        .now-card .content a:hover {
+            border-color: #4A90E2;
+        }
+
+        .now-card .content .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .now-card .content .tags span {
+            background: rgba(74, 144, 226, 0.08);
+            color: #4A90E2;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 返回按钮居中 */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 30px auto 0;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 8px 24px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+
+        .back-link:hover {
+            color: #4A90E2;
+            border-color: #4A90E2;
+            background: rgba(74, 144, 226, 0.04);
+        }
+
+        /* ===== 底部样式（与 index 统一） ===== */
+        .friend-links-zone {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            border-bottom: none;
+            padding: 0 0 10px 0;
+            width: 100%;
+            font-size: 0.82rem;
+            color: #606F7B;
+        }
+        .friend-link-node {
+            color: #606F7B;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .friend-link-node:hover { color: #4A90E2; }
+
+        footer {
+            background-color: #ffffff;
+            color: #64748b;
+            text-align: center;
+            padding: 24px 20px 20px;
+            margin-top: 40px;
+            font-size: 0.85rem;
+            border-top: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, #4A90E2 20%, #5C9CE6 80%, transparent) 1;
+            box-shadow: 0 -8px 30px rgba(74, 144, 226, 0.04), inset 0 2px 4px rgba(255,255,255,0.9);
+        }
+        footer strong {
+            color: #334155;
+        }
+        .copyright-line {
+            padding-top: 10px;
+            border-top: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.8s ease forwards; }
+
+        @media (max-width: 600px) {
+            header { padding: 40px 20px 35px; }
+            header h1 { font-size: 1.6rem; }
+            .now-card { padding: 18px 20px; }
+            .now-card .content { font-size: 0.92rem; }
+        }
+    </style>
+    <!-- 引入 softwares.js 以便读取友情链接数据 -->
+    <script src="softwares.js"></script>
+</head>
+<body>
+
+    <div class="fade-in">
+        <header>
+            <span class="tag">✦ 此刻 · 即兴的记录</span>
+            <h1>Now <span class="sub">/ 正在发生的</span></h1>
+            <p>文字是凝固的呼吸，也是流动的当下。</p>
+        </header>
+
+        <!-- 导航已移除 -->
+
+        <main>
+            <div class="now-date">📅 更新于 2026-06-19</div>
+
+            <!-- ===== 近况 ===== -->
+            <div class="now-card">
+                <div class="label">📌 近况</div>
+                <div class="content">
+                    · 重构 <a href="index.html">个人主页</a>，暗色极简风格落地<br>
+                    · 开源项目 <a href="#">DreamTools</a> 发布 v0.2.0（轻量桌面工具集）<br>
+                    · 正在学习 Rust 语言基础，关注系统编程方向
+                </div>
+            </div>
+
+            <!-- ===== 在读 ===== -->
+            <div class="now-card">
+                <div class="label">📖 在读</div>
+                <div class="content">
+                    《设计中的设计》 – 原研哉
+                    <span class="quote">“设计不是一种技能，而是捕捉事物本质的感觉能力。”</span>
+                    <div class="tags"><span>#设计哲学</span><span>#美学</span></div>
+                </div>
+            </div>
+
+            <!-- ===== 音乐 ===== -->
+            <div class="now-card">
+                <div class="label">🎵 循环</div>
+                <div class="content">
+                    《Random Access Memories》 – Daft Punk
+                    <span class="quote">复古未来主义，永远听不腻的电子诗篇。</span>
+                    <div class="tags"><span>#电子</span><span>#复古</span></div>
+                </div>
+            </div>
+
+            <!-- ===== 作品 ===== -->
+            <div class="now-card">
+                <div class="label">🔧 作品</div>
+                <div class="content">
+                    · <a href="shopindex.html">畅享工坊 · 轻量工具集</a> <span class="meta">(2026)</span><br>
+                    · <a href="webmaster.html">Webmaster 个人主页模板</a> <span class="meta">(2026)</span><br>
+                    · <a href="#">PicGrid 纯CSS画廊</a> <span class="meta">(2026)</span>
+                </div>
+            </div>
+
+            <!-- ===== 碎碎念 ===== -->
+            <div class="now-card">
+                <div class="label">✍️ 碎碎念</div>
+                <div class="content">
+                    最近在思考“工具”与“表达”的关系。好的工具应该像空气一样自然存在，让人专注于创造而非工具本身。<br>
+                    希望《畅享工坊》的每一款小工具，都能做到“解压即用，用完即走”。
+                </div>
+            </div>
+
+            <!-- 返回按钮居中 -->
+            <a href="index.html" class="back-link">← 返回主页</a>
+        </main>
+
+        <footer>
+            <!-- 友情链接区域（位于分割线下方，版权上方） -->
+            <div id="friendLinksZone" class="friend-links-zone"></div>
+            <!-- 版权信息 -->
+            <div class="copyright-line">
+                &copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 加载友情链接（与 shopindex 逻辑一致）
+        document.addEventListener('DOMContentLoaded', function() {
+            const zone = document.getElementById('friendLinksZone');
+            if (!zone) return;
+            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
+                let linksHtml = '';
+                ALL_SOFTWARES.friendLinks.forEach(link => {
+                    if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
+                        linksHtml += `<a href="${link.jumpUrl}" target="_blank" class="friend-link-node">${link.siteName}</a>`;
+                    }
+                });
+                if (linksHtml) {
+                    zone.innerHTML = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>' + linksHtml;
+                    zone.style.display = 'flex';
+                } else {
+                    zone.style.display = 'none';
+                }
+            } else {
+                zone.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

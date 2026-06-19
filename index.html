@@ -216,14 +216,47 @@
             color: #4A90E2;
         }
 
-        /* 底部 */
+        /* ===== 底部友情链接样式 ===== */
+        .friend-links-zone {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            /* 去掉多余的边框，由 footer 的分割线统一控制 */
+            border-bottom: none;
+            padding: 0 0 10px 0;
+            width: 100%;
+            font-size: 0.82rem;
+            color: #606F7B;
+        }
+        .friend-link-node {
+            color: #606F7B;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .friend-link-node:hover { color: #4A90E2; }
+
+        /* ===== 底部 —— 方案一优化版 ===== */
         footer {
-            background-color: #1e293b;
-            color: #94a3b8;
+            background-color: #ffffff;
+            color: #64748b;
             text-align: center;
-            padding: 20px;
+            padding: 24px 20px 20px;
             margin-top: 50px;
             font-size: 0.85rem;
+            /* 渐变分割线：中间实、两边虚（优雅光晕感） */
+            border-top: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, #4A90E2 20%, #5C9CE6 80%, transparent) 1;
+            /* 极淡的阴影让底部“沉”下来 */
+            box-shadow: 0 -8px 30px rgba(74, 144, 226, 0.04), inset 0 2px 4px rgba(255,255,255,0.9);
+        }
+        footer strong {
+            color: #334155;
+        }
+        /* 版权信息在友情链接下方，自然分段 */
+        .copyright-line {
+            padding-top: 10px;
+            border-top: none; /* 不需要额外分割线了 */
         }
 
         /* 入场动画 */
@@ -235,6 +268,8 @@
             animation: containerFade 1.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
     </style>
+    <!-- 引入 softwares.js 以便读取友情链接数据 -->
+    <script src="softwares.js"></script>
 </head>
 <body>
 
@@ -246,10 +281,8 @@
         </header>
 
         <nav>
-            <a href="#home">首页</a>
             <a href="webmaster.html">关于我</a>
-            <!--a href="picture.html">畅览</a-->
-            <!-- test_暂时关闭此功能区-->
+            <a href="now.html">此间</a>
             <a href="shopindex.html">畅享</a>
         </nav>
 
@@ -267,10 +300,10 @@
                     </div>
                 </a>
 
-                <a href="picture.html" class="card-link">
+                <a href="now.html" class="card-link">
                     <div class="interactive-card">
-                        <h3>🎨 畅览画廊</h3>
-                        <p>随手收集的日系幻想风插画与视觉灵感，打开它，洗涤眼睛。</p>
+                        <h3>📌 此刻 · Now</h3>
+                        <p>记录当下的阅读、音乐与灵感碎片，用文字定格瞬间。</p>
                     </div>
                 </a>
 
@@ -290,9 +323,37 @@
         </main>
 
         <footer>
-            &copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.
+            <!-- 友情链接区域（位于分割线下方，版权上方） -->
+            <div id="friendLinksZone" class="friend-links-zone"></div>
+            <!-- 版权信息 -->
+            <div class="copyright-line">
+                &copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.
+            </div>
         </footer>
     </div>
 
+    <script>
+        // 加载友情链接
+        document.addEventListener('DOMContentLoaded', function() {
+            const zone = document.getElementById('friendLinksZone');
+            if (!zone) return;
+            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
+                let linksHtml = '';
+                ALL_SOFTWARES.friendLinks.forEach(link => {
+                    if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
+                        linksHtml += `<a href="${link.jumpUrl}" target="_blank" class="friend-link-node">${link.siteName}</a>`;
+                    }
+                });
+                if (linksHtml) {
+                    zone.innerHTML = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>' + linksHtml;
+                    zone.style.display = 'flex';
+                } else {
+                    zone.style.display = 'none';
+                }
+            } else {
+                zone.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

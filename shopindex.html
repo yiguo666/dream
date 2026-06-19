@@ -15,14 +15,71 @@
             flex-direction: column;
             min-height: 100vh;
         }
+        /* ===== 重新装修了一下风格……无聊的参数啊 ===== */
         .header {
             background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
             color: #fff;
+            padding: 60px 20px 50px;
             text-align: center;
-            padding: 38px 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: none;
         }
-        .header h1 { font-size: 1.65rem; font-weight: 700; margin-bottom: 8px; }
-        .header p { font-size: 0.9rem; opacity: 0.9; }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+        }
+        .header .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 2;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 2;
+        }
+        .header p {
+            color: rgba(255,255,255,0.85);
+            margin: 0;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
         .main-container {
             max-width: 1140px;
             margin: 25px auto;
@@ -300,6 +357,8 @@
             padding-top: 8px;
         }
         @media (max-width: 768px) {
+            .header { padding: 40px 20px 35px; }
+            .header h1 { font-size: 1.6rem; }
             .main-container { flex-direction: column; }
             .sidebar-wrapper { width: 100%; }
             .category-list {
@@ -315,7 +374,6 @@
                 color: #5C6E80;
                 border-radius: 6px;
             }
-            /* 移除所有强制隐藏规则，由 JS 控制显示/隐藏 */
             .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
             .search-box-wrapper { width: 100%; max-width: 100%; }
             .grid-container { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
@@ -324,7 +382,9 @@
     <script src="softwares.js"></script>
 </head>
 <body>
+    <!-- ===== 适配新站，这一次头部更新为统一风格，啊啊啊啊啊啊累了/(ㄒoㄒ)/~~ ===== -->
     <div class="header">
+        <span class="tag">✦ 资源大厅</span>
         <h1>畅享资源大厅</h1>
         <p>畅游互联网资源的分享中心</p>
     </div>
@@ -392,7 +452,6 @@
                 categories = ["全部资源", ...Array.from(catSet)];
             }
 
-            // 解析 URL 参数（仅用于初始分类）
             const urlParams = new URLSearchParams(window.location.search);
             const categoryParam = urlParams.get('category');
             if (categoryParam && categories.includes(categoryParam)) {
@@ -481,7 +540,6 @@
         function loadAnnouncements() {
             const listContainer = document.getElementById('announcementList');
             if (!listContainer) return;
-            // 清空容器，以便重新填充或隐藏
             listContainer.innerHTML = '';
             if (ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length > 0) {
                 let html = '';
@@ -492,7 +550,7 @@
                 });
                 if (html) {
                     listContainer.innerHTML = html;
-                    listContainer.parentElement.style.display = 'block'; // 确保父容器显示
+                    listContainer.parentElement.style.display = 'block';
                 } else {
                     listContainer.parentElement.style.display = 'none';
                 }
