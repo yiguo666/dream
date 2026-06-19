@@ -5,182 +5,269 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>关于 Dream - 站长个人主页</title>
     <style>
-        /* 1. 物理层级：弹性自适应视口 */
-        html, body {
+        * {
+            box-sizing: border-box;
+        }
+        html,
+        body {
             min-height: 100%;
             margin: 0;
             padding: 0;
-            background-color: #f4f7fc;
-            position: relative;
         }
-
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: '-apple-system', 'Noto Sans SC', sans-serif;
+            background-color: #F4F7FA;
+            color: #334155;
             display: flex;
             flex-direction: column;
-            position: relative;
-            z-index: 1;
             overflow-x: hidden;
-            overflow-y: auto; 
             transition: background-color 0.8s ease-out;
         }
 
-        /* 2. 头部 */
         header {
-            background-color: #1e293b;
+            background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
             color: #fff;
+            padding: 60px 20px 50px;
             text-align: center;
-            padding: 4vh 0; /* PC端保持舒展 */
+            position: relative;
+            overflow: hidden;
             flex-shrink: 0;
             border-bottom: 3px solid #0069f3;
         }
-
+        header::before,
+        header::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        header::before {
+            top: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        header::after {
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        header .tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: .8rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
         header h1 {
-            color: #ffffff;
-            margin: 0;
-            font-size: 1.8rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+            color: #fff;
+            margin: 0 0 6px;
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 2;
         }
         header h1 span {
-            color: #0069f3;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        header p {
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+            font-size: .95rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* 3. 中间主体 */
         main {
-            flex: 1; 
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 30px 20px;
-            box-sizing: border-box;
         }
 
-        /* 核心卡片：PC端大气，移动端自适应 */
         section {
             width: 100%;
-            max-width: 720px; /* 从650px上调到720px，给PC端更舒展的宽度 */
-            padding: 40px 45px; /* 增大内边距，提升呼吸感 */
-            background-color: #fff;
-            box-shadow: 0 15px 35px rgba(0, 105, 243, 0.04), 0 5px 15px rgba(0,0,0,0.02);
-            border-radius: 16px;
+            max-width: 720px;
+            padding: 40px 45px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(74, 144, 226, .04), 0 2px 6px rgba(0, 0, 0, .02);
+            border: 1px solid rgba(74, 144, 226, .04);
             text-align: center;
-            border: 1px solid rgba(0, 105, 243, 0.08);
-            box-sizing: border-box;
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 0.8s cubic-bezier(.22, 1, .36, 1), box-shadow 0.8s cubic-bezier(.22, 1, .36, 1);
+        }
+        section:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(74, 144, 226, .06);
         }
 
-        /* 头像基础大小（PC端） */
         .profile-img {
             border-radius: 50%;
             width: 110px;
             height: 110px;
             margin: 0 auto 18px;
             display: block;
-            border: 4px solid #0069f3;
-            background-color: #fff;
-            cursor: pointer;
-            transition: transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 1s ease;
+            border: 3px solid #4A90E2;
+            background: #fff;
+            cursor: default;
+            transition: transform 2s cubic-bezier(.2, .8, .2, 1), box-shadow .8s ease;
+        }
+        .profile-img:hover {
+            transform: rotate(360deg);
+            box-shadow: 0 0 0 8px rgba(74, 144, 226, .1);
         }
 
-        h2 { color: #0f172a; margin-bottom: 14px; font-size: 1.45rem; font-weight: 700; }
-        p { line-height: 1.7; color: #334155; margin: 8px 0; font-size: 1rem; }
-        .highlight { color: #0069f3; font-weight: 600; }
+        h2 {
+            color: #0f172a;
+            margin-bottom: 14px;
+            font-size: 1.45rem;
+            font-weight: 700;
+        }
+        .highlight {
+            color: #4A90E2;
+            font-weight: 600;
+        }
+        p {
+            line-height: 1.7;
+            color: #475569;
+            margin: 8px 0;
+            font-size: 1rem;
+        }
 
-        /* 【核心重构：黑客帝国动态控制台】 */
+        /* ===== 控制台 - 固定高度，只显示四行 ===== */
         .status-terminal {
-            background: #0d1117; 
+            background: #0d1117;
             border: 1px solid #30363d;
             border-radius: 10px;
-            padding: 16px 20px;
+            padding: 12px 16px;
             margin: 22px 0;
             text-align: left;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.88rem; /* PC端字体更清晰 */
-            color: #58a6ff; 
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: .88rem;
+            color: #58a6ff;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
-            transition: all 0.5s ease;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, .8);
+            transition: all .5s ease;
+            /* 固定高度：四行文本 + padding */
+            height: 130px;
+            min-height: 130px;
+            max-height: 130px;
         }
-
         .status-terminal.warning-active {
             border-color: #ff3366;
-            box-shadow: 0 0 25px rgba(255, 51, 102, 0.35), inset 0 0 15px rgba(255, 51, 102, 0.2);
-            animation: terminalShake 0.4s ease-in-out 3;
+            box-shadow: 0 0 25px rgba(255, 51, 102, .35), inset 0 0 15px rgba(255, 51, 102, .2);
+            animation: terminalShake .4s ease-in-out 3;
         }
-
         @keyframes terminalShake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-3px); }
-            40%, 80% { transform: translateX(3px); }
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20%,
+            60% {
+                transform: translateX(-3px);
+            }
+            40%,
+            80% {
+                transform: translateX(3px);
+            }
         }
 
         #matrix-canvas {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.12; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.12;
             pointer-events: none;
             z-index: 0;
         }
 
         .terminal-content {
             position: relative;
-            z-index: 1; 
-            min-height: 110px; /* PC端给足高度空间 */
+            z-index: 1;
+            height: 100%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            justify-content: flex-start;
         }
 
         .command-line {
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; 
-            visibility: hidden; 
+            text-overflow: ellipsis;
+            visibility: hidden;
             width: 100%;
             display: block;
+            flex-shrink: 0;
+            line-height: 1.4;
+            font-size: inherit;
         }
-
         .command-line.typing::after {
             content: '█';
-            animation: blink 0.6s infinite;
+            animation: blink .6s infinite;
             margin-left: 4px;
         }
-
         @keyframes blink {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+            0%,
+            100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
         .text-alert {
             color: #ff3366 !important;
-            font-weight: bold;
+            font-weight: 700;
             text-shadow: 0 0 8px #ff3366;
         }
-
         .text-mission {
             color: #34d399 !important;
-            text-shadow: 0 0 6px rgba(52, 211, 153, 0.4);
+            text-shadow: 0 0 6px rgba(52, 211, 153, .4);
         }
 
+        /* ===== 社交链接 ===== */
         .social-icons {
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 16px;
+            padding-top: 16px;
             border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
         }
-
         .social-icons a {
-            display: inline-block;
-            margin: 0 20px;
             color: #64748b;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: .9rem;
             text-decoration: none;
+            transition: color .3s;
+            cursor: pointer;
+        }
+        .social-icons a:hover {
+            color: #4A90E2;
         }
 
-        /* 4. 底部动作区域优化 */
+        /* ===== 动作区 ===== */
         .action-area {
             margin-top: 20px;
             padding-top: 5px;
@@ -191,44 +278,47 @@
             align-items: center;
             width: 100%;
         }
-
         .action-area a {
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity .6s ease, transform .6s ease;
+            text-decoration: none;
         }
-
         .action-area.hide-normal a {
             opacity: 0;
             pointer-events: none;
-            transform: scale(0.8);
+            transform: scale(.8);
         }
 
         button {
             padding: 12px 50px;
-            font-size: 0.92rem;
-            font-weight: bold;
-            background-color: #0069f3;
+            font-size: .92rem;
+            font-weight: 700;
+            background: #4A90E2;
             color: #fff;
             border: none;
             border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 6px 16px rgba(0, 105, 243, 0.15);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 6px 16px rgba(74, 144, 226, .2);
+            transition: all .8s cubic-bezier(.22, 1, .36, 1);
             -webkit-tap-highlight-color: transparent;
         }
+        button:hover {
+            background: #357ABD;
+            transform: scale(1.02);
+        }
 
-        /* 动态控制台下方的传送门 */
+        /* ===== 传送门 ===== */
         .portal-wrapper {
             position: absolute;
             top: 0;
-            opacity: 0;
-            transform: scale(0.7);
-            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: none;
+            left: 0;
             width: 100%;
             text-align: center;
             z-index: 10;
+            display: none;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: all 1.2s cubic-bezier(.34, 1.56, .64, 1);
         }
-
         .portal-wrapper.show {
             display: block;
             opacity: 1;
@@ -239,105 +329,156 @@
             background: radial-gradient(circle, #001530 0%, #0d1117 70%) !important;
             color: #00bcff !important;
             border: 2px dashed #00bcff !important;
-            box-shadow: 0 0 20px rgba(0, 188, 255, 0.3) !important;
+            box-shadow: 0 0 30px rgba(0, 188, 255, .2) !important;
             letter-spacing: 2px;
             overflow: hidden;
             position: relative;
             display: inline-block;
+            animation: portalPulse 2s ease-in-out infinite;
         }
-
+        @keyframes portalPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(0, 188, 255, .2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 188, 255, .5);
+            }
+        }
         .portal-btn::before {
             content: '';
             position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
             border: 2px dotted #34d399;
             border-radius: 46%;
             animation: rotatePortal 4s linear infinite;
             pointer-events: none;
-            opacity: 0.5;
+            opacity: .5;
         }
-
         .portal-btn::after {
             content: '';
             position: absolute;
-            top: -40%; left: -40%; width: 180%; height: 180%;
+            top: -40%;
+            left: -40%;
+            width: 180%;
+            height: 180%;
             border: 1px dashed #ff00ff;
             border-radius: 42%;
             animation: rotatePortalInverse 6s linear infinite;
             pointer-events: none;
-            opacity: 0.3;
+            opacity: .3;
         }
-
         @keyframes rotatePortal {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
         @keyframes rotatePortalInverse {
-            from { transform: rotate(360deg); }
-            to { transform: rotate(0deg); }
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0);
+            }
         }
 
-        /* 入场动画 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* ===== 入场 ===== */
         .fade-in {
-            animation: fadeIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: fadeIn 1.2s cubic-bezier(.22, 1, .36, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* ==========================================
-           阻击战：针对移动端屏幕（小于768px）的精细重组
-           ========================================== */
+        /* ===== 移动端适配 ===== */
         @media (max-width: 767px) {
             header {
-                padding: 3vh 0;
+                padding: 40px 20px 35px;
             }
             header h1 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
+            }
+            header .tag {
+                font-size: .7rem;
+                padding: 3px 12px;
+                margin-bottom: 12px;
             }
             main {
                 padding: 15px;
             }
             section {
-                padding: 25px 18px; /* 移动端紧凑排版 */
+                padding: 25px 18px;
+                border-radius: 12px;
             }
             .profile-img {
-                width: 95px;
-                height: 95px;
+                width: 85px;
+                height: 85px;
                 margin-bottom: 12px;
             }
-            h2 { font-size: 1.25rem; margin-bottom: 10px; }
-            p { font-size: 0.92rem; margin: 6px 0; line-height: 1.6; }
-            
+            h2 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            p {
+                font-size: .92rem;
+                margin: 6px 0;
+            }
             .status-terminal {
-                padding: 12px;
-                margin: 15px 0;
-                font-size: 0.8rem; /* 减小字号防溢出 */
+                padding: 10px 12px;
+                margin: 16px 0;
+                font-size: .75rem;
+                border-radius: 8px;
+                height: 110px;
+                min-height: 110px;
+                max-height: 110px;
             }
             .terminal-content {
-                min-height: 95px;
+                height: 100%;
+            }
+            .social-icons {
+                gap: 16px;
             }
             .social-icons a {
-                margin: 0 12px;
-                font-size: 0.85rem;
+                font-size: .85rem;
             }
             button {
-                padding: 12px 42px;
-                font-size: 0.88rem;
+                padding: 10px 34px;
+                font-size: .85rem;
+                border-radius: 24px;
+            }
+            .portal-btn {
+                font-size: .85rem !important;
+                padding: 10px 28px !important;
             }
         }
 
-        /* PC端专属悬浮效果 */
-        @media (min-width: 768px) {
-            section:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 50px rgba(0, 105, 243, 0.08);
+        @media (max-width: 400px) {
+            section {
+                padding: 20px 12px;
             }
-            .profile-img:hover {
-                transform: rotate(360deg);
-                box-shadow: 0 0 20px 8px rgba(0, 105, 243, 0.15);
+            .status-terminal {
+                font-size: .7rem;
+                padding: 8px 10px;
+                height: 95px;
+                min-height: 95px;
+                max-height: 95px;
+            }
+            .profile-img {
+                width: 70px;
+                height: 70px;
             }
         }
     </style>
@@ -345,28 +486,25 @@
 <body>
 
     <header>
+        <span class="tag">✦ System / Dream</span>
         <h1>Dream <span>//</span> Space</h1>
+        <p>个人空间 · 站长主页</p>
     </header>
 
     <main>
         <section class="fade-in" id="main-card">
             <img src="picture/dlam.png" alt="Dream" class="profile-img">
-            
-            <h2>你好，我是 <span class="highlight">Dream</span></h2>
-            
-            <p>基于兴趣与直觉构建的空间，是我的第四维度。</p>
-            <p>在这里，不去定义身份，只沉淀值得被固化的灵感。</p>
-            <p>在 <span class="highlight">畅享工坊</span> 计划中,不定期共享绿色纯净自制轻量工具给大家。</p>
 
+            <h2>你好，我是 <span class="highlight">Dream</span></h2>
+
+            <p>基于兴趣与直觉构建的空间，是我的第四维。</p>
+            <p>在这里，不去定义身份，只沉淀值得被固化的灵感。</p>
+            <p>在 <span class="highlight">畅享工坊</span> 计划中，不定期共享绿色纯净自制轻量工具给大家。</p>
+
+            <!-- 控制台（固定高度，四行） -->
             <div class="status-terminal" id="terminal">
                 <canvas id="matrix-canvas"></canvas>
-                
-                <div class="terminal-content" id="display-box">
-                    <div class="command-line" data-text="> Initialize Identity... Done."></div>
-                    <div class="command-line" data-text="> OS Environment: Dream space 10 [x64]"></div>
-                    <div class="command-line" data-text="> Mission: Create a New World & Tools"></div>
-                    <div class="command-line" data-text="> Status: Core Engine running smoothly..."></div>
-                </div>
+                <div class="terminal-content" id="display-box"></div>
             </div>
 
             <div class="social-icons">
@@ -374,208 +512,287 @@
                 <a href="#" onclick="alert('摄影画廊还在整理中，敬请期待！'); return false;">500PX 画廊</a>
             </div>
 
+            <!-- 动作区 -->
             <div class="action-area" id="control-zone">
-                <a href="index.html" style="text-decoration: none;">
-                    <button>返回主页世界</button>
+                <a href="index.html">
+                    <button id="btn-back">返回主页世界</button>
                 </a>
                 <div class="portal-wrapper" id="portal-zone">
-                    <button class="portal-btn" onclick="executeWarp()">激活隐秘传送门 // WARP</button>
+                    <!-- 按钮名称保持原样 -->
+                    <button class="portal-btn" id="btn-warp">激活隐秘传送门 // WARP</button>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // --- 1. 代码雨画布尺寸防御控制 ---
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
+        // ================================================================
+        //  基于旧版思路重构，稳定可控
+        //  调整：终端固定高度（四行），警告延迟改为 7000ms
+        // ================================================================
 
-        function resizeCanvas() {
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width > 0 ? rect.width : 300;
-            canvas.height = rect.height > 0 ? rect.height : 110;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        (function() {
+            'use strict';
 
-        const alphabet = "010101ABCDEFGHIJKLMNOPQRSTUVWXYZ<>//$$".split("");
-        const fontSize = 12; 
-        
-        let computedColumns = Math.floor(canvas.width / fontSize);
-        let rainDrops = Array(computedColumns > 0 ? computedColumns : 40).fill(1);
-        let currentRainColor = '#58a6ff'; 
+            // ----- DOM 引用 -----
+            var terminal = document.getElementById('terminal');
+            var displayBox = document.getElementById('display-box');
+            var controlZone = document.getElementById('control-zone');
+            var portalZone = document.getElementById('portal-zone');
+            var btnWarp = document.getElementById('btn-warp');
 
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(13, 17, 23, 0.08)'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = currentRainColor; 
-            ctx.font = fontSize + 'px monospace';
+            // ----- 打字机核心（递归风格） -----
+            var currentLineIndex = 0;
 
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
+            function typeLine(elements, callback) {
+                if (currentLineIndex >= elements.length) {
+                    if (callback) callback();
+                    return;
                 }
-                rainDrops[i]++;
-            }
-        }
-        let matrixInterval = setInterval(drawMatrix, 40);
 
-
-        // --- 2. 动态逐行打字机逻辑驱动 ---
-        const displayBox = document.getElementById('display-box');
-        const terminal = document.getElementById('terminal');
-        const controlZone = document.getElementById('control-zone');
-        const portalZone = document.getElementById('portal-zone');
-        
-        let lines = Array.from(displayBox.querySelectorAll('.command-line'));
-        let currentLineIndex = 0;
-
-        function typeLine(elements, callback) {
-            if (currentLineIndex >= elements.length) {
-                if (callback) callback();
-                return;
-            }
-
-            const line = elements[currentLineIndex];
-            const fullText = line.getAttribute('data-text');
-            line.style.visibility = 'visible';
-            line.classList.add('typing');
-
-            let currentCharIndex = 0;
-            line.innerText = '';
-
-            const timer = setInterval(() => {
-                if (currentCharIndex < fullText.length) {
-                    line.innerText += fullText.charAt(currentCharIndex);
-                    currentCharIndex++;
-                } else {
-                    clearInterval(timer);
-                    line.classList.remove('typing'); 
+                var line = elements[currentLineIndex];
+                var fullText = line.getAttribute('data-text');
+                if (!fullText) {
                     currentLineIndex++;
-                    setTimeout(() => typeLine(elements, callback), 250);
+                    setTimeout(function() {
+                        typeLine(elements, callback);
+                    }, 80);
+                    return;
                 }
-            }, 30);
-        }
 
-        function startAllLogic() {
-            if(window.hasStarted) return;
-            window.hasStarted = true;
-            resizeCanvas();
-            setTimeout(() => {
-                typeLine(lines, () => {
-                    startSecretTimeline();
-                });
-            }, 400);
-        }
+                line.style.visibility = 'visible';
+                line.classList.add('typing');
+                line.innerText = '';
 
-        window.addEventListener('DOMContentLoaded', startAllLogic);
-        window.addEventListener('load', startAllLogic);
-        setTimeout(startAllLogic, 600);
-
-
-        // --- 3. 隐藏神秘传送门触发时间轴 ---
-        function startSecretTimeline() {
-            // 【阶段二：威胁警告】
-            setTimeout(() => {
-                terminal.classList.add('warning-active');
-                currentRainColor = '#ff3366'; 
-                
-                injectInstantLine("> [CRITICAL] ANOMALOUS OVERFLOW DETECTED.", "text-alert");
-                injectInstantLine("> [WARNING] SPATIAL LAYER BREACH...", "text-alert");
-            }, 6000);
-
-            // 【阶段三：协议注入】 —— 慢速优雅装填（800ms延时）
-            setTimeout(() => {
-                currentRainColor = '#00bcff'; 
-                canvas.style.opacity = "0.35"; 
-                
-                let loadCount = 0;
-                let fastLoadTimer = setInterval(() => {
-                    const injectionCodes = [
-                        `> Injecting: Sockets.Connect(Fourth_Dimension)...`,
-                        `> Compiling: NoteEngine.Sync.Optimize() -> 100%`,
-                        `> Buffer: Allocating portal stack [0x7FFF]`,
-                        `> Handshake: Gateway verification passed.`,
-                        `> Info: Initializing wormhole link...`
-                    ];
-                    injectInstantLine(injectionCodes[loadCount % injectionCodes.length]);
-                    loadCount++;
-                    
-                    if (loadCount >= 5) {
-                        clearInterval(fastLoadTimer);
-                        triggerMissionPhase(); 
+                var charIndex = 0;
+                var timer = setInterval(function() {
+                    if (charIndex < fullText.length) {
+                        line.innerText += fullText.charAt(charIndex);
+                        charIndex++;
+                    } else {
+                        clearInterval(timer);
+                        line.classList.remove('typing');
+                        currentLineIndex++;
+                        setTimeout(function() {
+                            typeLine(elements, callback);
+                        }, 200);
                     }
-                }, 800); 
-            }, 9500);
-        }
-
-        // 【阶段四：发布任务指令】
-        function triggerMissionPhase() {
-            canvas.style.opacity = "0.05"; 
-            currentRainColor = '#34d399';  
-            
-            const allLines = displayBox.querySelectorAll('.command-line');
-            for(let i=0; i < allLines.length - 2; i++) {
-                allLines[i].remove();
+                }, 30);
             }
 
-            const m1 = createDelayLine("> [MISSION]: 发现一条通往未知维度的奇点隧道。", "text-mission");
-            const m2 = createDelayLine("> [ACTION]: 点击下方粒子漩涡核执行次元跃迁。", "text-mission");
-            
-            currentLineIndex = 0;
-            typeLine([m1, m2], () => {
-                // 【阶段五：传送门降临】
-                setTimeout(() => {
-                    controlZone.classList.add('hide-normal'); 
-                    portalZone.style.display = 'block'; 
-                    setTimeout(() => {
-                        portalZone.classList.add('show');          
-                        injectInstantLine("> Status: Portal Gateway stabilized. Ready.");
-                    }, 50);
-                }, 600);
+            // ----- 创建一行（带 data-text）-----
+            function createDelayLine(text, className) {
+                var div = document.createElement('div');
+                div.className = 'command-line' + (className ? ' ' + className : '');
+                div.setAttribute('data-text', text);
+                displayBox.appendChild(div);
+                return div;
+            }
+
+            // ----- 保持行数不超过 max（防止溢出）-----
+            function trimLines(max) {
+                var lines = displayBox.querySelectorAll('.command-line');
+                while (lines.length > max) {
+                    lines[0].remove();
+                    lines = displayBox.querySelectorAll('.command-line');
+                }
+            }
+
+            // ================================================================
+            //  主流程
+            // ================================================================
+
+            var initialTexts = [
+                '> Initialize Identity... Done.',
+                '> OS Environment: Dream space 10 [x64]',
+                '> Mission: Create a New World & Tools',
+                '> Status: Core Engine running smoothly...'
+            ];
+
+            displayBox.innerHTML = '';
+            var initLines = [];
+            initialTexts.forEach(function(t) {
+                initLines.push(createDelayLine(t));
             });
-        }
 
-        // DOM 操纵小工具
-        function injectInstantLine(text, customClass = '') {
-            const div = document.createElement('div');
-            div.className = `command-line ${customClass}`;
-            div.style.visibility = 'visible';
-            div.innerText = text;
-            displayBox.appendChild(div);
-            autoScrollTrim();
-        }
+            currentLineIndex = 0;
+            typeLine(initLines, function() {
+                // 初始行打完 → 启动彩蛋时间线（延迟 7000ms）
+                startSecretTimeline();
+            });
 
-        function createDelayLine(text, customClass = '') {
-            const div = document.createElement('div');
-            div.className = `command-line ${customClass}`;
-            div.setAttribute('data-text', text);
-            displayBox.appendChild(div);
-            autoScrollTrim();
-            return div;
-        }
+            // ================================================================
+            //  彩蛋时间线（延迟 7000ms 后警告）
+            // ================================================================
 
-        function autoScrollTrim() {
-            const currentLines = displayBox.querySelectorAll('.command-line');
-            if (currentLines.length > 4) {
-                currentLines[0].remove(); 
+            function startSecretTimeline() {
+
+                // ---- 阶段一：等待 7000ms 后发出警告 ----
+                setTimeout(function() {
+
+                    terminal.classList.add('warning-active');
+                    window.setRainColor('#ff3366');
+
+                    var alert1 = createDelayLine('> [CRITICAL] ANOMALOUS OVERFLOW DETECTED.', 'text-alert');
+                    var alert2 = createDelayLine('> [WARNING] SPATIAL LAYER BREACH...', 'text-alert');
+
+                    currentLineIndex = 0;
+                    typeLine([alert1, alert2], function() {
+
+                        // ---- 阶段二：协议注入 ----
+                        setTimeout(function() {
+                            window.setRainColor('#00bcff');
+                            var canvas = document.getElementById('matrix-canvas');
+                            if (canvas) canvas.style.opacity = '0.35';
+
+                            var injectionCodes = [
+                                '> Injecting: Sockets.Connect(Fourth_Dimension)...',
+                                '> Compiling: NoteEngine.Sync.Optimize() -> 100%',
+                                '> Buffer: Allocating portal stack [0x7FFF]',
+                                '> Handshake: Gateway verification passed.',
+                                '> Info: Initializing wormhole link...'
+                            ];
+
+                            var injectLines = [];
+                            injectionCodes.forEach(function(code) {
+                                injectLines.push(createDelayLine(code));
+                            });
+
+                            currentLineIndex = 0;
+                            typeLine(injectLines, function() {
+
+                                // ---- 阶段三：任务发布 + 传送门 ----
+                                setTimeout(function() {
+                                    window.setRainColor('#34d399');
+                                    var canvas2 = document.getElementById('matrix-canvas');
+                                    if (canvas2) canvas2.style.opacity = '0.05';
+
+                                    // 清理多余行，保留最后两行
+                                    var all = displayBox.querySelectorAll('.command-line');
+                                    for (var i = 0; i < all.length - 2; i++) {
+                                        all[i].remove();
+                                    }
+
+                                    var m1 = createDelayLine('> [MISSION]: 发现一条通往未知维度的奇点隧道。',
+                                        'text-mission');
+                                    var m2 = createDelayLine('> [ACTION]: 点击下方粒子漩涡核执行次元跃迁。',
+                                        'text-mission');
+
+                                    currentLineIndex = 0;
+                                    typeLine([m1, m2], function() {
+
+                                        // ---- 阶段四：显示传送门 ----
+                                        setTimeout(function() {
+                                            controlZone.classList.add('hide-normal');
+                                            portalZone.style.display = 'block';
+                                            setTimeout(function() {
+                                                portalZone.classList.add('show');
+                                                var ready = createDelayLine(
+                                                    '> Status: Portal Gateway stabilized. Ready.'
+                                                    );
+                                                currentLineIndex = 0;
+                                                typeLine([ready], function() {
+                                                    // 完成
+                                                });
+                                            }, 60);
+                                        }, 500);
+                                    });
+                                }, 400);
+                            });
+                        }, 600);
+                    });
+                }, 7000); // ← 延迟改为 7000ms
             }
-        }
 
-        // 次元扭曲跳转
-        function executeWarp() {
-            const mainCard = document.getElementById('main-card');
-            mainCard.style.transform = "scale(0.01) rotate(1080deg)";
-            mainCard.style.opacity = "0";
-            document.body.style.backgroundColor = "#ffffff";
-            
-            setTimeout(() => {
-                window.location.href = "index.html"; 
-            }, 900);
-        }
+            // ================================================================
+            //  传送门跃迁
+            // ================================================================
+
+            function executeWarp() {
+                var mainCard = document.getElementById('main-card');
+                mainCard.style.transition = 'transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease';
+                mainCard.style.transform = 'scale(0.01) rotate(1080deg)';
+                mainCard.style.opacity = '0';
+                document.body.style.backgroundColor = '#ffffff';
+                setTimeout(function() {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+
+            if (btnWarp) {
+                btnWarp.addEventListener('click', executeWarp);
+            }
+            window.executeWarp = executeWarp;
+
+            // ================================================================
+            //  代码雨（Matrix 效果）
+            // ================================================================
+
+            (function initMatrix() {
+                var canvas = document.getElementById('matrix-canvas');
+                if (!canvas) return;
+                var ctx = canvas.getContext('2d');
+
+                var width, height, columns, drops;
+                var fontSize = 12;
+                var alphabet = '010101ABCDEFGHIJKLMNOPQRSTUVWXYZ<>//$$'.split('');
+                var currentRainColor = '#58a6ff';
+                var animId = null;
+
+                function resizeCanvas() {
+                    var rect = canvas.parentElement.getBoundingClientRect();
+                    width = rect.width > 0 ? rect.width : 300;
+                    height = rect.height > 0 ? rect.height : 110;
+                    canvas.width = width;
+                    canvas.height = height;
+                    var isMobile = window.innerWidth < 768;
+                    var colCount = isMobile ? Math.floor(width / (fontSize * 1.8)) : Math.floor(width / fontSize);
+                    columns = Math.max(colCount, 10);
+                    drops = Array(columns).fill(1);
+                }
+
+                function drawMatrix() {
+                    ctx.fillStyle = 'rgba(13, 17, 23, 0.08)';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = currentRainColor;
+                    ctx.font = fontSize + 'px monospace';
+
+                    for (var i = 0; i < drops.length; i++) {
+                        var text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                        if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                    animId = requestAnimationFrame(drawMatrix);
+                }
+
+                window.setRainColor = function(color) {
+                    currentRainColor = color;
+                };
+
+                function startMatrix() {
+                    resizeCanvas();
+                    if (animId) cancelAnimationFrame(animId);
+                    drawMatrix();
+                }
+
+                window.addEventListener('resize', function() {
+                    resizeCanvas();
+                    drops = Array(columns).fill(1);
+                });
+
+                if (document.readyState === 'complete') {
+                    startMatrix();
+                } else {
+                    window.addEventListener('load', startMatrix);
+                }
+            })();
+
+            console.log('[Dream] 主页已加载，彩蛋时间线已启动 (红字延迟 7000ms)');
+
+        })();
     </script>
 </body>
 </html>
