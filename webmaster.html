@@ -5,15 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>关于 Dream - 站长个人主页</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        html,
-        body {
-            min-height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+        /* ===== 样式保持不变（PC端130px，移动端适配） ===== */
+        * { box-sizing: border-box; }
+        html, body { min-height: 100%; margin: 0; padding: 0; }
         body {
             font-family: '-apple-system', 'Noto Sans SC', sans-serif;
             background-color: #F4F7FA;
@@ -23,7 +17,6 @@
             overflow-x: hidden;
             transition: background-color 0.8s ease-out;
         }
-
         header {
             background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
             color: #fff;
@@ -34,39 +27,26 @@
             flex-shrink: 0;
             border-bottom: 3px solid #0069f3;
         }
-        header::before,
-        header::after {
+        header::before, header::after {
             content: '';
             position: absolute;
             border-radius: 50%;
             filter: blur(60px);
             pointer-events: none;
         }
-        header::before {
-            top: -80px;
-            right: -80px;
-            width: 250px;
-            height: 250px;
-            background: rgba(255, 255, 255, 0.08);
-        }
-        header::after {
-            bottom: -60px;
-            left: -60px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.06);
-        }
+        header::before { top: -80px; right: -80px; width: 250px; height: 250px; background: rgba(255,255,255,0.08); }
+        header::after { bottom: -60px; left: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.06); }
         header .tag {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
             backdrop-filter: blur(4px);
             padding: 4px 16px;
             border-radius: 20px;
             font-size: .8rem;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255,255,255,0.9);
             margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255,255,255,0.1);
             position: relative;
             z-index: 2;
         }
@@ -78,11 +58,9 @@
             position: relative;
             z-index: 2;
         }
-        header h1 span {
-            color: rgba(255, 255, 255, 0.6);
-        }
+        header h1 span { color: rgba(255,255,255,0.6); }
         header p {
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255,255,255,0.85);
             margin: 0;
             font-size: .95rem;
             letter-spacing: 1px;
@@ -90,29 +68,19 @@
             z-index: 2;
         }
 
-        main {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-        }
-
+        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 30px 20px; }
         section {
             width: 100%;
             max-width: 720px;
             padding: 40px 45px;
             background: #fff;
             border-radius: 14px;
-            box-shadow: 0 6px 20px rgba(74, 144, 226, .04), 0 2px 6px rgba(0, 0, 0, .02);
-            border: 1px solid rgba(74, 144, 226, .04);
+            box-shadow: 0 6px 20px rgba(74,144,226,.04), 0 2px 6px rgba(0,0,0,.02);
+            border: 1px solid rgba(74,144,226,.04);
             text-align: center;
-            transition: transform 0.8s cubic-bezier(.22, 1, .36, 1), box-shadow 0.8s cubic-bezier(.22, 1, .36, 1);
+            transition: transform 0.8s cubic-bezier(.22,1,.36,1), box-shadow 0.8s cubic-bezier(.22,1,.36,1);
         }
-        section:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(74, 144, 226, .06);
-        }
+        section:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(74,144,226,.06); }
 
         .profile-img {
             border-radius: 50%;
@@ -123,31 +91,15 @@
             border: 3px solid #4A90E2;
             background: #fff;
             cursor: default;
-            transition: transform 2s cubic-bezier(.2, .8, .2, 1), box-shadow .8s ease;
+            transition: transform 2s cubic-bezier(.2,.8,.2,1), box-shadow .8s ease;
         }
-        .profile-img:hover {
-            transform: rotate(360deg);
-            box-shadow: 0 0 0 8px rgba(74, 144, 226, .1);
-        }
+        .profile-img:hover { transform: rotate(360deg); box-shadow: 0 0 0 8px rgba(74,144,226,.1); }
 
-        h2 {
-            color: #0f172a;
-            margin-bottom: 14px;
-            font-size: 1.45rem;
-            font-weight: 700;
-        }
-        .highlight {
-            color: #4A90E2;
-            font-weight: 600;
-        }
-        p {
-            line-height: 1.7;
-            color: #475569;
-            margin: 8px 0;
-            font-size: 1rem;
-        }
+        h2 { color: #0f172a; margin-bottom: 14px; font-size: 1.45rem; font-weight: 700; }
+        .highlight { color: #4A90E2; font-weight: 600; }
+        p { line-height: 1.7; color: #475569; margin: 8px 0; font-size: 1rem; }
 
-        /* ===== 控制台 - 固定高度，只显示四行 ===== */
+        /* ===== 控制台 - PC端高度130px ===== */
         .status-terminal {
             background: #0d1117;
             border: 1px solid #30363d;
@@ -160,39 +112,27 @@
             color: #58a6ff;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, .8);
+            box-shadow: inset 0 0 10px rgba(0,0,0,.8);
             transition: all .5s ease;
-            /* 固定高度：四行文本 + padding */
             height: 130px;
             min-height: 130px;
             max-height: 130px;
         }
         .status-terminal.warning-active {
             border-color: #ff3366;
-            box-shadow: 0 0 25px rgba(255, 51, 102, .35), inset 0 0 15px rgba(255, 51, 102, .2);
+            box-shadow: 0 0 25px rgba(255,51,102,.35), inset 0 0 15px rgba(255,51,102,.2);
             animation: terminalShake .4s ease-in-out 3;
         }
         @keyframes terminalShake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            20%,
-            60% {
-                transform: translateX(-3px);
-            }
-            40%,
-            80% {
-                transform: translateX(3px);
-            }
+            0%,100% { transform: translateX(0); }
+            20%,60% { transform: translateX(-3px); }
+            40%,80% { transform: translateX(3px); }
         }
 
         #matrix-canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             opacity: 0.12;
             pointer-events: none;
             z-index: 0;
@@ -225,27 +165,11 @@
             animation: blink .6s infinite;
             margin-left: 4px;
         }
-        @keyframes blink {
-            0%,
-            100% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
+        @keyframes blink { 0%,100% { opacity: 0; } 50% { opacity: 1; } }
 
-        .text-alert {
-            color: #ff3366 !important;
-            font-weight: 700;
-            text-shadow: 0 0 8px #ff3366;
-        }
-        .text-mission {
-            color: #34d399 !important;
-            text-shadow: 0 0 6px rgba(52, 211, 153, .4);
-        }
+        .text-alert { color: #ff3366 !important; font-weight: 700; text-shadow: 0 0 8px #ff3366; }
+        .text-mission { color: #34d399 !important; text-shadow: 0 0 6px rgba(52,211,153,.4); }
 
-        /* ===== 社交链接 ===== */
         .social-icons {
             margin-top: 16px;
             padding-top: 16px;
@@ -263,11 +187,8 @@
             transition: color .3s;
             cursor: pointer;
         }
-        .social-icons a:hover {
-            color: #4A90E2;
-        }
+        .social-icons a:hover { color: #4A90E2; }
 
-        /* ===== 动作区 ===== */
         .action-area {
             margin-top: 20px;
             padding-top: 5px;
@@ -278,15 +199,8 @@
             align-items: center;
             width: 100%;
         }
-        .action-area a {
-            transition: opacity .6s ease, transform .6s ease;
-            text-decoration: none;
-        }
-        .action-area.hide-normal a {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(.8);
-        }
+        .action-area a { transition: opacity .6s ease, transform .6s ease; text-decoration: none; }
+        .action-area.hide-normal a { opacity: 0; pointer-events: none; transform: scale(.8); }
 
         button {
             padding: 12px 50px;
@@ -297,39 +211,30 @@
             border: none;
             border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 6px 16px rgba(74, 144, 226, .2);
-            transition: all .8s cubic-bezier(.22, 1, .36, 1);
+            box-shadow: 0 6px 16px rgba(74,144,226,.2);
+            transition: all .8s cubic-bezier(.22,1,.36,1);
             -webkit-tap-highlight-color: transparent;
         }
-        button:hover {
-            background: #357ABD;
-            transform: scale(1.02);
-        }
+        button:hover { background: #357ABD; transform: scale(1.02); }
 
-        /* ===== 传送门 ===== */
         .portal-wrapper {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 100%;
             text-align: center;
             z-index: 10;
             display: none;
             opacity: 0;
             transform: scale(0.7);
-            transition: all 1.2s cubic-bezier(.34, 1.56, .64, 1);
+            transition: all 1.2s cubic-bezier(.34,1.56,.64,1);
         }
-        .portal-wrapper.show {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
+        .portal-wrapper.show { display: block; opacity: 1; transform: scale(1); }
 
         .portal-btn {
             background: radial-gradient(circle, #001530 0%, #0d1117 70%) !important;
             color: #00bcff !important;
             border: 2px dashed #00bcff !important;
-            box-shadow: 0 0 30px rgba(0, 188, 255, .2) !important;
+            box-shadow: 0 0 30px rgba(0,188,255,.2) !important;
             letter-spacing: 2px;
             overflow: hidden;
             position: relative;
@@ -337,21 +242,14 @@
             animation: portalPulse 2s ease-in-out infinite;
         }
         @keyframes portalPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(0, 188, 255, .2);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 188, 255, .5);
-            }
+            0%,100% { box-shadow: 0 0 20px rgba(0,188,255,.2); }
+            50% { box-shadow: 0 0 40px rgba(0,188,255,.5); }
         }
         .portal-btn::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
             border: 2px dotted #34d399;
             border-radius: 46%;
             animation: rotatePortal 4s linear infinite;
@@ -361,125 +259,55 @@
         .portal-btn::after {
             content: '';
             position: absolute;
-            top: -40%;
-            left: -40%;
-            width: 180%;
-            height: 180%;
+            top: -40%; left: -40%;
+            width: 180%; height: 180%;
             border: 1px dashed #ff00ff;
             border-radius: 42%;
             animation: rotatePortalInverse 6s linear infinite;
             pointer-events: none;
             opacity: .3;
         }
-        @keyframes rotatePortal {
-            from {
-                transform: rotate(0);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        @keyframes rotatePortalInverse {
-            from {
-                transform: rotate(360deg);
-            }
-            to {
-                transform: rotate(0);
-            }
-        }
+        @keyframes rotatePortal { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+        @keyframes rotatePortalInverse { from { transform: rotate(360deg); } to { transform: rotate(0); } }
 
-        /* ===== 入场 ===== */
-        .fade-in {
-            animation: fadeIn 1.2s cubic-bezier(.22, 1, .36, 1) forwards;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .fade-in { animation: fadeIn 1.2s cubic-bezier(.22,1,.36,1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ===== 移动端适配 ===== */
+        /* ===== 移动端适配（仅增高容器） ===== */
         @media (max-width: 767px) {
-            header {
-                padding: 40px 20px 35px;
-            }
-            header h1 {
-                font-size: 1.6rem;
-            }
-            header .tag {
-                font-size: .7rem;
-                padding: 3px 12px;
-                margin-bottom: 12px;
-            }
-            main {
-                padding: 15px;
-            }
-            section {
-                padding: 25px 18px;
-                border-radius: 12px;
-            }
-            .profile-img {
-                width: 85px;
-                height: 85px;
-                margin-bottom: 12px;
-            }
-            h2 {
-                font-size: 1.2rem;
-                margin-bottom: 10px;
-            }
-            p {
-                font-size: .92rem;
-                margin: 6px 0;
-            }
+            header { padding: 40px 20px 35px; }
+            header h1 { font-size: 1.6rem; }
+            header .tag { font-size: .7rem; padding: 3px 12px; margin-bottom: 12px; }
+            main { padding: 15px; }
+            section { padding: 25px 18px; border-radius: 12px; }
+            .profile-img { width: 85px; height: 85px; margin-bottom: 12px; }
+            h2 { font-size: 1.2rem; margin-bottom: 10px; }
+            p { font-size: .92rem; margin: 6px 0; }
             .status-terminal {
                 padding: 10px 12px;
                 margin: 16px 0;
                 font-size: .75rem;
                 border-radius: 8px;
-                height: 110px;
-                min-height: 110px;
-                max-height: 110px;
+                height: 150px;
+                min-height: 150px;
+                max-height: 150px;
             }
-            .terminal-content {
-                height: 100%;
-            }
-            .social-icons {
-                gap: 16px;
-            }
-            .social-icons a {
-                font-size: .85rem;
-            }
-            button {
-                padding: 10px 34px;
-                font-size: .85rem;
-                border-radius: 24px;
-            }
-            .portal-btn {
-                font-size: .85rem !important;
-                padding: 10px 28px !important;
-            }
+            .terminal-content { height: 100%; }
+            .social-icons { gap: 16px; }
+            .social-icons a { font-size: .85rem; }
+            button { padding: 10px 34px; font-size: .85rem; border-radius: 24px; }
+            .portal-btn { font-size: .85rem !important; padding: 10px 28px !important; }
         }
-
         @media (max-width: 400px) {
-            section {
-                padding: 20px 12px;
-            }
+            section { padding: 20px 12px; }
             .status-terminal {
                 font-size: .7rem;
                 padding: 8px 10px;
-                height: 95px;
-                min-height: 95px;
-                max-height: 95px;
+                height: 130px;
+                min-height: 130px;
+                max-height: 130px;
             }
-            .profile-img {
-                width: 70px;
-                height: 70px;
-            }
+            .profile-img { width: 70px; height: 70px; }
         }
     </style>
 </head>
@@ -497,11 +325,11 @@
 
             <h2>你好，我是 <span class="highlight">Dream</span></h2>
 
-            <p>基于兴趣与直觉构建的空间，是我的第四维。</p>
+            <p>基于兴趣与直觉构建的空间，是我的第四维度。</p>
             <p>在这里，不去定义身份，只沉淀值得被固化的灵感。</p>
             <p>在 <span class="highlight">畅享工坊</span> 计划中，不定期共享绿色纯净自制轻量工具给大家。</p>
 
-            <!-- 控制台（固定高度，四行） -->
+            <!-- 控制台 -->
             <div class="status-terminal" id="terminal">
                 <canvas id="matrix-canvas"></canvas>
                 <div class="terminal-content" id="display-box"></div>
@@ -512,13 +340,12 @@
                 <a href="#" onclick="alert('摄影画廊还在整理中，敬请期待！'); return false;">500PX 画廊</a>
             </div>
 
-            <!-- 动作区 -->
+            <!-- 传送动作区 -->
             <div class="action-area" id="control-zone">
                 <a href="index.html">
                     <button id="btn-back">返回主页世界</button>
                 </a>
                 <div class="portal-wrapper" id="portal-zone">
-                    <!-- 按钮名称保持原样 -->
                     <button class="portal-btn" id="btn-warp">激活隐秘传送门 // WARP</button>
                 </div>
             </div>
@@ -527,43 +354,36 @@
 
     <script>
         // ================================================================
-        //  基于旧版思路重构，稳定可控
-        //  调整：终端固定高度（四行），警告延迟改为 7000ms
+        //  核心交互（修复百分比进度显示 + 延迟逻辑）
         // ================================================================
 
         (function() {
             'use strict';
 
-            // ----- DOM 引用 -----
             var terminal = document.getElementById('terminal');
             var displayBox = document.getElementById('display-box');
             var controlZone = document.getElementById('control-zone');
             var portalZone = document.getElementById('portal-zone');
             var btnWarp = document.getElementById('btn-warp');
 
-            // ----- 打字机核心（递归风格） -----
             var currentLineIndex = 0;
 
+            // ----- 通用打字机 -----
             function typeLine(elements, callback) {
                 if (currentLineIndex >= elements.length) {
                     if (callback) callback();
                     return;
                 }
-
                 var line = elements[currentLineIndex];
                 var fullText = line.getAttribute('data-text');
                 if (!fullText) {
                     currentLineIndex++;
-                    setTimeout(function() {
-                        typeLine(elements, callback);
-                    }, 80);
+                    setTimeout(function() { typeLine(elements, callback); }, 80);
                     return;
                 }
-
                 line.style.visibility = 'visible';
                 line.classList.add('typing');
                 line.innerText = '';
-
                 var charIndex = 0;
                 var timer = setInterval(function() {
                     if (charIndex < fullText.length) {
@@ -573,23 +393,21 @@
                         clearInterval(timer);
                         line.classList.remove('typing');
                         currentLineIndex++;
-                        setTimeout(function() {
-                            typeLine(elements, callback);
-                        }, 200);
+                        setTimeout(function() { typeLine(elements, callback); }, 200);
                     }
                 }, 30);
             }
 
-            // ----- 创建一行（带 data-text）-----
+            // ----- 创建一行（带 data-text）并自动保留最多8行 -----
             function createDelayLine(text, className) {
                 var div = document.createElement('div');
                 div.className = 'command-line' + (className ? ' ' + className : '');
                 div.setAttribute('data-text', text);
                 displayBox.appendChild(div);
+                trimLines(8);
                 return div;
             }
 
-            // ----- 保持行数不超过 max（防止溢出）-----
             function trimLines(max) {
                 var lines = displayBox.querySelectorAll('.command-line');
                 while (lines.length > max) {
@@ -617,7 +435,7 @@
 
             currentLineIndex = 0;
             typeLine(initLines, function() {
-                // 初始行打完 → 启动彩蛋时间线（延迟 7000ms）
+                // 初始四行打字完成后，延迟7000ms后出现红色警告
                 startSecretTimeline();
             });
 
@@ -627,7 +445,7 @@
 
             function startSecretTimeline() {
 
-                // ---- 阶段一：等待 7000ms 后发出警告 ----
+                // ---- 阶段一：延迟7000ms后发出警告 ----
                 setTimeout(function() {
 
                     terminal.classList.add('warning-active');
@@ -639,69 +457,126 @@
                     currentLineIndex = 0;
                     typeLine([alert1, alert2], function() {
 
-                        // ---- 阶段二：协议注入 ----
+                        // ---- 阶段二：协议注入（含百分比进度） ----
                         setTimeout(function() {
                             window.setRainColor('#00bcff');
                             var canvas = document.getElementById('matrix-canvas');
                             if (canvas) canvas.style.opacity = '0.35';
 
-                            var injectionCodes = [
+                            // *** 关键修复：清空容器，只显示协议注入相关的行，确保百分比行可见 ***
+                            displayBox.innerHTML = '';
+
+                            // 定义所有需要显示的行（第二行为特殊进度行）
+                            var lines = [
                                 '> Injecting: Sockets.Connect(Fourth_Dimension)...',
-                                '> Compiling: NoteEngine.Sync.Optimize() -> 100%',
+                                '> Compiling: NoteEngine.Sync.Optimize() -> 0%',
                                 '> Buffer: Allocating portal stack [0x7FFF]',
                                 '> Handshake: Gateway verification passed.',
                                 '> Info: Initializing wormhole link...'
                             ];
 
-                            var injectLines = [];
-                            injectionCodes.forEach(function(code) {
-                                injectLines.push(createDelayLine(code));
+                            var lineElements = [];
+                            lines.forEach(function(text) {
+                                var div = document.createElement('div');
+                                div.className = 'command-line';
+                                div.setAttribute('data-text', text);
+                                displayBox.appendChild(div);
+                                lineElements.push(div);
                             });
 
-                            currentLineIndex = 0;
-                            typeLine(injectLines, function() {
+                            // 逐行打字，特殊处理第二行
+                            function typeNext(index) {
+                                if (index >= lineElements.length) {
+                                    afterAllLines();
+                                    return;
+                                }
+                                var line = lineElements[index];
+                                var fullText = line.getAttribute('data-text');
+                                line.style.visibility = 'visible';
+                                line.classList.add('typing');
+                                line.innerText = '';
+                                var charIndex = 0;
+                                var timer = setInterval(function() {
+                                    if (charIndex < fullText.length) {
+                                        line.innerText += fullText.charAt(charIndex);
+                                        charIndex++;
+                                    } else {
+                                        clearInterval(timer);
+                                        line.classList.remove('typing');
+                                        if (index === 1) {
+                                            // 启动百分比进度
+                                            startProgress(line);
+                                        } else {
+                                            setTimeout(function() { typeNext(index + 1); }, 200);
+                                        }
+                                    }
+                                }, 30);
+                            }
 
-                                // ---- 阶段三：任务发布 + 传送门 ----
+                            // 百分比进度更新
+                            function startProgress(lineElement) {
+                                var progress = 0;
+                                var maxProgress = 100;
+                                var totalDuration = 2000 + Math.random() * 4000; // 2~6秒随机
+                                var startTime = Date.now();
+                                var baseText = '> Compiling: NoteEngine.Sync.Optimize() -> ';
+
+                                function updateProgress() {
+                                    var elapsed = Date.now() - startTime;
+                                    var ratio = Math.min(elapsed / totalDuration, 1);
+                                    progress = Math.floor(ratio * maxProgress);
+                                    lineElement.innerText = baseText + progress + '%';
+                                    if (progress < maxProgress) {
+                                        var nextDelay = 10 + Math.random() * 70; // 10~80ms随机间隔
+                                        setTimeout(updateProgress, nextDelay);
+                                    } else {
+                                        lineElement.innerText = baseText + '100%';
+                                        // 完成后继续下一行
+                                        setTimeout(function() { typeNext(2); }, 300);
+                                    }
+                                }
+                                updateProgress();
+                            }
+
+                            // 所有行完成后进入阶段三
+                            function afterAllLines() {
                                 setTimeout(function() {
                                     window.setRainColor('#34d399');
                                     var canvas2 = document.getElementById('matrix-canvas');
                                     if (canvas2) canvas2.style.opacity = '0.05';
 
-                                    // 清理多余行，保留最后两行
+                                    // 清理多余行，只保留最后两行（任务行）
                                     var all = displayBox.querySelectorAll('.command-line');
-                                    for (var i = 0; i < all.length - 2; i++) {
-                                        all[i].remove();
+                                    while (all.length > 2) {
+                                        all[0].remove();
+                                        all = displayBox.querySelectorAll('.command-line');
                                     }
 
-                                    var m1 = createDelayLine('> [MISSION]: 发现一条通往未知维度的奇点隧道。',
-                                        'text-mission');
-                                    var m2 = createDelayLine('> [ACTION]: 点击下方粒子漩涡核执行次元跃迁。',
-                                        'text-mission');
+                                    var m1 = createDelayLine('> [MISSION]: 发现一条通往未知维度的奇点隧道。', 'text-mission');
+                                    var m2 = createDelayLine('> [ACTION]: 点击下方粒子漩涡核执行次元跃迁。', 'text-mission');
 
                                     currentLineIndex = 0;
                                     typeLine([m1, m2], function() {
-
-                                        // ---- 阶段四：显示传送门 ----
                                         setTimeout(function() {
                                             controlZone.classList.add('hide-normal');
                                             portalZone.style.display = 'block';
                                             setTimeout(function() {
                                                 portalZone.classList.add('show');
-                                                var ready = createDelayLine(
-                                                    '> Status: Portal Gateway stabilized. Ready.'
-                                                    );
+                                                var ready = createDelayLine('> Status: Portal Gateway stabilized. Ready.');
                                                 currentLineIndex = 0;
-                                                typeLine([ready], function() {
-                                                    // 完成
-                                                });
+                                                typeLine([ready], function() {});
                                             }, 60);
                                         }, 500);
                                     });
                                 }, 400);
-                            });
-                        }, 600);
+                            }
+
+                            // 开始打字
+                            typeNext(0);
+
+                        }, 600); // 警告后延迟600ms开始协议注入
                     });
-                }, 7000); // ← 延迟改为 7000ms
+                }, 7000); // 初始四行完成后延迟7000ms出现红色警告
             }
 
             // ================================================================
@@ -756,7 +631,6 @@
                     ctx.fillRect(0, 0, width, height);
                     ctx.fillStyle = currentRainColor;
                     ctx.font = fontSize + 'px monospace';
-
                     for (var i = 0; i < drops.length; i++) {
                         var text = alphabet[Math.floor(Math.random() * alphabet.length)];
                         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -791,7 +665,6 @@
             })();
 
             console.log('[Dream] 主页已加载，彩蛋时间线已启动 (红字延迟 7000ms)');
-
         })();
     </script>
 </body>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>资源下载详情中心 - Noxcms Tail</title>
     <style>
-        /* 完整样式参见之前版本，此处略，但确保完整 */
+        /* p.s.完整样式参见之前版本，此处略，但确保内容的完整 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -183,7 +183,7 @@
 
     <div class="container">
         <ul class="breadcrumbs-nav" id="bind_breadcrumbs">
-            <!-- 修改：链接指向 index.html -->
+            <!-- 修改这里：旧站的链接指向 index.html。。。 -->
             <li><a href="index.html">全部资源</a></li>
             <li id="breadcrumb_category_node" style="display: none;"><a href="index.html" id="bind_breadcrumb_cat_text">分类</a></li>
             <li><span class="current-node" id="bind_breadcrumb_name">加载中...</span></li>
@@ -281,7 +281,7 @@
             document.getElementById('bind_size').innerText = product.size || '-';
             document.getElementById('bind_environment').innerText = product.environment || '全平台';
 
-            // 面包屑 - 修改分类链接指向 index.html
+            // 面包屑 - 同样是把旧站修改分类链接指向 index.html
             document.getElementById('bind_breadcrumb_name').innerText = product.name;
             if (product.category) {
                 const catNode = document.getElementById('breadcrumb_category_node');
@@ -297,7 +297,7 @@
                 logoImg.src = product.mainImage;
             }
 
-            // 详情图 - 智能显示
+            // 详情图 - 智能显示...
             const detailSection = document.getElementById('detailSection');
             const bannerZone = document.getElementById('detail_banner_zone');
             let detailImages = product.detailImages || '';
