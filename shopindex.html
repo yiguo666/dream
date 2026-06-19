@@ -3,366 +3,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>畅享工坊 - Dream 的个人空间</title>
+    <title>畅享资源软件下载</title>
     <style>
-        /* 1. 基础氛围：干净、清透、散漫休闲 */
-        body { 
-            font-family: '-apple-system', 'Noto Sans SC', "Microsoft YaHei", sans-serif; 
-            background-color: #f4f7fc; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F4F7FA;
             color: #334155;
-            overflow-x: hidden;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        
-        /* 2. 页头：完美继承主页的午夜星空蓝 */
-        .header-site { 
-            background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
-            padding: 50px 0; /* PC端保持大气的舒展度 */
-            text-align: center; 
-            border-bottom: 3px solid #0069f3;
+        .header {
+            background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
+            color: #fff;
+            text-align: center;
+            padding: 38px 20px;
         }
-        .header-site h1 { 
-            color: #ffffff; 
-            font-size: 2.2rem; 
-            margin: 0; 
+        .header h1 { font-size: 1.65rem; font-weight: 700; margin-bottom: 8px; }
+        .header p { font-size: 0.9rem; opacity: 0.9; }
+        .main-container {
+            max-width: 1140px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 24px;
+            flex: 1;
+            width: 100%;
+        }
+        .sidebar-wrapper {
+            width: 230px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+        .sidebar {
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid #E6EFFB;
+        }
+        .sidebar-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #8896A8;
+            padding: 4px 8px 10px;
+            border-bottom: 1px solid #F0F4FA;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .category-list { list-style: none; }
+        .category-item {
+            padding: 10px 14px;
+            margin-bottom: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #606F7B;
             font-weight: 500;
-            letter-spacing: 3px; 
-        }
-        .header-site p { 
-            color: #94a3b8; 
-            font-size: 14px; 
-            margin: 10px 0 0 0; 
-            letter-spacing: 1px;
-        }
-
-        /* 3. 导航栏：轻盈干净的白色悬浮条 */
-        nav { 
-            background-color: #ffffff; 
-            padding: 14px 0; 
-            text-align: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        nav a { 
-            color: #64748b; 
-            text-decoration: none; 
-            margin: 0 25px; 
-            font-weight: bold; 
-            font-size: 0.98rem;
-            transition: all 0.5s ease;
-            display: inline-block;
-        }
-        nav a:hover, nav a.active { 
-            color: #0069f3; 
-            transform: scale(1.05);
-        }
-
-        /* 主容器限制：PC大屏纵深 */
-        main { 
-            flex: 1; 
-            max-width: 1140px; 
-            margin: 45px auto; 
-            padding: 0 24px; 
-            width: 100%; 
-            box-sizing: border-box; 
-        }
-        
-        /* 精致的标题下晕染线 */
-        .section-title { 
-            color: #1e293b; 
-            font-size: 1.5rem; 
-            font-weight: 600; 
-            margin-bottom: 35px; 
-            position: relative;
-            display: inline-block;
-        }
-        .section-title::after {
-            content: '';
-            position: absolute;
-            left: 0; bottom: -6px; width: 50%; height: 3px;
-            background-color: rgba(0, 105, 243, 0.4);
-            border-radius: 2px;
-        }
-
-        /* 网格布局：【核心升级】默认PC端大气3列网格 */
-        .products-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 30px; 
-        }
-
-        /* 4. 软件卡片：融入 1.2s 极慢呼吸动效 */
-        .product-card { 
-            background: #ffffff; 
-            border-radius: 16px; 
-            overflow: hidden; 
-            box-shadow: 0 8px 25px rgba(160, 174, 192, 0.05); 
-            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
-                        box-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-                        border-color 0.6s ease; 
-            display: flex; 
-            flex-direction: column; 
-            border: 1px solid rgba(0, 0, 0, 0.02);
-            box-sizing: border-box;
-        }
-
-        /* 图片容器：等比，清透干净 */
-        .img-box { 
-            width: 100%; 
-            aspect-ratio: 16 / 10; 
-            background: #fcfdfe; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-bottom: 1px solid #f1f5f9;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .img-box img { 
-            max-width: 85%; 
-            max-height: 85%; 
-            object-fit: contain; 
-            transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .content-box { 
-            padding: 25px; 
-            text-align: center; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-        }
-        
-        .content-box h3 { 
-            margin: 0 0 12px; 
-            font-size: 1.2rem; 
-            color: #1e293b; 
-            font-weight: 600;
+            transition: 0.25s;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; /* 防爆：防止超长软件名撑开变形 */
+            text-overflow: ellipsis;
         }
-        
-        .price { 
-            color: #ff5722; 
-            font-size: 24px; 
-            font-weight: 700; 
-            margin-bottom: 12px; 
-            font-family: 'Georgia', serif;
-        }
-
-        /* 授权方式小标签 */
-        .auth-badge {
-            display: inline-block;
-            align-self: center;
-            background-color: #e0f2fe;
-            color: #0369a1;
-            font-size: 12px;
-            padding: 5px 14px;
-            border-radius: 20px;
-            margin-bottom: 22px;
+        .category-item:hover { background-color: #F0F6FE; color: #4A90E2; }
+        .category-item.active {
+            background-color: #4A90E2;
+            color: #fff;
             font-weight: 600;
-            border: 1px solid #bae6fd;
-            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(74,144,226,0.25);
         }
-        .auth-badge.premium {
-            background-color: #fff3e0;
-            color: #e65100;
-            border-color: #ffe0b2;
+        .sidebar-notice-panel {
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid #E6EFFB;
         }
-
-        /* 按钮升级 */
-        .btn-view { 
-            display: block; 
-            background: #0069f3; 
-            color: white; 
-            text-decoration: none; 
-            padding: 13px 0; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-            transition: background 0.4s ease, transform 0.4s ease;
-            -webkit-tap-highlight-color: transparent;
+        .notice-sub-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #64748B;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .btn-view:hover { 
-            background: #0056c7; 
-            transform: scale(1.01);
+        .notice-list {
+            max-height: 200px;
+            overflow-y: auto;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-
-        /* 5. 页脚 */
-        footer { 
-            background: #1e293b; 
-            color: #94a3b8; 
-            text-align: center; 
-            padding: 30px 20px; 
-            margin-top: auto; 
+        .notice-item {
+            font-size: 0.82rem;
+            color: #4F5E74;
+            line-height: 1.6;
+            background: #F5F9FF;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #4A90E2;
+        }
+        .notice-item:last-child { margin-bottom: 0; }
+        .recommend-zone {
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid #E6EFFB;
+            margin-top: 0;
+        }
+        .recommend-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .recommend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: #606F7B;
+            padding: 8px 10px;
+            background: #F8FAFD;
+            border-radius: 8px;
+            border: 1px solid #EDF3FA;
+            transition: 0.2s;
+        }
+        .recommend-item:hover { border-color: #D6E4F7; background: #F1F6FC; }
+        .recommend-item a {
+            color: #4A90E2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .content-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-width: 0;
+        }
+        .control-bar {
+            background: #fff;
+            padding: 12px 20px;
+            border-radius: 14px;
+            border: 1px solid #E6EFFB;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .control-bar h2 {
+            font-size: 1rem;
+            color: #2C3E50;
+            font-weight: 700;
+        }
+        .control-bar h2 span { color: #4A90E2; }
+        .search-box-wrapper {
+            position: relative;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
             font-size: 0.85rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: #F8FAFD;
+            border: 1px solid #E2EAF4;
+            border-radius: 8px;
+            outline: none;
         }
-        
-        /* 暂无商品提示样式 */
-        .no-data { 
-            grid-column: span 3; 
-            text-align: center; 
-            padding: 90px 20px; 
-            color: #94a3b8; 
-            font-size: 15px; 
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(160, 174, 192, 0.03);
+        .search-input:focus {
+            background: #fff;
+            border-color: #4A90E2;
         }
-
-        /* 出场平滑淡入动画 */
-        @keyframes containerFade {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            color: #A0AEC0;
         }
-        .fade-in-wrapper {
-            animation: containerFade 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
         }
-
-        /* ===================================================
-           高级响应式分流战：拦截移动端与窄屏幕
-           =================================================== */
-        
-        /* 中等屏幕（如 iPad 或小屏显示器）：切换为两列 */
-        @media (max-width: 950px) {
-            main {
-                margin: 30px auto;
-                padding: 0 20px;
-            }
-            .products-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 24px; 
-            }
-            .no-data {
-                grid-column: span 2;
-            }
+        .item {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.25s, box-shadow 0.25s;
+            border: 1px solid #E6EFFB;
+            display: flex;
+            flex-direction: column;
         }
-
-        /* 手机端超窄屏幕：全面降维成单列流，防爆防堆叠 */
-        @media (max-width: 600px) {
-            .header-site {
-                padding: 35px 0;
-            }
-            .header-site h1 {
-                font-size: 1.6rem;
-            }
-            nav a {
-                margin: 0 15px;
-                font-size: 0.92rem;
-            }
-            main {
-                margin: 20px auto;
-                padding: 0 15px;
-            }
-            .section-title {
-                font-size: 1.25rem;
-                margin-bottom: 22px;
-            }
-            .products-grid { 
-                grid-template-columns: 1fr; /* 直接变成单列，体验极佳 */
-                gap: 20px; 
-            }
-            .no-data {
-                grid-column: span 1;
-                padding: 60px 15px;
-            }
-            .product-card {
-                border-radius: 12px; /* 手机端圆角稍微收敛，更贴合手机壳 */
-            }
-            .content-box {
-                padding: 20px;
-            }
-            .content-box h3 {
-                font-size: 1.1rem;
-            }
-            .price {
-                font-size: 21px;
-            }
-            .auth-badge {
-                margin-bottom: 18px;
-            }
+        .item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74,144,226,0.1);
         }
-
-        /* PC端专属平滑呼吸特权 */
-        @media (min-width: 951px) {
-            .product-card:hover { 
-                transform: translateY(-8px); 
-                box-shadow: 0 20px 35px rgba(0, 105, 243, 0.08); 
-                border-color: rgba(0, 105, 243, 0.2);
+        .item-image-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #F8FAFD;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #F0F4FA;
+            overflow: hidden;
+        }
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .item-content {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .item-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #334155;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+            min-height: 2.4em;
+        }
+        .item-link {
+            display: block;
+            text-align: center;
+            background-color: #4A90E2;
+            color: #fff;
+            text-decoration: none;
+            padding: 6px 0;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .item-link:hover { background-color: #357ABD; }
+        .site-footer {
+            background: #fff;
+            border-top: 1px solid #E6EFFB;
+            padding: 24px 0 20px;
+            margin-top: 40px;
+            width: 100%;
+            text-align: center;
+        }
+        .footer-inner {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .friend-links-zone {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #E2EAF4;
+            width: 100%;
+            font-size: 0.82rem;
+            color: #606F7B;
+        }
+        .friend-link-node {
+            color: #606F7B;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .friend-link-node:hover { color: #4A90E2; }
+        .disclaimer-text {
+            font-size: 0.75rem;
+            color: #94A3B8;
+            line-height: 1.6;
+            max-width: 800px;
+            text-align: center;
+        }
+        .copyright-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748B;
+            padding-top: 8px;
+        }
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            .sidebar-wrapper { width: 100%; }
+            .category-list {
+                display: flex;
+                overflow-x: auto;
+                gap: 6px;
             }
-            .product-card:hover .img-box img {
-                transform: scale(1.04);
+            .category-list::-webkit-scrollbar { display: none; }
+            .category-item {
+                flex-shrink: 0;
+                margin-bottom: 0;
+                background: #EDF3FA;
+                color: #5C6E80;
+                border-radius: 6px;
             }
+            /* 移除所有强制隐藏规则，由 JS 控制显示/隐藏 */
+            .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .search-box-wrapper { width: 100%; max-width: 100%; }
+            .grid-container { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
         }
     </style>
+    <script src="softwares.js"></script>
 </head>
 <body>
-
-    <div class="fade-in-wrapper" style="display: flex; flex-direction: column; min-height: 100vh;">
-        <div class="header-site">
-            <h1>Dream 的个人网站</h1>
-            <p>Dream <span>|</span> Designer <span>|</span> Website</p>
-        </div>
-
-        <nav>
-            <a href="index.html">首页</a>
-            <a href="webmaster.html">关于我</a>
-            <a href="shopindex.html" class="active">畅享</a>
-        </nav>
-
-        <main>
-            <div class="section-title">我的工坊作品集</div>
-            <div class="products-grid" id="products-container"></div>
-        </main>
-
-        <footer>&copy; 2026 Designed by Dream. All Rights Reserved.</footer>
+    <div class="header">
+        <h1>畅享资源大厅</h1>
+        <p>畅游互联网资源的分享中心</p>
     </div>
 
-    <script src="products.js"></script>
+    <div class="main-container">
+        <div class="sidebar-wrapper">
+            <div class="sidebar">
+                <div class="sidebar-title">📂 资源类别架构</div>
+                <ul class="category-list" id="categoryUl"></ul>
+            </div>
+            <div class="sidebar-notice-panel">
+                <div class="notice-sub-title">📢 大厅动态公告</div>
+                <ul id="announcementList" class="notice-list"></ul>
+            </div>
+            <div id="recommendZone" class="recommend-zone">
+                <div class="notice-sub-title">⭐ 精品推荐</div>
+                <ul id="recommendList" class="recommend-list"></ul>
+            </div>
+        </div>
+
+        <div class="content-panel">
+            <div class="control-bar">
+                <h2>当前视图：<span id="currentCategoryTitle">全部资源</span></h2>
+                <div class="search-box-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="键入关键字实时检索资源...">
+                </div>
+            </div>
+            <div class="grid-container" id="productGrid"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div id="friendLinksZone" class="friend-links-zone"></div>
+            <div class="disclaimer-text">
+                <p>免责声明：本站提供的一切数字化资产均收集自互联网公开分享渠道，仅供个人技术研究、安全测试与学术交流使用，<strong>严禁用于商业谋利或非法用途。</strong></p>
+                <p>如您认为本站资源侵犯了您的合法权益，请通过官方渠道告知，我们将在核实后第一时间处理。</p>
+            </div>
+            <div class="copyright-text">© 2026 畅享资源大厅. All Rights Reserved.</div>
+        </div>
+    </footer>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const container = document.getElementById('products-container');
-            
-            if (typeof ALL_PRODUCTS === 'undefined' || Object.keys(ALL_PRODUCTS).length === 0) {
-                container.innerHTML = '<div class="no-data">🪐 树屋工坊目前空空如也，请先去 WPF 后台添加属于你的独立作品吧！</div>';
+        let allProducts = [];
+        let categories = ["全部资源"];
+        let currentCategory = "全部资源";
+        let searchKeyword = "";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
+                document.getElementById('productGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#EF4444;padding:40px;">⚠️ 数据加载失败，请检查 softwares.js 文件。</div>';
+                return;
+            }
+            allProducts = ALL_SOFTWARES.products;
+
+            if (ALL_SOFTWARES.categories && Array.isArray(ALL_SOFTWARES.categories) && ALL_SOFTWARES.categories.length > 0) {
+                categories = ["全部资源", ...ALL_SOFTWARES.categories];
+            } else {
+                const catSet = new Set();
+                allProducts.forEach(p => { if (p.category) catSet.add(p.category); });
+                categories = ["全部资源", ...Array.from(catSet)];
+            }
+
+            // 解析 URL 参数（仅用于初始分类）
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+            if (categoryParam && categories.includes(categoryParam)) {
+                currentCategory = categoryParam;
+            } else {
+                currentCategory = "全部资源";
+            }
+
+            renderCategories();
+            loadAnnouncements();
+            loadRecommendations();
+            loadFriendLinks();
+            updateCategoryUI(currentCategory);
+            renderProductGrid();
+
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchKeyword = e.target.value.trim().toLowerCase();
+                renderProductGrid();
+            });
+        });
+
+        function renderCategories() {
+            const ul = document.getElementById('categoryUl');
+            ul.innerHTML = '';
+            categories.forEach(cat => {
+                const li = document.createElement('li');
+                li.className = 'category-item' + (cat === currentCategory ? ' active' : '');
+                li.textContent = cat;
+                li.setAttribute('data-cat', cat);
+                li.onclick = () => filterCategory(cat);
+                ul.appendChild(li);
+            });
+        }
+
+        function updateCategoryUI(cat) {
+            document.getElementById('currentCategoryTitle').innerText = cat;
+            document.querySelectorAll('.category-item').forEach(item => {
+                if (item.getAttribute('data-cat') === cat) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            updateCategoryUI(cat);
+            renderProductGrid();
+        }
+
+        function renderProductGrid() {
+            let filtered = allProducts;
+            if (currentCategory !== "全部资源") {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
+            if (searchKeyword !== "") {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchKeyword));
+            }
+
+            const grid = document.getElementById('productGrid');
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;padding:60px;">💡 未检索到符合条件的资源。</div>';
                 return;
             }
 
-            let htmlContent = '';
-            
-            Object.keys(ALL_PRODUCTS).forEach(id => {
-                const product = ALL_PRODUCTS[id];
-                const authText = product.authType ? product.authType.trim() : "免费软件";
-                const isPremium = /购买|付费|订阅|永久/.test(authText);
-                const badgeClass = isPremium ? "auth-badge premium" : "auth-badge";
-
-                htmlContent += `
-                    <div class="product-card">
-                        <div class="img-box">
-                            <img src="${product.logo || 'logo/default.png'}" alt="${product.name}">
+            let html = '';
+            filtered.forEach(product => {
+                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
+                html += `
+                    <div class="item">
+                        <div class="item-image-wrapper">
+                            <img src="${logo}" alt="${product.name}" class="item-image" onerror="this.onerror=null; this.src='logo/default.png';">
                         </div>
-                        <div class="content-box">
-                            <h3>${product.name}</h3>
-                            <div class="price">${product.price || '免费'}</div>
-                            <div class="${badgeClass}">✨ ${authText}</div>
-                            <a href="shopdetail.html?id=${id}" class="btn-view">查看详情</a>
+                        <div class="item-content">
+                            <div class="item-title" title="${product.name}">${product.name}</div>
+                            <a href="tail.html?id=${product.id}" class="item-link">查看详情</a>
                         </div>
                     </div>
                 `;
             });
+            grid.innerHTML = html;
+        }
 
-            container.innerHTML = htmlContent;
-        });
+        function loadAnnouncements() {
+            const listContainer = document.getElementById('announcementList');
+            if (!listContainer) return;
+            // 清空容器，以便重新填充或隐藏
+            listContainer.innerHTML = '';
+            if (ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length > 0) {
+                let html = '';
+                ALL_SOFTWARES.announcements.forEach(ann => {
+                    if (ann.title && ann.title.trim() !== '') {
+                        html += `<li class="notice-item"><span class="notice-badge">📢</span> ${ann.title}</li>`;
+                    }
+                });
+                if (html) {
+                    listContainer.innerHTML = html;
+                    listContainer.parentElement.style.display = 'block'; // 确保父容器显示
+                } else {
+                    listContainer.parentElement.style.display = 'none';
+                }
+            } else {
+                listContainer.parentElement.style.display = 'none';
+            }
+        }
+
+        function loadRecommendations() {
+            const recZone = document.getElementById('recommendZone');
+            const recList = document.getElementById('recommendList');
+            if (!recZone || !recList) return;
+            const recommends = allProducts.filter(p => p.isRecommend === true);
+            if (recommends.length === 0) {
+                recZone.style.display = 'none';
+                return;
+            }
+            let html = '';
+            recommends.forEach(rec => {
+                html += `
+                    <li class="recommend-item">
+                        <span>${rec.name}</span>
+                        <a href="tail.html?id=${rec.id}">查看详情</a>
+                    </li>
+                `;
+            });
+            recList.innerHTML = html;
+            recZone.style.display = 'block';
+        }
+
+        function loadFriendLinks() {
+            const zone = document.getElementById('friendLinksZone');
+            if (!zone) return;
+            if (ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
+                let linksHtml = '';
+                ALL_SOFTWARES.friendLinks.forEach(link => {
+                    if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
+                        linksHtml += `<a href="${link.jumpUrl}" target="_blank" class="friend-link-node">${link.siteName}</a>`;
+                    }
+                });
+                if (linksHtml) {
+                    zone.innerHTML = '<span style="color:#606F7B; margin-right:4px;">友情链接：</span>' + linksHtml;
+                    zone.style.display = 'flex';
+                } else {
+                    zone.style.display = 'none';
+                }
+            } else {
+                zone.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>

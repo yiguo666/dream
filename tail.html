@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源下载详情中心 - Noxcms Tail</title>
+    <style>
+        /* 完整样式参见之前版本，此处略，但确保完整 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+        .container { max-width: 820px; margin: 30px auto; padding: 0 20px; }
+        .breadcrumbs-nav {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 0.88rem;
+            color: #64748B;
+            font-weight: 500;
+        }
+        .breadcrumbs-nav li { display: flex; align-items: center; }
+        .breadcrumbs-nav li:not(:last-child)::after { content: "/"; margin: 0 10px; color: #CBD5E1; }
+        .breadcrumbs-nav a { text-decoration: none; color: #475569; transition: color 0.2s; }
+        .breadcrumbs-nav a:hover { color: #2563EB; }
+        .breadcrumbs-nav .current-node { color: #94A3B8; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .template-wrapper {
+            background: #FFFFFF;
+            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            overflow: hidden;
+            display: none;
+        }
+        .showcase-header {
+            display: flex;
+            padding: 24px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+            border-bottom: 1px solid #F1F5F9;
+            gap: 20px;
+            align-items: center;
+        }
+        .logo-frame {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            background: #fff;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-frame img { width: 100%; height: 100%; object-fit: contain; }
+        .meta-zone { flex-grow: 1; }
+        .asset-title { font-size: 1.35rem; font-weight: 700; color: #0F172A; margin-bottom: 8px; }
+        .badge-line { display: flex; flex-wrap: wrap; gap: 8px; }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: #EFF6FF;
+            color: #1D4ED8;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+        .specification-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background-color: #F8FAFC;
+            border-bottom: 1px solid #F1F5F9;
+            padding: 14px 24px;
+            gap: 12px;
+        }
+        .spec-node { display: flex; flex-direction: column; }
+        .spec-label { font-size: 0.7rem; color: #64748B; font-weight: 500; text-transform: uppercase; }
+        .spec-value { font-size: 0.85rem; color: #334155; font-weight: 600; word-break: break-all; }
+        .article-body { padding: 24px; }
+        .section-headline {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 12px;
+            border-left: 4px solid #2563EB;
+            padding-left: 12px;
+        }
+        .rich-desc-container {
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        #detailSection { margin-top: 20px; }
+        .showcase-banner-frame {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .showcase-banner-frame img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #E2E8F0;
+            display: block;
+        }
+        .download-action-card {
+            background: #F1F5F9;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+            border-top: 1px solid #E2E8F0;
+        }
+        .btn-download-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 24px;
+            background-color: #2563EB;
+            color: #FFF;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .btn-download-trigger:hover { background-color: #1D4ED8; transform: translateY(-1px); }
+        .btn-download-trigger+.btn-download-trigger { margin-top: 8px; }
+        .curtain-loading-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #FFF;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #E2E8F0;
+            border-top-color: #2563EB;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 14px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .fatal-error-wall {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+        .fatal-error-wall h2 { font-size: 1.3rem; color: #EF4444; margin-bottom: 10px; }
+        @media (max-width: 640px) {
+            .showcase-header { flex-direction: column; text-align: center; }
+            .specification-grid { grid-template-columns: 1fr 1fr; text-align: center; }
+            .download-action-card { text-align: center; }
+        }
+    </style>
+    <script src="softwares.js"></script>
+</head>
+<body>
+    <div id="curtainLoading" class="curtain-loading-layer">
+        <div class="spinner"></div>
+        <p>正在加载资源详情...</p>
+    </div>
+
+    <div class="container">
+        <ul class="breadcrumbs-nav" id="bind_breadcrumbs">
+            <!-- 修改：链接指向 index.html -->
+            <li><a href="index.html">全部资源</a></li>
+            <li id="breadcrumb_category_node" style="display: none;"><a href="index.html" id="bind_breadcrumb_cat_text">分类</a></li>
+            <li><span class="current-node" id="bind_breadcrumb_name">加载中...</span></li>
+        </ul>
+
+        <div id="fatalErrorWall" class="fatal-error-wall">
+            <h2>❌ 资产同步链路破损</h2>
+            <p id="errorMessageSlot">未能在当前资产池中捕获该软件的标示凭证。</p>
+            <a href="index.html" class="btn-download-trigger" style="background:#475569;">返回主大厅</a>
+        </div>
+
+        <div id="templateWrapper" class="template-wrapper">
+            <div class="showcase-header">
+                <div class="logo-frame">
+                    <img id="bind_logo" src="logo/default.png" alt="Logo" onerror="this.src='logo/default.png';">
+                </div>
+                <div class="meta-zone">
+                    <h1 id="bind_name" class="asset-title">-</h1>
+                    <div class="badge-line">
+                        <span id="bind_category" class="badge">分类</span>
+                        <span id="bind_weight" class="badge">推荐权重</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="specification-grid">
+                <div class="spec-node">
+                    <span class="spec-label">资源ID</span>
+                    <span id="bind_id" class="spec-value">-</span>
+                </div>
+                <div class="spec-node">
+                    <span class="spec-label">版本</span>
+                    <span id="bind_version" class="spec-value">-</span>
+                </div>
+                <div class="spec-node">
+                    <span class="spec-label">大小</span>
+                    <span id="bind_size" class="spec-value">-</span>
+                </div>
+                <div class="spec-node">
+                    <span class="spec-label">运行环境</span>
+                    <span id="bind_environment" class="spec-value">-</span>
+                </div>
+            </div>
+
+            <div class="article-body">
+                <h2 class="section-headline">资源描述</h2>
+                <div id="bind_desc_container" class="rich-desc-container">
+                    <p>暂无详细描述。</p>
+                </div>
+                <div id="detailSection">
+                    <h2 class="section-headline">详情图片</h2>
+                    <div id="detail_banner_zone" class="showcase-banner-frame"></div>
+                </div>
+            </div>
+
+            <div class="download-action-card">
+                <div class="credential-infobar">
+                    <p style="font-size:0.9rem; font-weight:600; color:#1E293B; margin-bottom:4px;">🚀 请选择高速下载航道：</p>
+                    <p style="font-size:0.78rem; color:#64748B; margin-bottom:8px;">点击下方按钮即可获取资源</p>
+                </div>
+                <div id="downloadButtons" style="display:flex; flex-direction:column; gap:8px; width:100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const curtain = document.getElementById('curtainLoading');
+            const wrapper = document.getElementById('templateWrapper');
+            const errorWall = document.getElementById('fatalErrorWall');
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetId = urlParams.get('id');
+
+            if (!targetId) {
+                showFatalError("❌ 详情页传参指针丢失，请从大厅重新进入。");
+                return;
+            }
+            if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
+                showFatalError("❌ 未检测到数据底座 [softwares.js]！");
+                return;
+            }
+
+            const product = ALL_SOFTWARES.products.find(p => p.id === targetId);
+            if (!product) {
+                showFatalError(`❌ 未检索到标识为 [${targetId}] 的上架资产。`);
+                return;
+            }
+
+            // 基本信息
+            document.getElementById('bind_name').innerText = product.name || '未命名';
+            document.getElementById('bind_category').innerText = product.category || '未分类';
+            document.getElementById('bind_weight').innerText = product.weight ? `权重 ${product.weight}` : '未设置';
+            document.getElementById('bind_id').innerText = product.id || '-';
+            document.getElementById('bind_version').innerText = product.version || '-';
+            document.getElementById('bind_size').innerText = product.size || '-';
+            document.getElementById('bind_environment').innerText = product.environment || '全平台';
+
+            // 面包屑 - 修改分类链接指向 index.html
+            document.getElementById('bind_breadcrumb_name').innerText = product.name;
+            if (product.category) {
+                const catNode = document.getElementById('breadcrumb_category_node');
+                const catText = document.getElementById('bind_breadcrumb_cat_text');
+                catText.innerText = product.category;
+                catText.href = `index.html?category=${encodeURIComponent(product.category)}`;
+                catNode.style.display = 'inline-flex';
+            }
+
+            // Logo
+            const logoImg = document.getElementById('bind_logo');
+            if (product.mainImage && product.mainImage.trim() !== '') {
+                logoImg.src = product.mainImage;
+            }
+
+            // 详情图 - 智能显示
+            const detailSection = document.getElementById('detailSection');
+            const bannerZone = document.getElementById('detail_banner_zone');
+            let detailImages = product.detailImages || '';
+            detailImages = detailImages.trim();
+            if (detailImages === '') {
+                detailSection.style.display = 'none';
+            } else {
+                let imgPaths = detailImages.split(',').map(s => s.trim()).filter(s => s !== '');
+                if (imgPaths.length === 0) {
+                    detailSection.style.display = 'none';
+                } else {
+                    let imgsHtml = '';
+                    imgPaths.forEach(path => {
+                        if (path.startsWith('//')) path = 'https:' + path;
+                        imgsHtml += `<img src="${path}" alt="详情图" onerror="this.style.display='none';">`;
+                    });
+                    bannerZone.innerHTML = imgsHtml;
+                    detailSection.style.display = 'block';
+                    // 延迟检查，若所有图片都加载失败则隐藏区域
+                    setTimeout(() => {
+                        const imgs = bannerZone.querySelectorAll('img');
+                        let anyVisible = false;
+                        imgs.forEach(img => {
+                            if (img.style.display !== 'none') anyVisible = true;
+                        });
+                        if (!anyVisible) detailSection.style.display = 'none';
+                    }, 2000);
+                }
+            }
+
+            // 描述
+            const descContainer = document.getElementById('bind_desc_container');
+            if (product.description && product.description.trim() !== '') {
+                descContainer.innerHTML = `<p>${product.description.replace(/\n/g, '</p><p>')}</p>`;
+            } else {
+                descContainer.innerHTML = `<p>该资源暂无详细描述。</p>`;
+            }
+
+            // 下载链接
+            const downloadContainer = document.getElementById('downloadButtons');
+            let resourcePath = product.resourcePath || '';
+            resourcePath = resourcePath.trim();
+            if (resourcePath !== '') {
+                let urls = [];
+                if (resourcePath.includes(';')) {
+                    urls = resourcePath.split(';').map(s => s.trim()).filter(s => s !== '');
+                } else if (resourcePath.includes(',')) {
+                    urls = resourcePath.split(',').map(s => s.trim()).filter(s => s !== '');
+                } else if (resourcePath.includes('\n')) {
+                    urls = resourcePath.split('\n').map(s => s.trim()).filter(s => s !== '');
+                } else {
+                    urls = [resourcePath];
+                }
+                if (urls.length === 0) {
+                    urls = resourcePath.split(/\r?\n/).map(s => s.trim()).filter(s => s !== '');
+                }
+                if (urls.length === 0 && resourcePath !== '') {
+                    urls = [resourcePath];
+                }
+
+                if (urls.length > 0) {
+                    let btnsHtml = '';
+                    const chineseNum = ['一', '二', '三', '四', '五', '六'];
+                    urls.forEach((url, index) => {
+                        let label;
+                        if (urls.length === 1) {
+                            label = '立即获取资源';
+                        } else {
+                            if (index < chineseNum.length) {
+                                label = `通道 ${chineseNum[index]}`;
+                            } else {
+                                label = `通道 ${index+1}`;
+                            }
+                            if (index === 0) label += ' ⭐';
+                        }
+                        btnsHtml += `<a href="${url}" target="_blank" class="btn-download-trigger">${label}</a>`;
+                    });
+                    downloadContainer.innerHTML = btnsHtml;
+                } else {
+                    downloadContainer.innerHTML = '<p style="color:#94A3B8;">暂无下载链接</p>';
+                }
+            } else {
+                downloadContainer.innerHTML = '<p style="color:#94A3B8;">暂无下载链接</p>';
+            }
+
+            curtain.style.opacity = '0';
+            curtain.style.visibility = 'hidden';
+            wrapper.style.display = 'block';
+
+            function showFatalError(msg) {
+                curtain.style.display = 'none';
+                wrapper.style.display = 'none';
+                document.getElementById('errorMessageSlot').innerText = msg;
+                errorWall.style.display = 'flex';
+            }
+        })();
+    </script>
+</body>
+</html>

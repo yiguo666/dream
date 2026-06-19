@@ -5,22 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dream 的空间</title>
     <style>
-        /* 1. 基础氛围：干净、清透、散漫 */
+        /* ==========================================
+           优化后的个人主页风格（头部增强）
+           ========================================== */
+
+        /* 1. 基础氛围：干净、清透 */
         body {
             font-family: '-apple-system', 'Noto Sans SC', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f7fc; /* 依旧是你喜欢的明亮清透微蓝底 */
+            background-color: #F4F7FA;
             color: #334155;
         }
 
-        /* 2. 页头：保留深邃色调，但整体调轻盈，更像个人工作室 */
+        /* 2. 页头：蓝色渐变 + 装饰光晕 + 大内边距 */
         header {
-            background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
+            background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
             color: #fff;
-            padding: 50px 20px;
+            padding: 70px 20px 60px;
             text-align: center;
-            border-bottom: 3px solid #0069f3;
+            position: relative;
+            overflow: hidden;
+            border-bottom: none;
+        }
+
+        /* 装饰光晕（左右各一个半透明模糊圆） */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+            filter: blur(50px);
+            pointer-events: none;
+        }
+
+        /* 装饰标签（在标题上方） */
+        header .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 2;
         }
 
         header h1 {
@@ -28,27 +76,31 @@
             margin: 0 0 8px 0;
             font-size: 2.2rem;
             letter-spacing: 3px;
+            position: relative;
+            z-index: 2;
         }
 
         header p {
-            color: #94a3b8;
+            color: rgba(255,255,255,0.85);
             margin: 0;
             font-size: 0.95rem;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
         }
 
         header p span {
-            color: #0069f3;
+            color: #ffffff;
             font-weight: bold;
         }
 
-        /* 3. 经典导航：保留最基础的顶部锚点导航 */
+        /* 3. 导航：轻微阴影，与头部衔接 */
         nav {
             display: flex;
             justify-content: center;
-            background-color: #ffffff; 
+            background-color: #ffffff;
             padding: 6px 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02), 0 1px 0 rgba(0,0,0,0.02);
         }
 
         nav a {
@@ -63,7 +115,7 @@
         }
 
         nav a:hover {
-            color: #0069f3;
+            color: #4A90E2;
             transform: scale(1.05);
         }
 
@@ -74,19 +126,19 @@
             padding: 0 20px;
         }
 
-        /* 找回旧版的休闲区 */
+        /* 欢迎卡片 */
         .welcome-section {
             padding: 30px;
             background-color: #ffffff;
-            box-shadow: 0 8px 20px rgba(0, 105, 243, 0.03);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.03);
             border-radius: 14px;
             text-align: center;
             margin-bottom: 30px;
-            border: 1px solid rgba(0, 105, 243, 0.04);
+            border: 1px solid rgba(74, 144, 226, 0.04);
         }
 
         .welcome-section h2 {
-            color: #0069f3;
+            color: #4A90E2;
             font-size: 1.5rem;
             margin-top: 0;
         }
@@ -96,7 +148,7 @@
             font-size: 1.05rem;
         }
 
-        /* 【全新互动玩法：功能卡片网格】 */
+        /* 功能卡片网格 */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -104,7 +156,6 @@
             margin-bottom: 35px;
         }
 
-        /* 卡片做成可点击的便签样式 */
         .card-link {
             text-decoration: none;
             color: inherit;
@@ -117,7 +168,6 @@
             text-align: center;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.02);
             border: 1px solid rgba(0,0,0,0.02);
-            /* 延续你最钟爱的 1.2s 慢速率呼吸过渡 */
             transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
                         box-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
                         border-color 0.6s ease;
@@ -128,16 +178,15 @@
             justify-content: center;
         }
 
-        /* 鼠标悬停：缓缓浮起，边框变蓝，产生温柔的蓝色光晕 */
         .interactive-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 105, 243, 0.08);
-            border-color: rgba(0, 105, 243, 0.3);
+            box-shadow: 0 15px 30px rgba(74, 144, 226, 0.08);
+            border-color: rgba(74, 144, 226, 0.3);
         }
 
         .interactive-card h3 {
             margin: 0 0 10px 0;
-            color: #0069f3;
+            color: #4A90E2;
             font-size: 1.25rem;
         }
 
@@ -152,15 +201,22 @@
         .contact-section {
             padding: 30px;
             background-color: #ffffff;
-            box-shadow: 0 8px 20px rgba(0, 105, 243, 0.03);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.03);
             border-radius: 14px;
             text-align: center;
+            border: 1px solid rgba(74, 144, 226, 0.04);
         }
 
-        .contact-section h2 { color: #0069f3; margin-top: 0; }
-        .highlight { font-weight: bold; color: #0069f3; }
+        .contact-section h2 {
+            color: #4A90E2;
+            margin-top: 0;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #4A90E2;
+        }
 
-        /* 5. 底部 */
+        /* 底部 */
         footer {
             background-color: #1e293b;
             color: #94a3b8;
@@ -184,6 +240,7 @@
 
     <div class="fade-in-wrapper">
         <header>
+            <span class="tag">✦ 个人空间 · 设计分享</span>
             <h1>Dream的主页</h1>
             <p>Dream <span>|</span> Designer <span>|</span> Website</p>
         </header>
@@ -192,20 +249,17 @@
             <a href="#home">首页</a>
             <a href="webmaster.html">关于我</a>
             <!--a href="picture.html">畅览</a-->
-		    <!-- test_暂时关闭此功能区-->
+            <!-- test_暂时关闭此功能区-->
             <a href="shopindex.html">畅享</a>
         </nav>
 
         <main>
-            <!-- 找回旧版：原汁原味的无负担休闲简介 -->
             <section class="welcome-section" id="home">
                 <h2>欢迎来到dream的个人主页！</h2>
                 <p>在这里，我将分享我的创意和经验，畅享一切资源。</p>
             </section>
 
-            <!-- 【新增好玩的互动区】：把去处变成可以摆弄、点击的方块 -->
             <div class="grid-container">
-                
                 <a href="webmaster.html" class="card-link">
                     <div class="interactive-card">
                         <h3>🔍 关于站长</h3>
@@ -222,14 +276,12 @@
 
                 <a href="shopindex.html" class="card-link">
                     <div class="interactive-card">
-                        <h3>📦 畅享工坊</h3>
-                        <p>日常打磨出的各种绿色、快捷、解压即用的效率小工具中心。</p>
+                        <h3>📦 畅享大厅</h3>
+                        <p>畅享各种绿色、快捷、解压即用的效率小工具中心。</p>
                     </div>
                 </a>
-
             </div>
 
-            <!-- 联系板块 -->
             <section class="contact-section">
                 <h2>联系我</h2>
                 <p>如果你对我感兴趣，欢迎随时联系我。</p>
