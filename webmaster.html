@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>关于 Dream - 站长个人主页</title>
     <style>
-        /* ===== 样式保持不变（PC端130px，移动端适配） ===== */
+        /* ===== 全局样式不变 ===== */
         * { box-sizing: border-box; }
         html, body { min-height: 100%; margin: 0; padding: 0; }
         body {
@@ -99,7 +99,7 @@
         .highlight { color: #4A90E2; font-weight: 600; }
         p { line-height: 1.7; color: #475569; margin: 8px 0; font-size: 1rem; }
 
-        /* ===== 控制台 - PC端高度130px ===== */
+        /* ===== 控制台 - PC端固定高度130px ===== */
         .status-terminal {
             background: #0d1117;
             border: 1px solid #30363d;
@@ -273,7 +273,7 @@
         .fade-in { animation: fadeIn 1.2s cubic-bezier(.22,1,.36,1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ===== 移动端适配（仅增高容器） ===== */
+        /* ===== 移动端适配：容器自适应高度，文本允许换行，确保百分比可见 ===== */
         @media (max-width: 767px) {
             header { padding: 40px 20px 35px; }
             header h1 { font-size: 1.6rem; }
@@ -283,29 +283,39 @@
             .profile-img { width: 85px; height: 85px; margin-bottom: 12px; }
             h2 { font-size: 1.2rem; margin-bottom: 10px; }
             p { font-size: .92rem; margin: 6px 0; }
+            /* 移动端：容器高度自适应，最小高度150px，允许换行，字体略小 */
             .status-terminal {
                 padding: 10px 12px;
                 margin: 16px 0;
-                font-size: .75rem;
+                font-size: .72rem; /* 调小字体让单行能显示更多字符 */
                 border-radius: 8px;
-                height: 150px;
-                min-height: 150px;
-                max-height: 150px;
+                height: auto;           /* 自适应高度 */
+                min-height: 150px;      /* 最小高度 */
+                max-height: none;       /* 不限制最大高度 */
             }
-            .terminal-content { height: 100%; }
+            .terminal-content {
+                height: auto;           /* 随内容增高 */
+                overflow-y: visible;    /* 允许内容溢出（但容器本身会撑高） */
+            }
+            .command-line {
+                white-space: normal;    /* 允许换行 */
+                overflow: visible;      /* 不裁剪文本 */
+                text-overflow: clip;    /* 不使用省略号 */
+                line-height: 1.5;       /* 增加行高以便阅读 */
+                margin-bottom: 4px;     /* 增加行间距 */
+            }
             .social-icons { gap: 16px; }
             .social-icons a { font-size: .85rem; }
             button { padding: 10px 34px; font-size: .85rem; border-radius: 24px; }
             .portal-btn { font-size: .85rem !important; padding: 10px 28px !important; }
         }
+
         @media (max-width: 400px) {
             section { padding: 20px 12px; }
             .status-terminal {
-                font-size: .7rem;
+                font-size: .65rem;
                 padding: 8px 10px;
-                height: 130px;
                 min-height: 130px;
-                max-height: 130px;
             }
             .profile-img { width: 70px; height: 70px; }
         }
@@ -354,7 +364,7 @@
 
     <script>
         // ================================================================
-        //  核心交互（修复百分比进度显示 + 延迟逻辑）
+        //  核心交互（百分比进度完全可见，动态更新）
         // ================================================================
 
         (function() {
@@ -435,7 +445,6 @@
 
             currentLineIndex = 0;
             typeLine(initLines, function() {
-                // 初始四行打字完成后，延迟7000ms后出现红色警告
                 startSecretTimeline();
             });
 
@@ -445,7 +454,6 @@
 
             function startSecretTimeline() {
 
-                // ---- 阶段一：延迟7000ms后发出警告 ----
                 setTimeout(function() {
 
                     terminal.classList.add('warning-active');
@@ -457,16 +465,14 @@
                     currentLineIndex = 0;
                     typeLine([alert1, alert2], function() {
 
-                        // ---- 阶段二：协议注入（含百分比进度） ----
                         setTimeout(function() {
                             window.setRainColor('#00bcff');
                             var canvas = document.getElementById('matrix-canvas');
                             if (canvas) canvas.style.opacity = '0.35';
 
-                            // *** 关键修复：清空容器，只显示协议注入相关的行，确保百分比行可见 ***
+                            // 清空容器，显示协议注入行
                             displayBox.innerHTML = '';
 
-                            // 定义所有需要显示的行（第二行为特殊进度行）
                             var lines = [
                                 '> Injecting: Sockets.Connect(Fourth_Dimension)...',
                                 '> Compiling: NoteEngine.Sync.Optimize() -> 0%',
@@ -484,7 +490,6 @@
                                 lineElements.push(div);
                             });
 
-                            // 逐行打字，特殊处理第二行
                             function typeNext(index) {
                                 if (index >= lineElements.length) {
                                     afterAllLines();
@@ -504,7 +509,6 @@
                                         clearInterval(timer);
                                         line.classList.remove('typing');
                                         if (index === 1) {
-                                            // 启动百分比进度
                                             startProgress(line);
                                         } else {
                                             setTimeout(function() { typeNext(index + 1); }, 200);
@@ -513,11 +517,10 @@
                                 }, 30);
                             }
 
-                            // 百分比进度更新
                             function startProgress(lineElement) {
                                 var progress = 0;
                                 var maxProgress = 100;
-                                var totalDuration = 2000 + Math.random() * 4000; // 2~6秒随机
+                                var totalDuration = 2000 + Math.random() * 4000; // 2~6秒
                                 var startTime = Date.now();
                                 var baseText = '> Compiling: NoteEngine.Sync.Optimize() -> ';
 
@@ -527,25 +530,22 @@
                                     progress = Math.floor(ratio * maxProgress);
                                     lineElement.innerText = baseText + progress + '%';
                                     if (progress < maxProgress) {
-                                        var nextDelay = 10 + Math.random() * 70; // 10~80ms随机间隔
+                                        var nextDelay = 10 + Math.random() * 70;
                                         setTimeout(updateProgress, nextDelay);
                                     } else {
                                         lineElement.innerText = baseText + '100%';
-                                        // 完成后继续下一行
                                         setTimeout(function() { typeNext(2); }, 300);
                                     }
                                 }
                                 updateProgress();
                             }
 
-                            // 所有行完成后进入阶段三
                             function afterAllLines() {
                                 setTimeout(function() {
                                     window.setRainColor('#34d399');
                                     var canvas2 = document.getElementById('matrix-canvas');
                                     if (canvas2) canvas2.style.opacity = '0.05';
 
-                                    // 清理多余行，只保留最后两行（任务行）
                                     var all = displayBox.querySelectorAll('.command-line');
                                     while (all.length > 2) {
                                         all[0].remove();
@@ -571,12 +571,11 @@
                                 }, 400);
                             }
 
-                            // 开始打字
                             typeNext(0);
 
-                        }, 600); // 警告后延迟600ms开始协议注入
+                        }, 600);
                     });
-                }, 7000); // 初始四行完成后延迟7000ms出现红色警告
+                }, 7000);
             }
 
             // ================================================================
