@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>资源下载详情中心 - Noxcms Tail</title>
     <style>
-        /* p.s.完整样式参见之前版本，此处略，但确保内容的完整 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -81,6 +80,7 @@
         .spec-node { display: flex; flex-direction: column; }
         .spec-label { font-size: 0.7rem; color: #64748B; font-weight: 500; text-transform: uppercase; }
         .spec-value { font-size: 0.85rem; color: #334155; font-weight: 600; word-break: break-all; }
+
         .article-body { padding: 24px; }
         .section-headline {
             font-size: 1rem;
@@ -96,44 +96,141 @@
             line-height: 1.7;
             margin-bottom: 20px;
         }
-        #detailSection { margin-top: 20px; }
-        .showcase-banner-frame {
-            width: 100%;
+
+        /* ===== 详情图片列表 ===== */
+        #detail-images-list {
+            margin-top: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
         }
-        .showcase-banner-frame img {
+        #detail-images-list img {
             width: 100%;
             height: auto;
+            max-height: 600px;
+            object-fit: contain;
             border-radius: 8px;
             border: 1px solid #E2E8F0;
-            display: block;
+            background: #fcfdfe;
         }
+
+        /* ===== 下载区域 ===== */
         .download-action-card {
             background: #F1F5F9;
             padding: 20px 24px;
             display: flex;
             flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
+            gap: 14px;
             border-top: 1px solid #E2E8F0;
         }
-        .btn-download-trigger {
+        .download-header {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .download-header .title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1E293B;
+        }
+        .download-header .sub {
+            font-size: 0.78rem;
+            color: #64748B;
+        }
+        #downloadPanel {
+            display: none;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px 18px;
+            border: 1px solid #E2E8F0;
+            animation: fadeInPanel 0.3s ease-out;
+            margin-bottom: 10px;
+            order: -1;
+        }
+        @keyframes fadeInPanel {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .panel-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .channel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .channel-grid .channel-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            color: #334155;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+        .channel-grid .channel-link:hover {
+            border-color: #2563EB;
+            color: #2563EB;
+            background: #F0F7FF;
+            transform: translateY(-1px);
+        }
+        .channel-grid .channel-link .star {
+            color: #F59E0B;
+            margin-right: 4px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .btn-group .btn {
+            flex: 0 1 auto;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 10px 24px;
             background-color: #2563EB;
             color: #FFF;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s;
-            text-align: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+            min-width: 100px;
         }
-        .btn-download-trigger:hover { background-color: #1D4ED8; transform: translateY(-1px); }
-        .btn-download-trigger+.btn-download-trigger { margin-top: 8px; }
+        .btn-group .btn:hover {
+            background-color: #1D4ED8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
+        }
+        .btn-group .btn-secondary {
+            background-color: #E2E8F0;
+            color: #475569;
+            box-shadow: none;
+        }
+        .btn-group .btn-secondary:hover {
+            background-color: #CBD5E1;
+            color: #1E293B;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transform: translateY(-2px);
+        }
         .curtain-loading-layer {
             position: fixed;
             top: 0;
@@ -167,10 +264,19 @@
             margin-top: 60px;
         }
         .fatal-error-wall h2 { font-size: 1.3rem; color: #EF4444; margin-bottom: 10px; }
+
         @media (max-width: 640px) {
             .showcase-header { flex-direction: column; text-align: center; }
             .specification-grid { grid-template-columns: 1fr 1fr; text-align: center; }
-            .download-action-card { text-align: center; }
+            .channel-grid { grid-template-columns: 1fr; }
+            #detail-images-list img { max-height: 400px; }
+        }
+        @media (max-width: 480px) {
+            .btn-group .btn {
+                padding: 10px 16px;
+                font-size: 0.88rem;
+                min-width: 110px;
+            }
         }
     </style>
     <script src="softwares.js"></script>
@@ -183,7 +289,6 @@
 
     <div class="container">
         <ul class="breadcrumbs-nav" id="bind_breadcrumbs">
-            <!-- 修改这里：旧站的链接指向 index.html。。。 -->
             <li><a href="index.html">全部资源</a></li>
             <li id="breadcrumb_category_node" style="display: none;"><a href="index.html" id="bind_breadcrumb_cat_text">分类</a></li>
             <li><span class="current-node" id="bind_breadcrumb_name">加载中...</span></li>
@@ -192,7 +297,7 @@
         <div id="fatalErrorWall" class="fatal-error-wall">
             <h2>❌ 资产同步链路破损</h2>
             <p id="errorMessageSlot">未能在当前资产池中捕获该软件的标示凭证。</p>
-            <a href="index.html" class="btn-download-trigger" style="background:#475569;">返回主大厅</a>
+            <a href="index.html" class="btn" style="background:#475569; text-decoration:none; border-radius:8px; padding:8px 18px; color:#fff; font-weight:600; font-size:0.85rem;">返回主大厅</a>
         </div>
 
         <div id="templateWrapper" class="template-wrapper">
@@ -233,18 +338,30 @@
                 <div id="bind_desc_container" class="rich-desc-container">
                     <p>暂无详细描述。</p>
                 </div>
-                <div id="detailSection">
-                    <h2 class="section-headline">详情图片</h2>
-                    <div id="detail_banner_zone" class="showcase-banner-frame"></div>
+
+                <h2 class="section-headline">详情图片</h2>
+                <div id="detail-images-list">
+                    <!-- 由 JavaScript 动态填充 -->
                 </div>
             </div>
 
             <div class="download-action-card">
-                <div class="credential-infobar">
-                    <p style="font-size:0.9rem; font-weight:600; color:#1E293B; margin-bottom:4px;">🚀 请选择高速下载航道：</p>
-                    <p style="font-size:0.78rem; color:#64748B; margin-bottom:8px;">点击下方按钮即可获取资源</p>
+                <div class="download-header">
+                    <div class="title">🚀 请选择高速下载航道</div>
+                    <div class="sub">点击「立即获取资源」展开下载通道</div>
                 </div>
-                <div id="downloadButtons" style="display:flex; flex-direction:column; gap:8px; width:100%;"></div>
+
+                <div id="downloadPanel">
+                    <div class="panel-title">📦 可用下载通道</div>
+                    <div class="channel-grid" id="downloadButtons">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button id="btnToggleDownload" class="btn">立即获取资源</button>
+                    <a href="index.html" class="btn btn-secondary">返回资源大厅</a>
+                </div>
             </div>
         </div>
     </div>
@@ -281,7 +398,7 @@
             document.getElementById('bind_size').innerText = product.size || '-';
             document.getElementById('bind_environment').innerText = product.environment || '全平台';
 
-            // 面包屑 - 同样是把旧站修改分类链接指向 index.html
+            // 面包屑
             document.getElementById('bind_breadcrumb_name').innerText = product.name;
             if (product.category) {
                 const catNode = document.getElementById('breadcrumb_category_node');
@@ -297,37 +414,6 @@
                 logoImg.src = product.mainImage;
             }
 
-            // 详情图 - 智能显示...
-            const detailSection = document.getElementById('detailSection');
-            const bannerZone = document.getElementById('detail_banner_zone');
-            let detailImages = product.detailImages || '';
-            detailImages = detailImages.trim();
-            if (detailImages === '') {
-                detailSection.style.display = 'none';
-            } else {
-                let imgPaths = detailImages.split(',').map(s => s.trim()).filter(s => s !== '');
-                if (imgPaths.length === 0) {
-                    detailSection.style.display = 'none';
-                } else {
-                    let imgsHtml = '';
-                    imgPaths.forEach(path => {
-                        if (path.startsWith('//')) path = 'https:' + path;
-                        imgsHtml += `<img src="${path}" alt="详情图" onerror="this.style.display='none';">`;
-                    });
-                    bannerZone.innerHTML = imgsHtml;
-                    detailSection.style.display = 'block';
-                    // 延迟检查，若所有图片都加载失败则隐藏区域
-                    setTimeout(() => {
-                        const imgs = bannerZone.querySelectorAll('img');
-                        let anyVisible = false;
-                        imgs.forEach(img => {
-                            if (img.style.display !== 'none') anyVisible = true;
-                        });
-                        if (!anyVisible) detailSection.style.display = 'none';
-                    }, 2000);
-                }
-            }
-
             // 描述
             const descContainer = document.getElementById('bind_desc_container');
             if (product.description && product.description.trim() !== '') {
@@ -336,10 +422,34 @@
                 descContainer.innerHTML = `<p>该资源暂无详细描述。</p>`;
             }
 
-            // 下载链接
+            // ===== 详情图片列表 =====
+            const detailList = document.getElementById('detail-images-list');
+            let detailImages = product.detailImages || '';
+            detailImages = detailImages.trim();
+            let imgList = [];
+            if (detailImages !== '') {
+                imgList = detailImages.split(',').map(s => s.trim()).filter(s => s !== '');
+            }
+
+            if (imgList.length > 0) {
+                let html = '';
+                imgList.forEach(src => {
+                    html += `<img src="${src}" alt="详情图" onerror="this.style.display='none';">`;
+                });
+                detailList.innerHTML = html;
+            } else {
+                detailList.innerHTML = '<p style="color:#94A3B8; text-align:center; padding:20px;">暂无详情图片</p>';
+            }
+
+            // ===== 下载通道 =====
             const downloadContainer = document.getElementById('downloadButtons');
+            const panel = document.getElementById('downloadPanel');
+            const toggleBtn = document.getElementById('btnToggleDownload');
+            let isPanelOpen = false;
+
             let resourcePath = product.resourcePath || '';
             resourcePath = resourcePath.trim();
+
             if (resourcePath !== '') {
                 let urls = [];
                 if (resourcePath.includes(';')) {
@@ -364,24 +474,37 @@
                     urls.forEach((url, index) => {
                         let label;
                         if (urls.length === 1) {
-                            label = '立即获取资源';
+                            label = '直接下载';
                         } else {
                             if (index < chineseNum.length) {
                                 label = `通道 ${chineseNum[index]}`;
                             } else {
                                 label = `通道 ${index+1}`;
                             }
-                            if (index === 0) label += ' ⭐';
+                            if (index === 0) label = '⭐ ' + label;
                         }
-                        btnsHtml += `<a href="${url}" target="_blank" class="btn-download-trigger">${label}</a>`;
+                        btnsHtml += `<a href="${url}" target="_blank" class="channel-link">${label}</a>`;
                     });
                     downloadContainer.innerHTML = btnsHtml;
                 } else {
-                    downloadContainer.innerHTML = '<p style="color:#94A3B8;">暂无下载链接</p>';
+                    downloadContainer.innerHTML = '<div style="color:#94A3B8; text-align:center; grid-column:1/-1; padding:8px 0;">暂无可用下载通道</div>';
                 }
             } else {
-                downloadContainer.innerHTML = '<p style="color:#94A3B8;">暂无下载链接</p>';
+                downloadContainer.innerHTML = '<div style="color:#94A3B8; text-align:center; grid-column:1/-1; padding:8px 0;">暂无可用下载通道</div>';
             }
+
+            toggleBtn.addEventListener('click', function() {
+                if (isPanelOpen) {
+                    panel.style.display = 'none';
+                    toggleBtn.textContent = '立即获取资源';
+                    isPanelOpen = false;
+                } else {
+                    panel.style.display = 'block';
+                    toggleBtn.textContent = '关闭资源隧道';
+                    isPanelOpen = true;
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
 
             curtain.style.opacity = '0';
             curtain.style.visibility = 'hidden';
