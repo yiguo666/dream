@@ -3,7 +3,7 @@
     {
       "id": "soft_20260614113912",
       "name": "植物大战僵尸",
-      "category": "游戏",
+      "category": "🎮 游戏",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260614175611.png",
       "detailImages": "logo/logo_20260616164135350.png,logo/logo_20260616164212372.png",
@@ -15,9 +15,23 @@
       "description": "植物大战僵尸的经典作品，必玩塔防游戏。\r\n极富策略性的小游戏，集成了即时战略、塔防战斗和卡片收集等要素。\r\n在游戏中，玩家通过栽种植物，武装自己的家园，把僵尸阻挡在入侵的道路上，不同的敌人，不同的玩法构成五种不同的游戏模式，加之黑夜、浓雾以及泳池之类的障碍增加了游戏挑战性。"
     },
     {
+      "id": "P733",
+      "name": "PVZ Player",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260629192807188.png",
+      "detailImages": "logo/logo_20260629190522600.png,logo/logo_20260629190524136.png,logo/logo_20260629190526943.png",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "1.5.0",
+      "size": "473KB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及部分二创的修改版，同时也适配 64 位 Windows 7 / 8 / 10 / 11 系统。\r\n部分使用Windows 7的用户请注意，由于工具是基于 .NET 8 开发的，运行前需要确保系统已安装 KB2533623 补丁，否则可能无法正常启动。\r\n页面提供了两个下载版本，你可以根据自己的情况选择：\r\n通道一（推荐）：体积较小，适合绝大多数用户，双击即可运行。如遇启动失败，请尝试通道二。\r\n通道二（兼容版）：体积较大，内置自适应运行环境，当通道一无法正常使用时，请下载此版本。"
+    },
+    {
       "id": "P870",
       "name": "罪恶都市",
-      "category": "游戏",
+      "category": "🎮 游戏",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616231606251.png",
       "detailImages": "logo/logo_20260616232359267.png,logo/logo_20260616232405150.png",
@@ -31,7 +45,7 @@
     {
       "id": "P554",
       "name": "混乱大枪战",
-      "category": "游戏",
+      "category": "🎮 游戏",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616170414603.png",
       "detailImages": "logo/logo_20260616170537288.png,logo/logo_20260616170618600.png",
@@ -45,7 +59,7 @@
     {
       "id": "P979",
       "name": "疯狂小人战斗",
-      "category": "游戏",
+      "category": "🎮 游戏",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616165015078.png",
       "detailImages": "logo/logo_20260616164749832.png,logo/logo_20260616164936631.png",
@@ -59,7 +73,7 @@
     {
       "id": "P936",
       "name": "勇者之路精灵物语",
-      "category": "游戏",
+      "category": "🎮 游戏",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616175200627.png",
       "detailImages": "logo/logo_20260616175203606.png,logo/logo_20260616175206320.png",
@@ -73,10 +87,10 @@
     {
       "id": "P837",
       "name": "Snipaste",
-      "category": "工具",
+      "category": "🛠️ 工具",
       "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260617120340043.png",
-      "detailImages": "",
+      "mainImage": "logo/logo_20260630172008698.png",
+      "detailImages": "logo/logo_20260630172411325.png",
       "resourcePath": "",
       "isRecommend": true,
       "version": "2.8.3",
@@ -87,7 +101,7 @@
     {
       "id": "P142",
       "name": "仙剑奇侠传一",
-      "category": "游戏",
+      "category": "🎮 游戏",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260617132724115.png",
       "detailImages": "logo/logo_20260617132726970.png,logo/logo_20260617132731104.png",
@@ -101,16 +115,58 @@
     {
       "id": "P188",
       "name": "Everything",
-      "category": "工具",
+      "category": "🛠️ 工具",
       "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260617152331946.png",
-      "detailImages": "",
+      "mainImage": "logo/logo_20260630171703238.png",
+      "detailImages": "logo/logo_20260630171756245.png",
       "resourcePath": "",
-      "isRecommend": true,
+      "isRecommend": false,
       "version": "1.4.1",
       "size": "",
       "environment": "Win 2000 |Win XP |Win 7 | Win 10 | Win 11",
       "description": "一款文件搜索工具，基于名称实时定位文件和目录。\r\n体积小巧，界面简洁易用，快速建立索引，快速搜索，同时占用极低的系统资源，实时跟踪文件变化。\r\n在搜索框输入文字，它就会只显示过滤后的文件和目录。\r\nEverything搜索只基于文件和文件夹的名称，创建数据库速度超快。"
+    },
+    {
+      "id": "P687",
+      "name": "KeyMouseSimulator",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260702181051068.png",
+      "detailImages": "logo/logo_20260702181056923.png",
+      "resourcePath": "",
+      "isRecommend": true,
+      "version": "1.0.0",
+      "size": "",
+      "environment": "Win 7 | Win 10 | Win 11",
+      "description": "反复输入相同指令而烦恼？让键鼠模拟器帮你解放双手。\r\n\r\n只需在软件中设置好按键序列（如 iiiijj）和间隔延迟，将鼠标移动到目标窗口，3 秒后它就会自动开始执行。\r\n中途想停下来，按 Esc 立刻终止，按空格随时暂停。自动填表、重复录入等多种场景。轻量无后台，用完即走。"
+    },
+    {
+      "id": "P350",
+      "name": "MoneyCase",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260630234645764.png",
+      "detailImages": "",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "",
+      "environment": "Win 7 | Win 10 | Win 11",
+      "description": ""
+    },
+    {
+      "id": "P303",
+      "name": "IconX",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐ 原创",
+      "mainImage": "logo/logo_20260630234436000.png",
+      "detailImages": "logo/logo_20260630234440294.png,logo/logo_20260630234442916.png",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "",
+      "environment": "Win 7 | Win 10 | Win 11",
+      "description": "图片与图标互转，拖拽即识别。\r\n从 .ico 文件里提取高清 PNG，还是将任意图片一键转为专业级 .ico 图标，拖拽即可完成。\r\n操作零门槛，支持图片与图标互转，无需手动选择转换方向，拖入文件自动匹配对应功能。\r\n轻量单文件，无需安装，完美解决图标尺寸、格式适配问题。"
     }
   ],
   "announcements": [
@@ -131,7 +187,8 @@
     }
   ],
   "categories": [
-    "游戏",
-    "工具"
+    "🛠️ 工具",
+    "🎮 游戏",
+    "🎯 原创"
   ]
 };
