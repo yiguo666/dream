@@ -645,55 +645,6 @@
                 document.getElementById('errorMessageSlot').innerText = msg;
                 errorWall.style.display = 'flex';
             }
-
-            // ================================================================
-            // ★★★ 静默统计追踪（完全不可见，仅后台 CMS 查看，不妨碍用户的体验感。） ★★★
-            // ================================================================
-            const STATS_API = 'stats.php';
-
-            /**
-             * 发送统计数据到服务器
-             * 使用 sendBeacon（页面关闭也能发送）+ Image 打点双重保障
-             */
-            function sendStats(action) {
-                if (!targetId || !product) return;
-                
-                // 构建查询参数
-                const params = new URLSearchParams();
-                params.append('action', action);      // 'visit' 或 'download'
-                params.append('productId', targetId);
-                params.append('name', product.name || '');
-                params.append('category', product.category || '');
-                
-                const url = STATS_API + '?' + params.toString();
-                
-                try {
-                    // 方式1: sendBeacon（优先，页面关闭也能发）
-                    if (navigator.sendBeacon) {
-                        navigator.sendBeacon(url);
-                    } 
-                    // 方式2: Image 打点（兼容所有浏览器）
-                    new Image().src = url;
-                } catch(e) {
-                    // 完全静默，不影响用户体验
-                }
-            }
-
-            // --- 1. 页面访问统计 ---
-            // 延迟 800ms 发送，不阻塞页面渲染
-            setTimeout(function() {
-                sendStats('visit');
-            }, 800);
-
-            // --- 2. 下载统计（点击下载链接时触发） ---
-            // 使用事件委托，监听所有 .channel-link 的点击
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('.channel-link');
-                if (link) {
-                    sendStats('download');
-                }
-            });
-
         })();
 
         // ===== 加载友情链接 =====
