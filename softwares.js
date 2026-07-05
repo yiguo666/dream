@@ -43,6 +43,20 @@
       "description": "八十年代黑帮横行的罪恶城藏满犯罪机遇，刑满十五年的汤米奉弗雷利家族之命前往当地交易毒品，不料交易遭伏击全盘失败。在家族首领桑尼的要求下，汤米着手追查伏击主谋，并借机在罪恶城发展自身势力。\r\n城市布局由东岛、西岛及虾岛等多个岛屿构成，包含罪城海滩、大洋海滩、市中心、小哈瓦那等风格各异的区域，整体呈现迈阿密与南佛罗里达的都市风貌。\r\n玩家可在庞大的城市地图中自由探索，执行主线与支线任务，从事抢劫、暗杀等活动，并驾驶汽车、摩托车、飞机等多种载具。"
     },
     {
+      "id": "P837",
+      "name": "Snipaste",
+      "category": "🛠️ 工具",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260630172008698.png",
+      "detailImages": "logo/logo_20260630172411325.png",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "2.8.3",
+      "size": "",
+      "environment": "Win 7 | Win 10 | Win 11",
+      "description": "Snipaste 是一个简单但强大的贴图工具，同时也可以执行截屏、标注等功能。 \r\n快捷键（默认为 F1）、鼠标左键 单击托盘图标。\r\n拥有回放截图记录、逐像素控制光标移动 、 像素级控制截取区域 、放大镜、取色、贴图等功能。"
+    },
+    {
       "id": "P554",
       "name": "混乱大枪战",
       "category": "🎮 游戏",
@@ -83,20 +97,6 @@
       "size": "19.6 MB",
       "environment": "Win 7 | Win 10 | Win 11",
       "description": "《勇者之路》系列续作，玩家扮演大陆冒险者。\r\n可以收服功能各异的精灵伙伴，双人配合闯过多层奇幻关卡。\r\n讨伐魔物 BOSS，追寻传说中冒险王遗留的宝藏。"
-    },
-    {
-      "id": "P837",
-      "name": "Snipaste",
-      "category": "🛠️ 工具",
-      "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260630172008698.png",
-      "detailImages": "logo/logo_20260630172411325.png",
-      "resourcePath": "",
-      "isRecommend": false,
-      "version": "2.8.3",
-      "size": "",
-      "environment": "Win 7 | Win 10 | Win 11",
-      "description": "Snipaste 是一个简单但强大的贴图工具，同时也可以执行截屏、标注等功能。 \r\n快捷键（默认为 F1）、鼠标左键 单击托盘图标。\r\n拥有回放截图记录、逐像素控制光标移动 、 像素级控制截取区域 、放大镜、取色、贴图等功能。"
     },
     {
       "id": "P142",
