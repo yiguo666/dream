@@ -43,6 +43,20 @@
       "description": "八十年代黑帮横行的罪恶城藏满犯罪机遇，刑满十五年的汤米奉弗雷利家族之命前往当地交易毒品，不料交易遭伏击全盘失败。在家族首领桑尼的要求下，汤米着手追查伏击主谋，并借机在罪恶城发展自身势力。\r\n城市布局由东岛、西岛及虾岛等多个岛屿构成，包含罪城海滩、大洋海滩、市中心、小哈瓦那等风格各异的区域，整体呈现迈阿密与南佛罗里达的都市风貌。\r\n玩家可在庞大的城市地图中自由探索，执行主线与支线任务，从事抢劫、暗杀等活动，并驾驶汽车、摩托车、飞机等多种载具。"
     },
     {
+      "id": "P979",
+      "name": "疯狂小人战斗",
+      "category": "🎮 游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260616165015078.png",
+      "detailImages": "logo/logo_20260616164749832.png,logo/logo_20260616164936631.png",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "2.60MB",
+      "environment": "Win 7 | Win 10 | Win 11",
+      "description": "玩家可以选择不同的角色进行对战，包括草莓、桃子、垃圾桶、电球、咖啡豆和茄子等。\r\n每个角色都拥有独特的远程技能、大招和战斗特长。"
+    },
+    {
       "id": "P837",
       "name": "Snipaste",
       "category": "🛠️ 工具",
@@ -69,20 +83,6 @@
       "size": "5.68 MB",
       "environment": "Win 7 | Win 10 | Win 11",
       "description": "混乱大枪战，一款刺激好玩的游戏。\r\n拿起你手中的枪去击败对手吧，小心炸弹哦，可是会把你自己炸飞的。\r\n游戏加载完后点击CAMPAIGN，再选择关卡。\r\n点击选择单人或双人模式，最后点击右下角Start Level即可开始游戏。"
-    },
-    {
-      "id": "P979",
-      "name": "疯狂小人战斗",
-      "category": "🎮 游戏",
-      "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260616165015078.png",
-      "detailImages": "logo/logo_20260616164749832.png,logo/logo_20260616164936631.png",
-      "resourcePath": "",
-      "isRecommend": false,
-      "version": "1.0.0",
-      "size": "2.60MB",
-      "environment": "Win 7 | Win 10 | Win 11",
-      "description": "玩家可以选择不同的角色进行对战，包括草莓、桃子、垃圾桶、电球、咖啡豆和茄子等。\r\n每个角色都拥有独特的远程技能、大招和战斗特长。"
     },
     {
       "id": "P936",
