@@ -190,5 +190,59 @@
     "🛠️ 工具",
     "🎮 游戏",
     "🎯 原创"
-  ]
+  ],
+  "nowContent": {
+    "reading": "<a href=\"https://book.douban.com/subject/1941558/\" target=\"_blank\">《设计中的设计》 – 原研哉</a>",
+    "music": "《Random Access Memories》 – Daft Punk",
+    "quotes": [
+      {
+        "text": "设计不是一种技能，而是捕捉事物本质的感觉能力。",
+        "attribution": "原研哉"
+      },
+      {
+        "text": "好的工具应该像空气一样自然存在，让人专注于创造本身。",
+        "attribution": "Dream"
+      },
+      {
+        "text": "我们塑造工具，然后工具塑造我们。",
+        "attribution": "麦克卢汉"
+      },
+      {
+        "text": "简洁是终极的精致。",
+        "attribution": "达·芬奇"
+      }
+    ],
+    "works": [
+      {
+        "name": "PVZ Player",
+        "url": "tail.html?id=P733"
+      },
+      {
+        "name": "键鼠模拟器",
+        "url": "tail.html?id=P687"
+      },
+      {
+        "name": "图标双向转换",
+        "url": "tail.html?id=P303"
+      }
+    ],
+    "milestones": [
+      {
+        "date": "2026-07-04",
+        "text": "重构 Now 页面，精简并优化交互效果"
+      },
+      {
+        "date": "2026-07-03",
+        "text": "Dream畅享工坊正式上线，首批工具已就位"
+      },
+      {
+        "date": "2026-07-02",
+        "text": "开始学习 Rust 语言，关注系统编程"
+      },
+      {
+        "date": "2026-06-30",
+        "text": "完成 WebMaster 个人主页新设计"
+      }
+    ]
+  }
 };

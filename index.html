@@ -112,11 +112,18 @@
             font-size: 0.95rem;
             transition: all 0.5s ease;
             cursor: pointer;
+            border-radius: 20px;
         }
 
         nav a:hover {
             color: #4A90E2;
             transform: scale(1.05);
+        }
+
+        /* 高亮当前页（主页） */
+        nav a.highlight-nav {
+            color: #4A90E2;
+            background: rgba(74,144,226,0.08);
         }
 
         /* 4. 核心容器 */
@@ -197,7 +204,7 @@
             line-height: 1.6;
         }
 
-        /* 联系我啊啊啊啊啊啊啊板块 */
+        /* 联系我板块 */
         .contact-section {
             padding: 30px;
             background-color: #ffffff;
@@ -216,47 +223,43 @@
             color: #4A90E2;
         }
 
-        /* ===== 底部友情链接样式 ===== */
+        /* ===== 底部友情链接样式（与 now.html / webmaster.html 统一） ===== */
         .friend-links-zone {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 12px;
-            /* 去掉多余的边框，由 footer 的分割线统一控制 */
             border-bottom: none;
             padding: 0 0 10px 0;
             width: 100%;
             font-size: 0.82rem;
-            color: #606F7B;
+            color: #64748b;
         }
         .friend-link-node {
-            color: #606F7B;
+            color: #64748b;
             text-decoration: none;
             transition: 0.2s;
         }
         .friend-link-node:hover { color: #4A90E2; }
 
-        /* ===== 底部 —— 方案一优化版 ===== */
+        /* ===== 底部 — 与 now.html 完全统一 ===== */
         footer {
-            background-color: #ffffff;
+            background: #fff;
             color: #64748b;
             text-align: center;
             padding: 24px 20px 20px;
-            margin-top: 50px;
+            margin-top: 0;
             font-size: 0.85rem;
-            /* 渐变分割线：中间实、两边虚（优雅光晕感） */
             border-top: 2px solid transparent;
             border-image: linear-gradient(90deg, transparent, #4A90E2 20%, #5C9CE6 80%, transparent) 1;
-            /* 极淡的阴影让底部“沉”下来 */
             box-shadow: 0 -8px 30px rgba(74, 144, 226, 0.04), inset 0 2px 4px rgba(255,255,255,0.9);
         }
         footer strong {
-            color: #334155;
+            color: #1e293b;
         }
-        /* 版权信息在友情链接下方，自然分段 */
         .copyright-line {
             padding-top: 10px;
-            border-top: none; /* 不需要额外分割线了 */
+            border-top: none;
         }
 
         /* 入场动画 */
@@ -267,9 +270,24 @@
         .fade-in-wrapper {
             animation: containerFade 1.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 600px) {
+            header { padding: 40px 20px 35px; }
+            header h1 { font-size: 1.6rem; }
+            header .tag { font-size: .7rem; padding: 3px 12px; margin-bottom: 12px; }
+            .grid-container { grid-template-columns: 1fr; }
+            .welcome-section { padding: 20px; }
+            .welcome-section h2 { font-size: 1.2rem; }
+            .contact-section { padding: 20px; }
+            nav a { padding: 6px 12px; font-size: .8rem; }
+            .interactive-card { padding: 18px; }
+        }
+        @media (max-width: 400px) {
+            .welcome-section p { font-size: .9rem; }
+            .interactive-card h3 { font-size: 1.05rem; }
+        }
     </style>
-    <!-- 引入 softwares.js 以便读取友情链接数据 -->
-    <script src="softwares.js"></script>
 </head>
 <body>
 
@@ -283,7 +301,7 @@
         <nav>
             <a href="webmaster.html">关于我</a>
             <a href="now.html">此间</a>
-            <a href="shopindex.html">畅享</a>
+            <a href="shopindex.html" target="_blank">畅享</a>
         </nav>
 
         <main>
@@ -307,9 +325,9 @@
                     </div>
                 </a>
 
-                <a href="shopindex.html" class="card-link">
+                <a href="shopindex.html" target="_blank" rel="noopener noreferrer" class="card-link">
                     <div class="interactive-card">
-                        <h3>📦 畅享大厅</h3>
+                        <h3>📦 畅享工坊</h3>
                         <p>畅享各种绿色、快捷、解压即用的效率小工具中心。</p>
                     </div>
                 </a>
@@ -323,7 +341,7 @@
         </main>
 
         <footer>
-            <!-- 友情链接区域（位于分割线下方，版权上方） -->
+            <!-- 友情链接区域 -->
             <div id="friendLinksZone" class="friend-links-zone"></div>
             <!-- 版权信息 -->
             <div class="copyright-line">
@@ -332,8 +350,10 @@
         </footer>
     </div>
 
+    <!-- ===== softwares.js 移到 body 底部，避免阻塞渲染 ===== -->
+    <script src="softwares.js"></script>
     <script>
-        // 加载友情链接
+        // 加载友情链接（与 now.html / webmaster.html 逻辑一致）
         document.addEventListener('DOMContentLoaded', function() {
             const zone = document.getElementById('friendLinksZone');
             if (!zone) return;
