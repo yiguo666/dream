@@ -26,7 +26,7 @@
       "version": "1.5.0",
       "size": "473KB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及部分二创的修改版，同时也适配 64 位 Windows 7 / 8 / 10 / 11 系统。\r\n部分使用Windows 7的用户请注意，由于工具是基于 .NET 8 开发的，运行前需要确保系统已安装 KB2533623 补丁，否则可能无法正常启动。\r\n页面提供了两个下载版本，你可以根据自己的情况选择：\r\n通道一（推荐）：体积较小，适合绝大多数用户，双击即可运行。如遇启动失败，请尝试通道二。\r\n通道二（兼容版）：体积较大，内置自适应运行环境，当通道一无法正常使用时，请下载此版本。"
+      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及部分二创的修改版，同时也适配 64 位 Windows 7 / 8 / 10 / 11 系统。\r\n关于启动报错“缺少 .NET Runtime”的解决方案，如果遇到启动失败或弹窗提示“You must install .NET Desktop Runtime”，说明你的系统缺少该组件或版本较低，请直接点击弹窗中的“Download it now”链接，根据提示下载安装即可解决。\r\n为了兼顾不同用户，这里提供了两个版本：\r\n通道一（推荐）：体积较小，适合绝大多数用户，双击即可运行。如遇启动失败，请尝试通道二。\r\n通道二（兼容版）：体积较大，内置自适应运行环境，当通道一无法正常使用时，请下载此版本。\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。"
     },
     {
       "id": "P870",
@@ -131,8 +131,8 @@
       "name": "键鼠模拟器",
       "category": "🎯 原创",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260703194533964.png",
-      "detailImages": "logo/logo_20260703194541937.png,logo/logo_20260703194546137.png",
+      "mainImage": "logo/SA]O3$5SAYRE_`LVR37M0]3.png",
+      "detailImages": "logo/%X6WO482TPS_XHX)FF[5OBR.png,logo/_YSMOH}%G0JCFB2~YX0`TNO.png",
       "resourcePath": "",
       "isRecommend": true,
       "version": "1.0.0",
@@ -145,8 +145,8 @@
       "name": "图标双向转换",
       "category": "🎯 原创",
       "weight": "⭐⭐⭐⭐⭐⭐⭐ 原创",
-      "mainImage": "logo/logo_20260702181051068.png",
-      "detailImages": "logo/logo_20260702181056923.png,logo/logo_20260702181051068.png",
+      "mainImage": "logo/YI~H`}85LAZK[RS}1{IY5`T.png",
+      "detailImages": "logo/]R9R4EH4~G$}JX0$RGSMPXY.png,logo/3LEQ3R)U2AG7HT0}06UX1N3.png",
       "resourcePath": "",
       "isRecommend": true,
       "version": "1.0.0",
@@ -159,14 +159,14 @@
       "name": "大小写金额转换",
       "category": "🎯 原创",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260703194838450.png",
-      "detailImages": "logo/logo_20260703194842447.png,logo/logo_20260703194846894.png",
+      "mainImage": "logo/logo_20260706181249783.png",
+      "detailImages": "logo/logo_20260703194842447.png,logo/logo_20260703194846894.png,logo/logo_20260706181257923.png,logo/logo_20260706181300226.png",
       "resourcePath": "",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "",
       "environment": "Win 7 | Win 10 | Win 11",
-      "description": "专注于金额数字与中文大写互转的桌面效率工具。\r\n它的核心定位是解决财务、报销、合同填写等场景下，手动转换大写金额易出错、效率低的问题。\r\n毫秒级精准转换支持一键复制，彻底告别“壹贰叁”写错重写的烦恼。\r\n针对小写数字，可灵活切换千分位分隔符（逗号/空格）和小数精度（保留整数/1位/2位），满足不同财务系统的录入规范，支持一键导出TXT日志。"
+      "description": "专注于金额数字与中文大写互转的桌面效率工具。\r\n它的核心是解决财务、报销、合同等文件填写等场景下，手动转换大写金额易出错、效率低的问题。\r\n毫秒级精准转换支持一键复制，彻底告别“壹贰叁”写错重写的烦恼。\r\n针对小写数字，可灵活切换千分位分隔符（逗号/空格）和小数精度（保留整数/1位/2位），满足不同财务系统的录入规范，支持一键导出TXT日志。"
     }
   ],
   "announcements": [
@@ -179,11 +179,11 @@
   "friendLinks": [
     {
       "siteName": "dream",
-      "jumpUrl": "https://1guo.vercel.app/"
+      "jumpUrl": "01guo.com"
     },
     {
       "siteName": "nox",
-      "jumpUrl": "https://yiguo666.github.io/dream/"
+      "jumpUrl": ""
     }
   ],
   "categories": [
