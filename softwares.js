@@ -179,7 +179,7 @@
   "friendLinks": [
     {
       "siteName": "dream",
-      "jumpUrl": "01guo.com"
+      "jumpUrl": "https://01guo.com/"
     },
     {
       "siteName": "nox",

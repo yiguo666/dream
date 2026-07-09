@@ -298,7 +298,7 @@
     <div class="fade-in-wrapper">
         <header>
                <!-- 这是第N次重新装修主页了o((>ω< ))o -->
-		   <span class="tag">✦ 个人空间 · 设计分享</span>
+           <span class="tag">✦ 个人空间 · 设计分享</span>
             <h1>Dream的主页</h1>
             <p>Dream <span>|</span> Designer <span>|</span> Website</p>
         </header>
@@ -364,7 +364,7 @@
     <script>
         (function() {
              <!-- 更新下随笔…… -->
-			const shards = [
+            const shards = [
                 { text: '月华夜影三点雪，<br>河畔寥寥几人烟。', year: '2015', date: '5.9' },
                 { text: '花落无语对愁言，<br>月挠枝头人未眠。', year: '2021', date: '10.1' },
                 { text: '千家灯火万家辉，<br>清风送来又一岁。<br>愿君如月人长久，<br>万里共饮屠苏酒。', year: '2020', date: '1.24', title: '贺新春' },
@@ -398,15 +398,6 @@
                 document.documentElement.style.setProperty('--glow-soft', `hsla(${tc.hue}, ${tc.sat}%, 55%, 0.18)`);
             }
 
-            let lastIndex = -1;
-            function pickRandomShard() {
-                let idx;
-                do { idx = Math.floor(Math.random() * shards.length); }
-                while (idx === lastIndex && shards.length > 1);
-                lastIndex = idx;
-                return shards[idx];
-            }
-
             function renderShard(shardData) {
                 glimmerText.classList.add('fading');
                 setTimeout(() => {
@@ -418,9 +409,49 @@
                 }, 400);
             }
 
+            let playlist = [];
+            let currentPlayIndex = 0;
+            let lastShard = null;
+            let autoTimer = null;
+
+            function shuffleArray(arr) {
+                const a = [...arr];
+                for (let i = a.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [a[i], a[j]] = [a[j], a[i]];
+                }
+                return a;
+            }
+
+            function createPlaylist(excludeShard) {
+                let list = shuffleArray(shards);
+                if (excludeShard && list.length > 1 && list[0] === excludeShard) {
+                    [list[0], list[1]] = [list[1], list[0]];
+                }
+                return list;
+            }
+
+            function nextShard() {
+                currentPlayIndex++;
+                if (currentPlayIndex >= playlist.length) {
+                    playlist = createPlaylist(lastShard);
+                    currentPlayIndex = 0;
+                }
+                const shard = playlist[currentPlayIndex];
+                return shard;
+            }
+
+            function showCurrentShard() {
+                const shard = playlist[currentPlayIndex];
+                renderShard(shard);
+                lastShard = shard;
+            }
+
             card.addEventListener('click', function(e) {
                 if (e.target.closest('#envelopeBtn')) return;
-                renderShard(pickRandomShard());
+                const shard = nextShard();
+                renderShard(shard);
+                lastShard = shard;
             });
 
             const envelopeBtn = document.getElementById('envelopeBtn');
@@ -483,10 +514,15 @@
 
             function init() {
                 applyTimeColor();
-                const initialShard = pickRandomShard();
-                glimmerText.innerHTML = initialShard.text;
-                const title = initialShard.title || '随笔';
-                glimmerMeta.innerHTML = '— ' + title + ' · <span class="meta-year">' + initialShard.year + '</span> · ' + initialShard.date;
+                playlist = createPlaylist(null);
+                currentPlayIndex = 0;
+                showCurrentShard();
+
+                autoTimer = setInterval(() => {
+                    const shard = nextShard();
+                    renderShard(shard);
+                    lastShard = shard;
+                }, 18000);
             }
 
             if (document.readyState === 'complete' || document.readyState === 'interactive') {
