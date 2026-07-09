@@ -15,7 +15,7 @@
             flex-direction: column;
             min-height: 100vh;
         }
-       /* ===== 重新装修了一下风格……无聊的参数啊 ===== */
+        /* ===== 重新装修了一下风格……无聊的参数啊 ===== */
         .header {
             background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
             color: #fff;
@@ -251,7 +251,6 @@
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 16px;
         }
-        /* 原有卡片样式保持不变 */
         .item {
             background: #fff;
             border-radius: 12px;
@@ -310,62 +309,6 @@
             transition: 0.2s;
         }
         .item-link:hover { background-color: #357ABD; }
-
-        /* ===== 新增骨架屏样式（仅增加，不影响原有布局） ===== */
-        .skeleton-card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #E6EFFB;
-            display: flex;
-            flex-direction: column;
-        }
-        .skeleton-img {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: linear-gradient(90deg, #EDF3FA 25%, #F8FAFD 50%, #EDF3FA 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        .skeleton-body {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .skeleton-line {
-            height: 14px;
-            border-radius: 6px;
-            background: linear-gradient(90deg, #EDF3FA 25%, #F8FAFD 50%, #EDF3FA 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        .skeleton-line--short { width: 60%; }
-        .skeleton-line--btn {
-            height: 28px;
-            border-radius: 8px;
-            margin-top: 4px;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* 移动端骨架屏网格与卡片网格保持一致 */
-        @media (max-width: 768px) {
-            .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
-            }
-        }
-        @media (max-width: 400px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-        }
-
-        /* 原有其他媒体查询保持不变 */
         .site-footer {
             background: #fff;
             border-top: 1px solid #E6EFFB;
@@ -433,12 +376,13 @@
             }
             .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
             .search-box-wrapper { width: 100%; max-width: 100%; }
+            .grid-container { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
         }
     </style>
     <script src="softwares.js"></script>
 </head>
 <body>
-      <!-- ===== 适配新站，这一次头部更新为统一风格，啊啊啊啊啊啊累了/(ㄒoㄒ)/~~ ===== -->
+    <!-- ===== 适配新站，这一次头部更新为统一风格，啊啊啊啊啊啊累了/(ㄒoㄒ)/~~ ===== -->
     <div class="header">
         <span class="tag">✦ 资源大厅</span>
         <h1>畅享创意工坊</h1>
@@ -472,18 +416,7 @@
                     <input type="text" id="searchInput" class="search-input" placeholder="键入关键字实时检索资源...">
                 </div>
             </div>
-            <!-- 做个网格容器：初始状态包含了专业版的骨架屏，这一次体验max -->
-            <div class="grid-container" id="productGrid">
-                <!-- 骨架卡片，数量可根据需要调整（一般8个可以覆盖首屏） -->
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-            </div>
+            <div class="grid-container" id="productGrid"></div>
         </div>
     </div>
 
@@ -505,6 +438,7 @@
         let categories = ["全部资源"];
         let currentCategory = "全部资源";
         let searchKeyword = "";
+        let searchDebounceTimer = null;   // 防抖定时器
 
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
@@ -537,9 +471,13 @@
             renderProductGrid();
 
             const searchInput = document.getElementById('searchInput');
+            // 添加防抖处理，避免频繁渲染
             searchInput.addEventListener('input', (e) => {
-                searchKeyword = e.target.value.trim().toLowerCase();
-                renderProductGrid();
+                clearTimeout(searchDebounceTimer);
+                searchDebounceTimer = setTimeout(() => {
+                    searchKeyword = e.target.value.trim().toLowerCase();
+                    renderProductGrid();
+                }, 300);   // 300ms 防抖
             });
         });
 
@@ -588,22 +526,29 @@
                 return;
             }
 
-            let html = '';
+            // 使用 DocumentFragment 批量插入，减少重排重绘
+            const fragment = document.createDocumentFragment();
             filtered.forEach(product => {
                 const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
-                html += `
-                    <div class="item">
-                        <div class="item-image-wrapper">
-                            <img src="${logo}" alt="${product.name}" class="item-image" onerror="this.onerror=null; this.src='logo/default.png';">
-                        </div>
-                        <div class="item-content">
-                            <div class="item-title" title="${product.name}">${product.name}</div>
-                            <a href="tail.html?id=${product.id}" class="item-link">查看详情</a>
-                        </div>
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.innerHTML = `
+                    <div class="item-image-wrapper">
+                        <img src="${logo}" alt="${product.name}" class="item-image" 
+                             loading="lazy" decoding="async"
+                             onerror="this.onerror=null; this.src='logo/default.png';">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-title" title="${product.name}">${product.name}</div>
+                        <a href="tail.html?id=${product.id}" class="item-link">查看详情</a>
                     </div>
                 `;
+                fragment.appendChild(itemDiv);
             });
-            grid.innerHTML = html;
+
+            // 清空并一次性添加所有元素
+            grid.innerHTML = '';
+            grid.appendChild(fragment);
         }
 
         function loadAnnouncements() {
