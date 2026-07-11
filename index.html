@@ -63,6 +63,8 @@
             box-shadow: 0 8px 20px rgba(74,144,226,0.03);
             border-radius: 14px; text-align: center; margin-bottom: 30px;
             border: 1px solid rgba(74,144,226,0.04);
+            cursor: default; -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         .welcome-section h2 { color: #4A90E2; font-size: 1.5rem; margin-top: 0; }
         .welcome-section p { color: #475569; font-size: 1.05rem; }
@@ -104,7 +106,6 @@
             box-shadow: 0 12px 32px rgba(74,144,226,0.06);
         }
         .glimmer-section:active { transform: scale(0.985); }
-
         .glimmer-section::before {
             content: ''; position: absolute; inset: -40px; border-radius: 50%;
             background: radial-gradient(circle at 50% 50%, var(--glow-soft) 0%, transparent 70%);
@@ -131,7 +132,6 @@
         .dot4 { width:4px; height:4px; top:40%; right:18%; animation-name: floatPath4; animation-duration: 9s; animation-delay: 1s; }
         .dot5 { width:4px; height:4px; top:75%; left:45%; animation-name: floatPath1; animation-duration: 13s; animation-delay: 3s; }
         .dot6 { width:5px; height:5px; top:8%; right:30%; animation-name: floatPath2; animation-duration: 10s; animation-delay: 4s; }
-
         .glimmer-dot::after {
             content: ''; display: block; width: 100%; height: 100%;
             border-radius: 50%; background: var(--glow-color);
@@ -142,7 +142,6 @@
             0%,100% { opacity:0.5; transform:scale(1); }
             50% { opacity:1; transform:scale(2.2); }
         }
-
         @keyframes floatPath1 {
             0%,100% { transform: translate(0,0); }
             20% { transform: translate(22px, -14px); }
@@ -201,11 +200,16 @@
         }
         .glimmer-meta .meta-year { color: #4A90E2; font-weight: 600; }
 
+        /* 邮箱卡片容器 */
         .envelope-card {
-            position: relative; display: flex; align-items: center;
-            justify-content: center; flex-shrink: 0; margin-top: 4px; z-index: 5;
+            position: relative; display: flex; justify-content: center;
+            align-items: center; flex-shrink: 0; margin-top: 4px;
+            z-index: 5; min-height: 48px; width: 100%;
         }
+        /* 信封按钮：绝对居中 */
         .envelope-btn {
+            position: absolute; left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
             display: inline-flex; align-items: center; gap: 8px;
             padding: 12px 24px; border-radius: 32px;
             background: rgba(255,255,255,0.4); backdrop-filter: blur(8px);
@@ -215,14 +219,14 @@
             transition: all 0.5s cubic-bezier(0.22,1,0.36,1);
             box-shadow: 0 4px 12px rgba(74,144,226,0.05);
             white-space: nowrap; -webkit-tap-highlight-color: transparent;
-            min-width: 200px; justify-content: center;
+            min-width: 200px; justify-content: center; z-index: 2;
         }
         .envelope-btn:hover {
             background: rgba(255,255,255,0.7);
             border-color: rgba(74,144,226,0.35);
             box-shadow: 0 8px 24px rgba(74,144,226,0.12);
         }
-        .envelope-btn:active { transform: scale(0.96); }
+        .envelope-btn:active { transform: translate(-50%, -50%) scale(0.96); }
         .envelope-icon { font-size: 1.3rem; flex-shrink: 0; }
         .text-slot {
             position: relative; display: inline-block;
@@ -243,6 +247,65 @@
         }
         .envelope-btn.revealed .envelope-text { opacity: 0; pointer-events: none; }
         .envelope-btn.revealed .email-display { opacity: 1; pointer-events: auto; }
+
+        /* 复制标签：紧贴按钮右侧，现已增加间距 */
+        .copy-badge {
+            position: absolute;
+            /* 桌面端：按钮一半宽(100px) + 30px间隙 = 130px */
+            left: calc(50% + 130px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.9);
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 10px 16px; border-radius: 24px;
+            cursor: pointer; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(74,144,226,0.05); color: #4A90E2;
+            border: 1px solid rgba(74,144,226,0.18);
+            transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+            opacity: 0; pointer-events: none;
+            white-space: nowrap; -webkit-tap-highlight-color: transparent;
+            user-select: none; z-index: 3;
+        }
+        .copy-badge.visible {
+            opacity: 1; pointer-events: auto;
+            transform: translateY(-50%) scale(1);
+        }
+        .copy-badge.hiding {
+            opacity: 0; pointer-events: none;
+            transform: translateY(-50%) scale(0.85);
+            transition: all 0.25s ease-in;
+        }
+        .copy-badge:hover {
+            background: rgba(74,144,226,0.12);
+            border-color: rgba(74,144,226,0.4);
+            box-shadow: 0 4px 16px rgba(74,144,226,0.1);
+            transform: translateY(-50%) scale(1.03);
+        }
+        .copy-badge:active {
+            transform: translateY(-50%) scale(0.93);
+            transition: transform 0.1s ease;
+            background: rgba(74,144,226,0.15);
+        }
+
+        /* 三连击彩蛋 Toast 屏幕中央 */
+        .easter-egg-toast {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: #1e293b; color: #f1f5f9;
+            padding: 13px 26px; border-radius: 32px;
+            font-size: 0.92rem; letter-spacing: 0.6px;
+            z-index: 1000; pointer-events: none; opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1),
+                        opacity 0.4s ease;
+            box-shadow: 0 8px 36px rgba(0,0,0,0.22);
+            white-space: nowrap; max-width: 88vw; text-align: center;
+        }
+        .easter-egg-toast.show {
+            transform: translate(-50%, -50%) scale(1); opacity: 1;
+        }
+        .easter-egg-toast.multiline {
+            white-space: normal; line-height: 1.6; padding: 12px 22px;
+        }
 
         .glimmer-toast {
             position: absolute; bottom: calc(100% + 8px); left: 50%;
@@ -276,14 +339,25 @@
         }
         .fade-in-wrapper { animation: containerFade 1.4s cubic-bezier(0.22,1,0.36,1); }
 
+        /* 移动端适配 */
         @media (max-width: 600px) {
             header { padding:40px 20px 35px; }
             header h1 { font-size:1.6rem; }
             .glimmer-section { height: 380px; padding: 20px 16px 18px; }
             .glimmer-text { font-size:1rem; }
-            .envelope-btn { min-width: 180px; padding: 10px 20px; }
+            .envelope-btn { min-width: 180px; padding: 10px 20px; font-size: 0.85rem; }
             .text-slot { width: 150px; }
             .email-display { font-size: 0.8rem; }
+            .envelope-card { min-height: 44px; }
+            /* 移动端按钮一半90px + 18px间隙 = 108px */
+            .copy-badge {
+                left: calc(50% + 108px);
+                padding: 8px 14px; font-size: 0.75rem; border-radius: 20px;
+            }
+            .easter-egg-toast {
+                font-size: 0.85rem; padding: 12px 20px;
+                max-width: 92vw; white-space: normal;
+            }
         }
         @media (max-width: 400px) {
             .glimmer-section { height: 350px; padding:18px 12px 14px; }
@@ -291,14 +365,22 @@
             .envelope-btn { min-width: 160px; padding:8px 16px; }
             .text-slot { width: 140px; }
             .email-display { font-size: 0.75rem; }
+            /* 按钮一半80px + 16px间隙 = 96px */
+            .copy-badge {
+                left: calc(50% + 96px);
+                padding: 7px 12px; font-size: 0.7rem;
+                border-radius: 18px; gap: 3px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="easter-egg-toast" id="easterEggToast"></div>
+
     <div class="fade-in-wrapper">
         <header>
-               <!-- 这是第N次重新装修主页了o((>ω< ))o -->
-           <span class="tag">✦ 个人空间 · 设计分享</span>
+		    <!-- 这是第N次重新装修主页了o((>ω< ))o -->
+            <span class="tag">✦ 个性空间 · 设计畅享</span>
             <h1>Dream的主页</h1>
             <p>Dream <span>|</span> Designer <span>|</span> Website</p>
         </header>
@@ -308,7 +390,7 @@
             <a href="shopindex.html" target="_blank">畅享</a>
         </nav>
         <main>
-            <section class="welcome-section" id="home">
+            <section class="welcome-section" id="home" onmousedown="event.preventDefault()">
                 <h2>欢迎来到dream的个人主页！</h2>
                 <p>在这里，我将分享我的创意和经验，畅享一切资源。</p>
             </section>
@@ -349,6 +431,9 @@
                                 <span class="email-display">1771232219@qq.com</span>
                             </span>
                         </div>
+                        <span class="copy-badge" id="copyBadge">
+                            <span class="copy-icon">📋</span> 点我复制
+                        </span>
                         <span class="glimmer-toast" id="glimmerToast">📋 已复制到剪贴板</span>
                     </div>
                 </div>
@@ -362,8 +447,7 @@
 
     <script src="softwares.js"></script>
     <script>
-        (function() {
-             <!-- 更新下随笔…… -->
+        (() => {
             const shards = [
                 { text: '月华夜影三点雪，<br>河畔寥寥几人烟。', year: '2015', date: '5.9' },
                 { text: '花落无语对愁言，<br>月挠枝头人未眠。', year: '2021', date: '10.1' },
@@ -377,159 +461,182 @@
                 { text: '未央夜初凉，凌风已入墙。<br>镜面寒似霜，伊人才红妆。<br>今闻庭前雨，夜半与君语。<br>杳杳杏花香，故人还故乡。', year: '2019', date: '9.1' },
                 { text: '白云绕山径，<br>清风任我性。', year: '2019', date: '7.28' },
             ];
-
             const glimmerText = document.getElementById('glimmerText');
             const glimmerMeta = document.getElementById('glimmerMeta');
             const card = document.getElementById('glimmerCard');
 
-            function getTimeColor() {
+            // 三连击彩蛋
+            const welcomeSection = document.getElementById('home');
+            const easterEggToast = document.getElementById('easterEggToast');
+            let clickCount = 0, eggTimer;
+            const easterEggs = [
+                '🌟 星沉海底当窗见，雨过河源隔座看。',
+                '🌙 你发现了藏在时光里的秘密。',
+                '✨ 浮生若梦，为欢几何？',
+                '🕊️ 风起于青萍之末，浪成于微澜之间。',
+                '🌸 偷得浮生半日闲。',
+                '💫 且将新火试新茶，诗酒趁年华。',
+                '🍃 人生如逆旅，我亦是行人。',
+                '🪷 此心安处是吾乡。',
+            ];
+
+            welcomeSection.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+            welcomeSection.addEventListener('click', e => {
+                e.preventDefault();
+                if (e.target.closest('#envelopeBtn') || e.target.closest('#copyBadge')) return;
+                clickCount++;
+                clearTimeout(eggTimer);
+                if (clickCount >= 3) {
+                    clickCount = 0;
+                    const msg = easterEggs[Math.floor(Math.random() * easterEggs.length)];
+                    easterEggToast.textContent = msg;
+                    easterEggToast.classList.toggle('multiline', msg.length > 18);
+                    easterEggToast.classList.add('show');
+                    setTimeout(() => easterEggToast.classList.remove('show'), 2200);
+                } else {
+                    eggTimer = setTimeout(() => clickCount = 0, 500);
+                }
+            });
+
+            // 时间配色
+            const applyTimeColor = () => {
                 const hour = new Date().getHours();
-                if (hour >= 5 && hour < 8) return { hue: 38, sat: 55 };
-                if (hour >= 8 && hour < 12) return { hue: 205, sat: 50 };
-                if (hour >= 12 && hour < 17) return { hue: 160, sat: 30 };
-                if (hour >= 17 && hour < 20) return { hue: 25, sat: 55 };
-                return { hue: 260, sat: 25 };
-            }
+                let hue = 260, sat = 25;
+                if (hour >= 5 && hour < 8) { hue = 38; sat = 55; }
+                else if (hour >= 8 && hour < 12) { hue = 205; sat = 50; }
+                else if (hour >= 12 && hour < 17) { hue = 160; sat = 30; }
+                else if (hour >= 17 && hour < 20) { hue = 25; sat = 55; }
+                document.documentElement.style.setProperty('--glow-hue', hue);
+                document.documentElement.style.setProperty('--glow-color', `hsla(${hue}, ${sat}%, 55%, 0.55)`);
+                document.documentElement.style.setProperty('--glow-soft', `hsla(${hue}, ${sat}%, 55%, 0.18)`);
+            };
 
-            function applyTimeColor() {
-                const tc = getTimeColor();
-                document.documentElement.style.setProperty('--glow-hue', tc.hue);
-                document.documentElement.style.setProperty('--glow-color', `hsla(${tc.hue}, ${tc.sat}%, 55%, 0.55)`);
-                document.documentElement.style.setProperty('--glow-soft', `hsla(${tc.hue}, ${tc.sat}%, 55%, 0.18)`);
-            }
-
-            function renderShard(shardData) {
+            const renderShard = data => {
                 glimmerText.classList.add('fading');
                 setTimeout(() => {
-                    glimmerText.innerHTML = shardData.text;
-                    const title = shardData.title || '随笔';
-                    const metaHTML = '— ' + title + ' · <span class="meta-year">' + shardData.year + '</span> · ' + shardData.date;
-                    glimmerMeta.innerHTML = metaHTML;
+                    glimmerText.innerHTML = data.text;
+                    const title = data.title || '随笔';
+                    glimmerMeta.innerHTML = `— ${title} · <span class="meta-year">${data.year}</span> · ${data.date}`;
                     glimmerText.classList.remove('fading');
                 }, 400);
-            }
+            };
 
-            let playlist = [];
-            let currentPlayIndex = 0;
-            let lastShard = null;
-            let autoTimer = null;
-
-            function shuffleArray(arr) {
-                const a = [...arr];
-                for (let i = a.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [a[i], a[j]] = [a[j], a[i]];
-                }
-                return a;
-            }
-
-            function createPlaylist(excludeShard) {
-                let list = shuffleArray(shards);
-                if (excludeShard && list.length > 1 && list[0] === excludeShard) {
-                    [list[0], list[1]] = [list[1], list[0]];
-                }
+            let playlist = [], currentIndex = 0, lastShard = null, autoTimer;
+            const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+            const createPlaylist = exclude => {
+                let list = shuffle(shards);
+                if (exclude && list[0] === exclude) [list[0], list[1]] = [list[1], list[0]];
                 return list;
-            }
-
-            function nextShard() {
-                currentPlayIndex++;
-                if (currentPlayIndex >= playlist.length) {
-                    playlist = createPlaylist(lastShard);
-                    currentPlayIndex = 0;
-                }
-                const shard = playlist[currentPlayIndex];
-                return shard;
-            }
-
-            function showCurrentShard() {
-                const shard = playlist[currentPlayIndex];
-                renderShard(shard);
-                lastShard = shard;
-            }
-
-            card.addEventListener('click', function(e) {
-                if (e.target.closest('#envelopeBtn')) return;
+            };
+            const nextShard = () => {
+                currentIndex = (currentIndex + 1) % playlist.length;
+                if (currentIndex === 0) playlist = createPlaylist(lastShard);
+                return playlist[currentIndex];
+            };
+            card.addEventListener('click', e => {
+                if (e.target.closest('#envelopeBtn') || e.target.closest('#copyBadge')) return;
                 const shard = nextShard();
                 renderShard(shard);
                 lastShard = shard;
             });
 
+            // 邮箱模块
             const envelopeBtn = document.getElementById('envelopeBtn');
+            const copyBadge = document.getElementById('copyBadge');
             const toast = document.getElementById('glimmerToast');
-            const emailAddress = '1771232219@qq.com';
-            let isRevealed = false;
-            let toastTimer = null;
+            const email = '1771232219@qq.com';
+            let revealed = false, toastTimer;
 
-            function showCopyToast() {
-                toast.textContent = '📋 已复制到剪贴板';
+            const showToast = () => {
                 toast.classList.add('show');
-                if (toastTimer) clearTimeout(toastTimer);
+                clearTimeout(toastTimer);
                 toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
-            }
+            };
+            const copyEmail = () => {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(email).then(showToast).catch(() => fallbackCopy(email));
+                } else fallbackCopy(email);
+            };
+            const fallbackCopy = text => {
+                const input = document.createElement('input');
+                input.value = text; document.body.appendChild(input);
+                input.select(); input.setSelectionRange(0, 99999);
+                try { document.execCommand('copy'); showToast(); } catch(e) { showToast(); }
+                document.body.removeChild(input);
+            };
 
-            function copyEmail() {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(emailAddress).then(showCopyToast).catch(showCopyToast);
-                } else {
-                    const temp = document.createElement('input');
-                    temp.value = emailAddress;
-                    document.body.appendChild(temp);
-                    temp.select();
-                    try { document.execCommand('copy'); showCopyToast(); } catch (e) { showCopyToast(); }
-                    document.body.removeChild(temp);
-                }
-            }
-
-            envelopeBtn.addEventListener('click', function(e) {
+            envelopeBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                if (!isRevealed) {
-                    isRevealed = true;
+                if (!revealed) {
+                    revealed = true;
                     envelopeBtn.classList.add('revealed');
+                    copyBadge.classList.remove('hiding');
+                    copyBadge.classList.add('visible');
                 } else {
-                    if (e.target.closest('.email-display')) {
-                        copyEmail();
-                    } else {
-                        isRevealed = false;
-                        envelopeBtn.classList.remove('revealed');
-                    }
+                    revealed = false;
+                    envelopeBtn.classList.remove('revealed');
+                    copyBadge.classList.add('hiding');
+                    copyBadge.classList.remove('visible');
                 }
             });
 
-            function loadFriendLinks() {
-                const zone = document.getElementById('friendLinksZone');
-                if (!zone) return;
-                if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
-                    let linksHtml = '';
-                    ALL_SOFTWARES.friendLinks.forEach(link => {
-                        if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
-                            linksHtml += `<a href="${link.jumpUrl}" target="_blank" class="friend-link-node">${link.siteName}</a>`;
-                        }
-                    });
-                    if (linksHtml) {
-                        zone.innerHTML = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>' + linksHtml;
-                        zone.style.display = 'flex';
-                    } else zone.style.display = 'none';
-                } else zone.style.display = 'none';
-            }
+            copyBadge.addEventListener('click', e => {
+                e.stopPropagation();
+                if (!revealed) return;
+                copyEmail();
+                const icon = copyBadge.querySelector('.copy-icon');
+                icon.textContent = '✅';
+                copyBadge.style.background = 'rgba(34,197,94,0.08)';
+                copyBadge.style.borderColor = 'rgba(34,197,94,0.35)';
+                copyBadge.style.color = '#16a34a';
+                setTimeout(() => {
+                    icon.textContent = '📋';
+                    copyBadge.style.background = '';
+                    copyBadge.style.borderColor = '';
+                    copyBadge.style.color = '';
+                }, 1000);
+            });
 
-            function init() {
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && revealed) {
+                    revealed = false;
+                    envelopeBtn.classList.remove('revealed');
+                    copyBadge.classList.add('hiding');
+                    copyBadge.classList.remove('visible');
+                }
+            });
+
+            const loadFriendLinks = () => {
+                const zone = document.getElementById('friendLinksZone');
+                if (!zone || typeof ALL_SOFTWARES === 'undefined') return;
+                const links = ALL_SOFTWARES.friendLinks?.filter(l => l.siteName && l.jumpUrl && l.jumpUrl !== 'http://');
+                if (links?.length) {
+                    zone.innerHTML = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>' +
+                        links.map(l => `<a href="${l.jumpUrl}" target="_blank" class="friend-link-node">${l.siteName}</a>`).join('');
+                    zone.style.display = 'flex';
+                } else zone.style.display = 'none';
+            };
+
+            const init = () => {
                 applyTimeColor();
                 playlist = createPlaylist(null);
-                currentPlayIndex = 0;
-                showCurrentShard();
-
+                currentIndex = 0;
+                const first = playlist[0];
+                renderShard(first);
+                lastShard = first;
                 autoTimer = setInterval(() => {
                     const shard = nextShard();
                     renderShard(shard);
                     lastShard = shard;
                 }, 18000);
-            }
+            };
 
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                init(); loadFriendLinks();
-            } else {
-                document.addEventListener('DOMContentLoaded', () => { init(); loadFriendLinks(); });
-            }
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) { clickCount = 0; clearTimeout(eggTimer); }
+            });
+
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { init(); loadFriendLinks(); });
+            else { init(); loadFriendLinks(); }
             setInterval(applyTimeColor, 3600000);
         })();
     </script>
