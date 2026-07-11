@@ -200,7 +200,7 @@
         }
         .glimmer-meta .meta-year { color: #4A90E2; font-weight: 600; }
 
-        /* 邮箱卡片容器 */
+        /* 桌面端邮箱卡片：水平布局 */
         .envelope-card {
             position: relative; display: flex; justify-content: center;
             align-items: center; flex-shrink: 0; margin-top: 4px;
@@ -248,10 +248,9 @@
         .envelope-btn.revealed .envelope-text { opacity: 0; pointer-events: none; }
         .envelope-btn.revealed .email-display { opacity: 1; pointer-events: auto; }
 
-        /* 复制标签：紧贴按钮右侧，现已增加间距 */
+        /* 复制标签：绝对定位，桌面端在按钮右侧 */
         .copy-badge {
             position: absolute;
-            /* 桌面端：按钮一半宽(100px) + 30px间隙 = 130px */
             left: calc(50% + 130px);
             top: 50%;
             transform: translateY(-50%) scale(0.9);
@@ -287,7 +286,7 @@
             background: rgba(74,144,226,0.15);
         }
 
-        /* 三连击彩蛋 Toast 屏幕中央 */
+        /* 三连击彩蛋 */
         .easter-egg-toast {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
@@ -339,38 +338,72 @@
         }
         .fade-in-wrapper { animation: containerFade 1.4s cubic-bezier(0.22,1,0.36,1); }
 
-        /* 移动端适配 */
+        /* 移动端适配：标签换行显示 */
         @media (max-width: 600px) {
             header { padding:40px 20px 35px; }
             header h1 { font-size:1.6rem; }
-            .glimmer-section { height: 380px; padding: 20px 16px 18px; }
+            .glimmer-section { height: auto; min-height: 380px; padding: 20px 16px 18px; }
             .glimmer-text { font-size:1rem; }
-            .envelope-btn { min-width: 180px; padding: 10px 20px; font-size: 0.85rem; }
+            
+            /* 邮箱卡片改为纵向排列 */
+            .envelope-card {
+                flex-direction: column;
+                gap: 10px;
+                min-height: auto;
+            }
+            /* 按钮和标签重置为相对定位，自动居中 */
+            .envelope-btn {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                min-width: 180px;
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                width: fit-content;
+                margin: 0 auto;
+            }
+            .envelope-btn:active { transform: scale(0.96); }
             .text-slot { width: 150px; }
             .email-display { font-size: 0.8rem; }
-            .envelope-card { min-height: 44px; }
-            /* 移动端按钮一半90px + 18px间隙 = 108px */
+            
+            /* 复制标签在下方独立成行 */
             .copy-badge {
-                left: calc(50% + 108px);
-                padding: 8px 14px; font-size: 0.75rem; border-radius: 20px;
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: scale(0.9);
+                margin: 0 auto;
+                padding: 8px 16px;
+                font-size: 0.75rem;
+                border-radius: 20px;
+                width: fit-content;
             }
+            .copy-badge.visible {
+                transform: scale(1);
+            }
+            .copy-badge.hiding {
+                transform: scale(0.85);
+            }
+            .copy-badge:hover {
+                transform: scale(1.03);
+            }
+            .copy-badge:active {
+                transform: scale(0.93);
+            }
+            
             .easter-egg-toast {
                 font-size: 0.85rem; padding: 12px 20px;
                 max-width: 92vw; white-space: normal;
             }
         }
         @media (max-width: 400px) {
-            .glimmer-section { height: 350px; padding:18px 12px 14px; }
+            .glimmer-section { min-height: 350px; padding:18px 12px 14px; }
             .glimmer-text { font-size:0.9rem; }
             .envelope-btn { min-width: 160px; padding:8px 16px; }
             .text-slot { width: 140px; }
             .email-display { font-size: 0.75rem; }
-            /* 按钮一半80px + 16px间隙 = 96px */
-            .copy-badge {
-                left: calc(50% + 96px);
-                padding: 7px 12px; font-size: 0.7rem;
-                border-radius: 18px; gap: 3px;
-            }
+            .copy-badge { padding: 7px 14px; font-size: 0.7rem; border-radius: 18px; gap: 3px; }
         }
     </style>
 </head>
@@ -379,7 +412,6 @@
 
     <div class="fade-in-wrapper">
         <header>
-		    <!-- 这是第N次重新装修主页了o((>ω< ))o -->
             <span class="tag">✦ 个性空间 · 设计畅享</span>
             <h1>Dream的主页</h1>
             <p>Dream <span>|</span> Designer <span>|</span> Website</p>
@@ -470,14 +502,15 @@
             const easterEggToast = document.getElementById('easterEggToast');
             let clickCount = 0, eggTimer;
             const easterEggs = [
-                '🌟 星沉海底当窗见，雨过河源隔座看。',
-                '🌙 你发现了藏在时光里的秘密。',
-                '✨ 浮生若梦，为欢几何？',
-                '🕊️ 风起于青萍之末，浪成于微澜之间。',
-                '🌸 偷得浮生半日闲。',
-                '💫 且将新火试新茶，诗酒趁年华。',
-                '🍃 人生如逆旅，我亦是行人。',
-                '🪷 此心安处是吾乡。',
+                '星沉海底当窗见，雨过河源隔座看。',
+                '你发现了藏在时光里的秘密。',
+                '浮生若梦，为欢几何？',
+                '风起于青萍之末，浪成于微澜之间。',
+				'月落乌啼霜满天，江枫渔火对愁眠。',
+                '偷得浮生半日闲。',
+                '且将新火试新茶，诗酒趁年华。',
+                '人生如逆旅，我亦是行人。',
+                '此心安处是吾乡。',
             ];
 
             welcomeSection.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
