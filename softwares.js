@@ -7,12 +7,12 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260614175611.png",
       "detailImages": "logo/logo_20260616164135350.png,logo/logo_20260616164212372.png",
-      "resourcePath": "https://1guo.lanzouw.com/iqkYA1fr80mj",
+      "resourcePath": "https://pan.quark.cn/s/26ec46b627c5",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "52.50MB",
       "environment": "Win 7 | Win 10 | Win 11",
-      "description": "植物大战僵尸的经典作品，必玩塔防游戏。\r\n极富策略性的小游戏，集成了即时战略、塔防战斗和卡片收集等要素。\r\n在游戏中，玩家通过栽种植物，武装自己的家园，把僵尸阻挡在入侵的道路上，不同的敌人，不同的玩法构成五种不同的游戏模式，加之黑夜、浓雾以及泳池之类的障碍增加了游戏挑战性。"
+      "description": "植物大战僵尸的经典作品，必玩塔防游戏。\r\n极富策略性的小游戏，集成了即时战略、塔防战斗和卡片收集等要素。\r\n在游戏中，玩家通过栽种植物，武装自己的家园，把僵尸阻挡在入侵的道路上，不同的敌人，不同的玩法构成五种不同的游戏模式，加之黑夜、浓雾以及泳池之类的障碍增加了游戏挑战性。\r\n（p.s.当前版本已经完成了汉化设置和对应版本兼容的性能优化，下载解压即可畅玩，无需安装注册表。）"
     },
     {
       "id": "P733",
@@ -21,12 +21,12 @@
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260629192807188.png",
       "detailImages": "logo/logo_20260629190522600.png,logo/logo_20260629190524136.png,logo/logo_20260629190526943.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/904f998a05a4;https://pan.quark.cn/s/e8b759572c37",
       "isRecommend": true,
       "version": "1.5.0",
       "size": "473KB",
-      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及部分二创的修改版，同时也适配 64 位 Windows 7 / 8 / 10 / 11 系统。\r\n关于启动报错“缺少 .NET Runtime”的解决方案，如果遇到启动失败或弹窗提示“You must install .NET Desktop Runtime”，说明你的系统缺少该组件或版本较低，请直接点击弹窗中的“Download it now”链接，根据提示下载安装即可解决。\r\n为了兼顾不同用户，这里提供了两个版本：\r\n通道一（推荐）：体积较小，适合绝大多数用户，双击即可运行。如遇启动失败，请尝试通道二。\r\n通道二（兼容版）：体积较大，内置自适应运行环境，当通道一无法正常使用时，请下载此版本。\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。"
+      "environment": "Win 10 | Win 11",
+      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及部分二创的修改版，同时也适配 64 位 Windows 10 / 11 系统。\r\n关于启动报错“缺少 .NET Runtime”的解决方案，如果遇到启动失败或弹窗提示“You must install .NET Desktop Runtime”，说明你的系统缺少该组件或版本较低，请直接点击弹窗中的“Download it now”链接，根据提示下载安装即可解决。\r\n为了兼顾不同用户，这里提供了两个版本：\r\n通道一（推荐）：体积较小，适合绝大多数用户，双击即可运行。如遇启动失败，请尝试通道二。\r\n通道二（兼容版）：体积较大，内置自适应运行环境，当通道一无法正常使用时，请下载此版本。\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。"
     },
     {
       "id": "P870",
@@ -35,12 +35,26 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616231606251.png",
       "detailImages": "logo/logo_20260616232359267.png,logo/logo_20260616232405150.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/9ed01080788c;https://pan.quark.cn/s/77568eb1b455",
       "isRecommend": false,
       "version": "6.0.0",
       "size": "1.11GB",
       "environment": "Win XP | Win 7 | Win 10 | Win 11",
-      "description": "八十年代黑帮横行的罪恶城藏满犯罪机遇，刑满十五年的汤米奉弗雷利家族之命前往当地交易毒品，不料交易遭伏击全盘失败。在家族首领桑尼的要求下，汤米着手追查伏击主谋，并借机在罪恶城发展自身势力。\r\n城市布局由东岛、西岛及虾岛等多个岛屿构成，包含罪城海滩、大洋海滩、市中心、小哈瓦那等风格各异的区域，整体呈现迈阿密与南佛罗里达的都市风貌。\r\n玩家可在庞大的城市地图中自由探索，执行主线与支线任务，从事抢劫、暗杀等活动，并驾驶汽车、摩托车、飞机等多种载具。"
+      "description": "八十年代黑帮横行的罪恶城藏满犯罪机遇，刑满十五年的汤米奉弗雷利家族之命前往当地交易毒品，不料交易遭伏击全盘失败。在家族首领桑尼的要求下，汤米着手追查伏击主谋，并借机在罪恶城发展自身势力。\r\n城市布局由东岛、西岛及虾岛等多个岛屿构成，包含罪城海滩、大洋海滩、市中心、小哈瓦那等风格各异的区域，整体呈现迈阿密与南佛罗里达的都市风貌。\r\n玩家可在庞大的城市地图中自由探索，执行主线与支线任务，从事抢劫、暗杀等活动，并驾驶汽车、摩托车、飞机等多种载具。\r\n(p.s.下载一是罪恶都市汉化版，下载二是魔改奥特曼模型汉化版)"
+    },
+    {
+      "id": "P466",
+      "name": "歌词跳转音乐播放器",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260714233422130.png",
+      "detailImages": "logo/logo_20260714233438110.png,logo/logo_20260714233440080.png,logo/logo_20260714233442078.png",
+      "resourcePath": "https://pan.quark.cn/s/9f76e12bed24;https://pan.quark.cn/s/50271e181527",
+      "isRecommend": true,
+      "version": "1.0.0",
+      "size": "323.5kb",
+      "environment": "Win 10 | Win 11",
+      "description": "历时三个月，我把它做出来了，那个只存在于想象中的播放器，没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。\r\n这是音律的艺术，全网独家的音乐播放器重新定义了本地音乐的打开方式。\r\n创新性制作了歌词跳转模式，可以玩的音乐模式！\r\n告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。"
     },
     {
       "id": "P979",
@@ -49,7 +63,7 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616165015078.png",
       "detailImages": "logo/logo_20260616164749832.png,logo/logo_20260616164936631.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/5f45902b2bdd",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "2.60MB",
@@ -63,10 +77,10 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260630172008698.png",
       "detailImages": "logo/logo_20260630172411325.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/02837a5bfaf1",
       "isRecommend": false,
       "version": "2.8.3",
-      "size": "",
+      "size": "38.7MB",
       "environment": "Win 7 | Win 10 | Win 11",
       "description": "Snipaste 是一个简单但强大的贴图工具，同时也可以执行截屏、标注等功能。 \r\n快捷键（默认为 F1）、鼠标左键 单击托盘图标。\r\n拥有回放截图记录、逐像素控制光标移动 、 像素级控制截取区域 、放大镜、取色、贴图等功能。"
     },
@@ -77,7 +91,7 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616170414603.png",
       "detailImages": "logo/logo_20260616170537288.png,logo/logo_20260616170618600.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/863aad0599ba",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "5.68 MB",
@@ -91,7 +105,7 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616175200627.png",
       "detailImages": "logo/logo_20260616175203606.png,logo/logo_20260616175206320.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/239b540cd001",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "19.6 MB",
@@ -105,12 +119,12 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260617132724115.png",
       "detailImages": "logo/logo_20260617132726970.png,logo/logo_20260617132731104.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/0ac1cd940e8f",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "20.7 MB",
       "environment": "Win 7 | Win 10",
-      "description": "最经典的仙侠游戏大作"
+      "description": "最经典的仙侠游戏大作\r\n内置存档编辑器和经典存档集合"
     },
     {
       "id": "P188",
@@ -119,10 +133,10 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260630171703238.png",
       "detailImages": "logo/logo_20260630171756245.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/85de06a2226f",
       "isRecommend": false,
       "version": "1.4.1",
-      "size": "",
+      "size": "1.7MB",
       "environment": "Win 2000 |Win XP |Win 7 | Win 10 | Win 11",
       "description": "一款文件搜索工具，基于名称实时定位文件和目录。\r\n体积小巧，界面简洁易用，快速建立索引，快速搜索，同时占用极低的系统资源，实时跟踪文件变化。\r\n在搜索框输入文字，它就会只显示过滤后的文件和目录。\r\nEverything搜索只基于文件和文件夹的名称，创建数据库速度超快。"
     },
@@ -137,7 +151,7 @@
       "isRecommend": true,
       "version": "1.0.0",
       "size": "",
-      "environment": "Win 7 | Win 10 | Win 11",
+      "environment": "Win 10 | Win 11",
       "description": "反复输入相同指令而烦恼？让键鼠模拟器帮你解放双手。\r\n\r\n只需在软件中设置好按键序列（如 iiiijj）和间隔延迟，将鼠标移动到目标窗口，3 秒后它就会自动开始执行。\r\n中途想停下来，按 Esc 立刻终止，按空格随时暂停。自动填表、重复录入等多种场景。轻量无后台，用完即走。"
     },
     {
@@ -147,11 +161,11 @@
       "weight": "⭐⭐⭐⭐⭐⭐⭐ 原创",
       "mainImage": "logo/YI~H`}85LAZK[RS}1{IY5`T.png",
       "detailImages": "logo/]R9R4EH4~G$}JX0$RGSMPXY.png,logo/3LEQ3R)U2AG7HT0}06UX1N3.png",
-      "resourcePath": "",
+      "resourcePath": "https://pan.quark.cn/s/b6d1b9e20194",
       "isRecommend": true,
       "version": "1.0.0",
-      "size": "",
-      "environment": "Win 7 | Win 10 | Win 11",
+      "size": "8.5MB",
+      "environment": "Win 10 | Win 11",
       "description": "图片与图标互转，拖拽即识别。\r\n从 .ico 文件里提取高清 PNG，还是将任意图片一键转为专业级 .ico 图标，拖拽即可完成。\r\n操作零门槛，支持图片与图标互转，无需手动选择转换方向，拖入文件自动匹配对应功能。\r\n轻量单文件，无需安装，完美解决图标尺寸、格式适配问题。"
     },
     {
@@ -160,12 +174,12 @@
       "category": "🎯 原创",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260706181249783.png",
-      "detailImages": "logo/logo_20260703194842447.png,logo/logo_20260703194846894.png,logo/logo_20260706181257923.png,logo/logo_20260706181300226.png",
-      "resourcePath": "",
+      "detailImages": "logo/logo_20260706181249783.png,logo/logo_20260706181257923.png,logo/logo_20260706181300226.png",
+      "resourcePath": "https://pan.quark.cn/s/69abefa36f2f;https://pan.quark.cn/s/cba9270156eb",
       "isRecommend": false,
       "version": "1.0.0",
       "size": "",
-      "environment": "Win 7 | Win 10 | Win 11",
+      "environment": "Win 10 | Win 11",
       "description": "专注于金额数字与中文大写互转的桌面效率工具。\r\n它的核心是解决财务、报销、合同等文件填写等场景下，手动转换大写金额易出错、效率低的问题。\r\n毫秒级精准转换支持一键复制，彻底告别“壹贰叁”写错重写的烦恼。\r\n针对小写数字，可灵活切换千分位分隔符（逗号/空格）和小数精度（保留整数/1位/2位），满足不同财务系统的录入规范，支持一键导出TXT日志。"
     }
   ],
@@ -224,9 +238,17 @@
       {
         "name": "图标双向转换",
         "url": "tail.html?id=P303"
+      },
+      {
+        "name": "跳转歌词音乐播放器",
+        "url": "tail.html?id=P466"
       }
     ],
     "milestones": [
+      {
+        "date": "2026-07-14",
+        "text": "历时近三个月，原创歌词跳转模式的音乐播放器终于上线了"
+      },
       {
         "date": "2026-07-04",
         "text": "重构 Now 页面，精简并优化交互效果"
