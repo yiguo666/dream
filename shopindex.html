@@ -15,7 +15,6 @@
             flex-direction: column;
             min-height: 100vh;
         }
-       /* ===== 重新装修了一下风格……无聊的参数啊 ===== */
         .header {
             background: linear-gradient(135deg, #4A90E2 0%, #5C9CE6 100%);
             color: #fff;
@@ -212,6 +211,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 20px;
+            scroll-margin-top: 20px; /* 滚动定位时的偏移量 */
         }
         .control-bar h2 {
             font-size: 1rem;
@@ -251,7 +251,6 @@
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 16px;
         }
-        /* 原有卡片样式保持不变 */
         .item {
             background: #fff;
             border-radius: 12px;
@@ -284,7 +283,23 @@
             padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 4px;
+        }
+        /* 标题行：生肖 + 标题，同一行，生肖稍微抬高 */
+        .item-title-row {
+            display: flex;
+            align-items: baseline; /* 基线对齐，然后用 vertical-align 微调 */
+            gap: 4px;
+            min-height: 2.4em;
+        }
+        .item-zodiac {
+            font-size: 0.75rem;
+            color: #8A9AA8;
+            opacity: 0.7;
+            line-height: 1;
+            position: relative;
+            top: -2px; /* 稍微抬高一点 */
+            flex-shrink: 0;
         }
         .item-title {
             font-size: 0.85rem;
@@ -295,7 +310,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             line-height: 1.4;
-            min-height: 2.4em;
         }
         .item-link {
             display: block;
@@ -308,10 +322,98 @@
             font-size: 0.75rem;
             font-weight: 600;
             transition: 0.2s;
+            margin-top: 4px;
         }
         .item-link:hover { background-color: #357ABD; }
 
-        /* ===== 新增骨架屏样式（仅增加，不影响原有布局） ===== */
+        /* ===== 分页控件样式 ===== */
+        .pagination-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 20px 40px;
+            background: #fff;
+            padding: 14px 30px;
+            border-radius: 14px;
+            border: 1px solid #E6EFFB;
+            margin-top: 8px;
+        }
+        .pagination-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .pagination-group--jump {
+            gap: 8px;
+        }
+        .page-btn {
+            background: #F8FAFD;
+            border: 1px solid #E2EAF4;
+            border-radius: 8px;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #334155;
+            font-weight: 500;
+        }
+        .page-btn:hover:not(:disabled) {
+            background: #EFF6FF;
+            border-color: #4A90E2;
+            color: #4A90E2;
+        }
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        #pageInfo {
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            padding: 0 4px;
+        }
+        .page-jump {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .page-jump span {
+            font-size: 0.85rem;
+            color: #64748B;
+        }
+        .page-jump input {
+            width: 56px;
+            padding: 4px 6px;
+            border: 1px solid #E2EAF4;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85rem;
+            background: #F8FAFD;
+            outline: none;
+        }
+        .page-jump input:focus {
+            border-color: #4A90E2;
+            background: #fff;
+        }
+        .page-jump button {
+            padding: 4px 14px;
+            background: #4A90E2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .page-jump button:hover {
+            background: #357ABD;
+        }
+
+        /* ===== 骨架屏 ===== */
         .skeleton-card {
             background: #fff;
             border-radius: 12px;
@@ -351,21 +453,94 @@
             100% { background-position: -200% 0; }
         }
 
-        /* 移动端骨架屏网格与卡片网格保持一致 */
+        /* 移动端适配 */
         @media (max-width: 768px) {
             .grid-container {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
                 gap: 12px;
             }
+            .header { padding: 40px 20px 35px; }
+            .header h1 { font-size: 1.6rem; }
+            .main-container { flex-direction: column; }
+            .sidebar-wrapper { width: 100%; }
+            .category-list {
+                display: flex;
+                overflow-x: auto;
+                gap: 6px;
+            }
+            .category-list::-webkit-scrollbar { display: none; }
+            .category-item {
+                flex-shrink: 0;
+                margin-bottom: 0;
+                background: #EDF3FA;
+                color: #5C6E80;
+                border-radius: 6px;
+            }
+            .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .search-box-wrapper { width: 100%; max-width: 100%; }
+            .sidebar-notice-panel .notice-list {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 8px;
+                max-height: none;
+                padding-bottom: 4px;
+            }
+            .sidebar-notice-panel .notice-item {
+                white-space: nowrap;
+                flex-shrink: 0;
+                margin-bottom: 0;
+                border-left: none;
+                border-bottom: 3px solid #4A90E2;
+            }
+            .sidebar-notice-panel .notice-list::-webkit-scrollbar { display: none; }
+            .sidebar-notice-panel .notice-list { scrollbar-width: none; -ms-overflow-style: none; }
+            .recommend-list {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 8px;
+            }
+            .recommend-item {
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            .recommend-list::-webkit-scrollbar { display: none; }
+            .recommend-list { scrollbar-width: none; -ms-overflow-style: none; }
+            .pagination-bar {
+                gap: 14px 20px;
+                padding: 12px 16px;
+            }
+            .pagination-group {
+                gap: 8px;
+            }
+            .page-btn {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+            .page-jump input {
+                width: 48px;
+            }
         }
-        @media (max-width: 400px) {
+        @media (max-width: 480px) {
             .grid-container {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 8px;
             }
+            .pagination-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 12px;
+            }
+            .pagination-group {
+                justify-content: center;
+            }
+            .pagination-group--jump {
+                justify-content: center;
+            }
         }
 
-        /* 原有其他媒体查询保持不变 */
         .site-footer {
             background: #fff;
             border-top: 1px solid #E6EFFB;
@@ -413,65 +588,10 @@
             color: #64748B;
             padding-top: 8px;
         }
-        @media (max-width: 768px) {
-            .header { padding: 40px 20px 35px; }
-            .header h1 { font-size: 1.6rem; }
-            .main-container { flex-direction: column; }
-            .sidebar-wrapper { width: 100%; }
-            .category-list {
-                display: flex;
-                overflow-x: auto;
-                gap: 6px;
-            }
-            .category-list::-webkit-scrollbar { display: none; }
-            .category-item {
-                flex-shrink: 0;
-                margin-bottom: 0;
-                background: #EDF3FA;
-                color: #5C6E80;
-                border-radius: 6px;
-            }
-            .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .search-box-wrapper { width: 100%; max-width: 100%; }
-
-            /* 公告转为横向滚动 */
-            .sidebar-notice-panel .notice-list {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                gap: 8px;
-                max-height: none;
-                padding-bottom: 4px;
-            }
-            .sidebar-notice-panel .notice-item {
-                white-space: nowrap;
-                flex-shrink: 0;
-                margin-bottom: 0;
-                border-left: none;
-                border-bottom: 3px solid #4A90E2;
-            }
-            .sidebar-notice-panel .notice-list::-webkit-scrollbar { display: none; }
-            .sidebar-notice-panel .notice-list { scrollbar-width: none; -ms-overflow-style: none; }
-
-            /* 推荐区转为横向滚动 */
-            .recommend-list {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                gap: 8px;
-            }
-            .recommend-item {
-                white-space: nowrap;
-                flex-shrink: 0;
-            }
-            .recommend-list::-webkit-scrollbar { display: none; }
-            .recommend-list { scrollbar-width: none; -ms-overflow-style: none; }
-        }
     </style>
     <script src="softwares.js"></script>
 </head>
 <body>
-      <!-- ===== 适配新站，这一次头部更新为统一风格，啊啊啊啊啊啊累了/(ㄒoㄒ)/~~ ===== -->
     <div class="header">
         <span class="tag">✦ 资源大厅</span>
         <h1>畅享创意工坊</h1>
@@ -495,7 +615,7 @@
         </div>
 
         <div class="content-panel">
-            <div class="control-bar">
+            <div class="control-bar" id="controlBar">
                 <h2>当前视图：<span id="currentCategoryTitle">🏠 全部资源</span></h2>
                 <div class="search-box-wrapper">
                     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -505,9 +625,9 @@
                     <input type="text" id="searchInput" class="search-input" placeholder="键入关键字实时检索资源...">
                 </div>
             </div>
-            <!-- 做个网格容器：初始状态包含了专业版的骨架屏，这一次体验max -->
+            <!-- 网格容器 -->
             <div class="grid-container" id="productGrid">
-                <!-- 骨架卡片，数量可根据需要调整（一般8个可以覆盖首屏） -->
+                <!-- 骨架屏 -->
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
@@ -516,6 +636,19 @@
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
+            </div>
+            <!-- 分页控件 -->
+            <div class="pagination-bar" id="paginationBar">
+                <div class="pagination-group">
+                    <button class="page-btn" id="prevPageBtn">◀ 上一页</button>
+                    <span id="pageInfo">第 1 / 1 页</span>
+                    <button class="page-btn" id="nextPageBtn">下一页 ▶</button>
+                </div>
+                <div class="pagination-group pagination-group--jump">
+                    <span>跳转</span>
+                    <input type="number" id="pageJumpInput" min="1" placeholder="页">
+                    <button id="pageJumpBtn">GO</button>
+                </div>
             </div>
         </div>
     </div>
@@ -538,6 +671,11 @@
         let categories = ["全部资源"];
         let currentCategory = "全部资源";
         let searchKeyword = "";
+        const PAGE_SIZE = 12;
+        let currentPage = 0;
+
+        // 十二生肖（用于卡片标签）
+        const ZODIAC = ['🐭', '🐮', '🐯', '🐰', '🐲', '🐍', '🐴', '🐏', '🐵', '🐔', '🐶', '🐷'];
 
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
@@ -572,10 +710,140 @@
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
                 searchKeyword = e.target.value.trim().toLowerCase();
+                currentPage = 0;
                 renderProductGrid();
+            });
+
+            document.getElementById('prevPageBtn').addEventListener('click', () => {
+                if (currentPage > 0) {
+                    currentPage--;
+                    renderProductGrid();
+                    scrollToControlBar();
+                }
+            });
+            document.getElementById('nextPageBtn').addEventListener('click', () => {
+                const total = getFilteredCount();
+                const totalPages = Math.ceil(total / PAGE_SIZE);
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    renderProductGrid();
+                    scrollToControlBar();
+                }
+            });
+            document.getElementById('pageJumpBtn').addEventListener('click', () => {
+                const input = document.getElementById('pageJumpInput');
+                let val = parseInt(input.value.trim(), 10);
+                const total = getFilteredCount();
+                const totalPages = Math.ceil(total / PAGE_SIZE);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > totalPages) val = totalPages;
+                if (val >= 1 && val <= totalPages) {
+                    currentPage = val - 1;
+                    renderProductGrid();
+                    scrollToControlBar();
+                }
+                input.value = '';
+            });
+            document.getElementById('pageJumpInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('pageJumpBtn').click();
+                }
             });
         });
 
+        // ----- 滚动到视图栏（.control-bar）顶部 -----
+        function scrollToControlBar() {
+            const controlBar = document.getElementById('controlBar');
+            if (controlBar) {
+                controlBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function getFilteredCount() {
+            let filtered = allProducts;
+            if (currentCategory !== "全部资源") {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
+            if (searchKeyword !== "") {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchKeyword));
+            }
+            return filtered.length;
+        }
+
+        function renderProductGrid() {
+            let filtered = allProducts;
+            if (currentCategory !== "全部资源") {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
+            if (searchKeyword !== "") {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchKeyword));
+            }
+
+            const total = filtered.length;
+            const totalPages = Math.ceil(total / PAGE_SIZE);
+            if (currentPage >= totalPages && totalPages > 0) {
+                currentPage = totalPages - 1;
+            }
+            if (currentPage < 0) currentPage = 0;
+
+            const start = currentPage * PAGE_SIZE;
+            const end = Math.min(start + PAGE_SIZE, total);
+            const pageItems = filtered.slice(start, end);
+
+            const grid = document.getElementById('productGrid');
+            if (pageItems.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;padding:60px;">💡 未检索到符合条件的资源。</div>';
+                updatePagination(total, totalPages);
+                return;
+            }
+
+            let html = '';
+            pageItems.forEach((product) => {
+                const globalIndex = filtered.indexOf(product);
+                const zodiac = ZODIAC[globalIndex % 12];
+                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
+                html += `
+                    <div class="item">
+                        <div class="item-image-wrapper">
+                            <img src="${logo}" alt="${product.name}" class="item-image" onerror="this.onerror=null; this.src='logo/default.png';">
+                        </div>
+                        <div class="item-content">
+                            <div class="item-title-row">
+                                <span class="item-zodiac">${zodiac}</span>
+                                <span class="item-title" title="${product.name}">${product.name}</span>
+                            </div>
+                            <a href="tail.html?id=${product.id}" class="item-link">查看详情</a>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+            updatePagination(total, totalPages);
+        }
+
+        function updatePagination(total, totalPages) {
+            const pageInfo = document.getElementById('pageInfo');
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+
+            if (total === 0) {
+                pageInfo.textContent = '第 0 / 0 页';
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                return;
+            }
+
+            const currentDisplay = currentPage + 1;
+            pageInfo.textContent = `第 ${currentDisplay} / ${totalPages} 页`;
+            prevBtn.disabled = (currentPage === 0);
+            nextBtn.disabled = (currentPage >= totalPages - 1);
+
+            const jumpInput = document.getElementById('pageJumpInput');
+            jumpInput.max = totalPages;
+            jumpInput.placeholder = `1-${totalPages}`;
+        }
+
+        // ----- 原有函数 (未改动) -----
         function renderCategories() {
             const ul = document.getElementById('categoryUl');
             ul.innerHTML = '';
@@ -602,41 +870,10 @@
 
         function filterCategory(cat) {
             currentCategory = cat;
+            currentPage = 0;
             updateCategoryUI(cat);
             renderProductGrid();
-        }
-
-        function renderProductGrid() {
-            let filtered = allProducts;
-            if (currentCategory !== "全部资源") {
-                filtered = filtered.filter(p => p.category === currentCategory);
-            }
-            if (searchKeyword !== "") {
-                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchKeyword));
-            }
-
-            const grid = document.getElementById('productGrid');
-            if (filtered.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;padding:60px;">💡 未检索到符合条件的资源。</div>';
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(product => {
-                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
-                html += `
-                    <div class="item">
-                        <div class="item-image-wrapper">
-                            <img src="${logo}" alt="${product.name}" class="item-image" onerror="this.onerror=null; this.src='logo/default.png';">
-                        </div>
-                        <div class="item-content">
-                            <div class="item-title" title="${product.name}">${product.name}</div>
-                            <a href="tail.html?id=${product.id}" class="item-link">查看详情</a>
-                        </div>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
+            scrollToControlBar(); // 分类切换也滚动到视图栏
         }
 
         function loadAnnouncements() {

@@ -57,6 +57,20 @@
       "description": "历时三个月，我把它做出来了，那个只存在于想象中的播放器，没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。\r\n这是音律的艺术，全网独家的音乐播放器重新定义了本地音乐的打开方式。\r\n创新性制作了歌词跳转模式，可以玩的音乐模式！\r\n告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。"
     },
     {
+      "id": "P303",
+      "name": "图标双向转换",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐ 原创",
+      "mainImage": "logo/YI~H`}85LAZK[RS}1{IY5`T.png",
+      "detailImages": "logo/]R9R4EH4~G$}JX0$RGSMPXY.png,logo/3LEQ3R)U2AG7HT0}06UX1N3.png",
+      "resourcePath": "https://pan.quark.cn/s/b6d1b9e20194;https://pan.quark.cn/s/a73c21d269f9",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "8.5MB",
+      "environment": "Win 10 | Win 11",
+      "description": "图片与图标互转，拖拽即识别。\r\n从 .ico 文件里提取高清 PNG，还是将任意图片一键转为专业级 .ico 图标，拖拽即可完成。\r\n操作零门槛，支持图片与图标互转，无需手动选择转换方向，拖入文件自动匹配对应功能。\r\n轻量单文件，无需安装，完美解决图标尺寸、格式适配问题。"
+    },
+    {
       "id": "P979",
       "name": "疯狂小人战斗",
       "category": "🎮 游戏",
@@ -99,20 +113,6 @@
       "description": "混乱大枪战，一款刺激好玩的游戏。\r\n拿起你手中的枪去击败对手吧，小心炸弹哦，可是会把你自己炸飞的。\r\n游戏加载完后点击CAMPAIGN，再选择关卡。\r\n点击选择单人或双人模式，最后点击右下角Start Level即可开始游戏。"
     },
     {
-      "id": "P936",
-      "name": "勇者之路精灵物语",
-      "category": "🎮 游戏",
-      "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260616175200627.png",
-      "detailImages": "logo/logo_20260616175203606.png,logo/logo_20260616175206320.png",
-      "resourcePath": "https://pan.quark.cn/s/239b540cd001",
-      "isRecommend": false,
-      "version": "1.0.0",
-      "size": "19.6 MB",
-      "environment": "Win 7 | Win 10 | Win 11",
-      "description": "《勇者之路》系列续作，玩家扮演大陆冒险者。\r\n可以收服功能各异的精灵伙伴，双人配合闯过多层奇幻关卡。\r\n讨伐魔物 BOSS，追寻传说中冒险王遗留的宝藏。"
-    },
-    {
       "id": "P142",
       "name": "仙剑奇侠传一",
       "category": "🎮 游戏",
@@ -125,6 +125,20 @@
       "size": "20.7 MB",
       "environment": "Win 7 | Win 10",
       "description": "最经典的仙侠游戏大作\r\n内置存档编辑器和经典存档集合"
+    },
+    {
+      "id": "P936",
+      "name": "勇者之路精灵物语",
+      "category": "🎮 游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260616175200627.png",
+      "detailImages": "logo/logo_20260616175203606.png,logo/logo_20260616175206320.png",
+      "resourcePath": "https://pan.quark.cn/s/239b540cd001",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "19.6 MB",
+      "environment": "Win 7 | Win 10 | Win 11",
+      "description": "《勇者之路》系列续作，玩家扮演大陆冒险者。\r\n可以收服功能各异的精灵伙伴，双人配合闯过多层奇幻关卡。\r\n讨伐魔物 BOSS，追寻传说中冒险王遗留的宝藏。"
     },
     {
       "id": "P188",
@@ -148,25 +162,11 @@
       "mainImage": "logo/SA]O3$5SAYRE_`LVR37M0]3.png",
       "detailImages": "logo/%X6WO482TPS_XHX)FF[5OBR.png,logo/_YSMOH}%G0JCFB2~YX0`TNO.png",
       "resourcePath": "",
-      "isRecommend": true,
+      "isRecommend": false,
       "version": "1.0.0",
       "size": "",
       "environment": "Win 10 | Win 11",
       "description": "反复输入相同指令而烦恼？让键鼠模拟器帮你解放双手。\r\n\r\n只需在软件中设置好按键序列（如 iiiijj）和间隔延迟，将鼠标移动到目标窗口，3 秒后它就会自动开始执行。\r\n中途想停下来，按 Esc 立刻终止，按空格随时暂停。自动填表、重复录入等多种场景。轻量无后台，用完即走。"
-    },
-    {
-      "id": "P303",
-      "name": "图标双向转换",
-      "category": "🎯 原创",
-      "weight": "⭐⭐⭐⭐⭐⭐⭐ 原创",
-      "mainImage": "logo/YI~H`}85LAZK[RS}1{IY5`T.png",
-      "detailImages": "logo/]R9R4EH4~G$}JX0$RGSMPXY.png,logo/3LEQ3R)U2AG7HT0}06UX1N3.png",
-      "resourcePath": "https://pan.quark.cn/s/b6d1b9e20194",
-      "isRecommend": true,
-      "version": "1.0.0",
-      "size": "8.5MB",
-      "environment": "Win 10 | Win 11",
-      "description": "图片与图标互转，拖拽即识别。\r\n从 .ico 文件里提取高清 PNG，还是将任意图片一键转为专业级 .ico 图标，拖拽即可完成。\r\n操作零门槛，支持图片与图标互转，无需手动选择转换方向，拖入文件自动匹配对应功能。\r\n轻量单文件，无需安装，完美解决图标尺寸、格式适配问题。"
     },
     {
       "id": "P350",
@@ -181,12 +181,31 @@
       "size": "",
       "environment": "Win 10 | Win 11",
       "description": "专注于金额数字与中文大写互转的桌面效率工具。\r\n它的核心是解决财务、报销、合同等文件填写等场景下，手动转换大写金额易出错、效率低的问题。\r\n毫秒级精准转换支持一键复制，彻底告别“壹贰叁”写错重写的烦恼。\r\n针对小写数字，可灵活切换千分位分隔符（逗号/空格）和小数精度（保留整数/1位/2位），满足不同财务系统的录入规范，支持一键导出TXT日志。"
+    },
+    {
+      "id": "P241",
+      "name": "DotNet8",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260715115303505.png",
+      "detailImages": "logo/logo_20260715115714505.png,logo/logo_20260715115855247.png",
+      "resourcePath": "https://pan.quark.cn/s/86259df97fb0",
+      "isRecommend": true,
+      "version": "1.0.0",
+      "size": "55.6MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "工坊原创项目大多依赖于微软环境.net8.0框架，系统里没有更新版本的小伙伴们可以在这里下载DotNet8的一键下载器，程序会自动检测、运行并安装，一键完成！\r\n下载器内置安装包，单击第一个按钮一键完成所有部署。\r\n如果实在无法运行且手动下载也失败的，可访问微软官方备用下载链接：https://dotnet.microsoft.com/en-us/download/dotnet/8.0"
     }
   ],
   "announcements": [
     {
       "id": "1",
-      "title": "欢迎来到畅享资源大厅",
+      "title": "欢迎来到畅享工坊大厅",
+      "targetUrl": ""
+    },
+    {
+      "id": "2",
+      "title": "最新原创项目，歌词跳转播放器已经正式上线，拥有全网独家的玩法和彩蛋",
       "targetUrl": ""
     }
   ],
@@ -236,12 +255,12 @@
         "url": "tail.html?id=P687"
       },
       {
-        "name": "图标双向转换",
-        "url": "tail.html?id=P303"
-      },
-      {
         "name": "跳转歌词音乐播放器",
         "url": "tail.html?id=P466"
+      },
+      {
+        "name": "DotNet8",
+        "url": "tail.html?id=P241"
       }
     ],
     "milestones": [
