@@ -131,11 +131,14 @@
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(74,144,226,0.25);
         }
+
+        /* ===== 公告栏 - 轮播改造 ===== */
         .sidebar-notice-panel {
             background: #fff;
             border-radius: 14px;
             padding: 16px;
             border: 1px solid #E6EFFB;
+            position: relative;
         }
         .notice-sub-title {
             font-size: 0.82rem;
@@ -146,24 +149,112 @@
             align-items: center;
             gap: 6px;
         }
-        .notice-list {
-            max-height: 200px;
-            overflow-y: auto;
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        /* 轮播容器 */
+        .notice-carousel {
+            position: relative;
+            overflow: hidden;
+            min-height: 60px;
         }
-        .notice-item {
+        .notice-slide {
+            display: none;
+            animation: fadeSlide 0.5s ease forwards;
             font-size: 0.82rem;
             color: #4F5E74;
             line-height: 1.6;
             background: #F5F9FF;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 8px;
-            margin-bottom: 8px;
             border-left: 3px solid #4A90E2;
+            word-break: break-word;
         }
-        .notice-item:last-child { margin-bottom: 0; }
+        .notice-slide.active {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 轮播控制条 */
+        .notice-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #F0F4FA;
+        }
+        .notice-arrow {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: #94A3B8;
+            cursor: pointer;
+            padding: 0 4px;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .notice-arrow:hover {
+            color: #4A90E2;
+        }
+        .notice-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .notice-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #DCE4EC;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .notice-dot.active {
+            background: #4A90E2;
+            transform: scale(1.2);
+        }
+        .notice-dot:hover {
+            background: #A0B8D0;
+        }
+        /* 当只有一条公告时，隐藏控制条 */
+        .notice-controls.hidden {
+            display: none;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .notice-carousel {
+                min-height: 50px;
+            }
+            .notice-slide {
+                font-size: 0.78rem;
+                padding: 8px 12px;
+            }
+            .notice-controls {
+                gap: 8px;
+                margin-top: 6px;
+                padding-top: 6px;
+            }
+            .notice-arrow {
+                font-size: 1rem;
+            }
+            .notice-dot {
+                width: 7px;
+                height: 7px;
+            }
+        }
+        @media (max-width: 480px) {
+            .notice-slide {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
+        }
+
+        /* ===== 其他样式（原样保留） ===== */
         .recommend-zone {
             background: #fff;
             border-radius: 14px;
@@ -211,7 +302,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            scroll-margin-top: 20px; /* 滚动定位时的偏移量 */
+            scroll-margin-top: 20px;
         }
         .control-bar h2 {
             font-size: 1rem;
@@ -285,10 +376,9 @@
             flex-direction: column;
             gap: 4px;
         }
-        /* 标题行：生肖 + 标题，同一行，生肖稍微抬高，有没有人发现这个彩蛋~ */
         .item-title-row {
             display: flex;
-            align-items: baseline; /* 基线对齐，然后用 vertical-align 微调 */
+            align-items: baseline;
             gap: 4px;
             min-height: 2.4em;
         }
@@ -298,7 +388,7 @@
             opacity: 0.7;
             line-height: 1;
             position: relative;
-            top: -2px; /* 稍微抬高一点 */
+            top: -2px;
             flex-shrink: 0;
         }
         .item-title {
@@ -326,7 +416,7 @@
         }
         .item-link:hover { background-color: #357ABD; }
 
-        /* ===== 分页控件样式 ===== */
+        /* ===== 分页控件 ===== */
         .pagination-bar {
             display: flex;
             flex-wrap: wrap;
@@ -478,23 +568,6 @@
             }
             .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
             .search-box-wrapper { width: 100%; max-width: 100%; }
-            .sidebar-notice-panel .notice-list {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                gap: 8px;
-                max-height: none;
-                padding-bottom: 4px;
-            }
-            .sidebar-notice-panel .notice-item {
-                white-space: nowrap;
-                flex-shrink: 0;
-                margin-bottom: 0;
-                border-left: none;
-                border-bottom: 3px solid #4A90E2;
-            }
-            .sidebar-notice-panel .notice-list::-webkit-scrollbar { display: none; }
-            .sidebar-notice-panel .notice-list { scrollbar-width: none; -ms-overflow-style: none; }
             .recommend-list {
                 display: flex;
                 flex-wrap: nowrap;
@@ -604,10 +677,19 @@
                 <div class="sidebar-title">📂 资源类别架构</div>
                 <ul class="category-list" id="categoryUl"></ul>
             </div>
-            <div class="sidebar-notice-panel">
+            <!-- ===== 公告栏（轮播改造） ===== -->
+            <div class="sidebar-notice-panel" id="noticePanel">
                 <div class="notice-sub-title">📢 工坊动态公告</div>
-                <ul id="announcementList" class="notice-list"></ul>
+                <div class="notice-carousel" id="noticeCarousel">
+                    <!-- 由 JS 动态填充 .notice-slide -->
+                </div>
+                <div class="notice-controls" id="noticeControls">
+                    <button class="notice-arrow" id="noticePrev">◀</button>
+                    <span class="notice-dots" id="noticeDots"></span>
+                    <button class="notice-arrow" id="noticeNext">▶</button>
+                </div>
             </div>
+            <!-- ===== 公告栏结束 ===== -->
             <div id="recommendZone" class="recommend-zone">
                 <div class="notice-sub-title">⭐ 精品推荐</div>
                 <ul id="recommendList" class="recommend-list"></ul>
@@ -674,7 +756,7 @@
         const PAGE_SIZE = 12;
         let currentPage = 0;
 
-        // 十二生肖（用于卡片标签）
+        // 十二生肖（用于卡片标签），有没有人看到我~
         const ZODIAC = ['🐭', '🐮', '🐯', '🐰', '🐲', '🐍', '🐴', '🐏', '🐵', '🐔', '🐶', '🐷'];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -701,7 +783,7 @@
             }
 
             renderCategories();
-            loadAnnouncements();
+            loadAnnouncements();     // 加载公告（轮播版）
             loadRecommendations();
             loadFriendLinks();
             updateCategoryUI(currentCategory);
@@ -751,7 +833,6 @@
             });
         });
 
-        // ----- 滚动到视图栏（.control-bar）顶部 -----
         function scrollToControlBar() {
             const controlBar = document.getElementById('controlBar');
             if (controlBar) {
@@ -843,7 +924,7 @@
             jumpInput.placeholder = `1-${totalPages}`;
         }
 
-        // ----- 原有函数 (未改动) -----
+        // ----- 原有函数 -----
         function renderCategories() {
             const ul = document.getElementById('categoryUl');
             ul.innerHTML = '';
@@ -873,31 +954,138 @@
             currentPage = 0;
             updateCategoryUI(cat);
             renderProductGrid();
-            scrollToControlBar(); // 分类切换也滚动到视图栏
+            scrollToControlBar();
         }
 
+        // ============================================================
+        // ★★★ 公告轮播逻辑（改造） ★★★
+        // ============================================================
+        let noticeList = [];
+        let currentNoticeIndex = 0;
+        let noticeTimer = null;
+        const INTERVAL = 5000; // 5秒切换
+
         function loadAnnouncements() {
-            const listContainer = document.getElementById('announcementList');
-            if (!listContainer) return;
-            listContainer.innerHTML = '';
-            if (ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length > 0) {
-                let html = '';
-                ALL_SOFTWARES.announcements.forEach(ann => {
-                    if (ann.title && ann.title.trim() !== '') {
-                        html += `<li class="notice-item"><span class="notice-badge">📢</span> ${ann.title}</li>`;
+            const carousel = document.getElementById('noticeCarousel');
+            const controls = document.getElementById('noticeControls');
+            const dotsContainer = document.getElementById('noticeDots');
+            const prevBtn = document.getElementById('noticePrev');
+            const nextBtn = document.getElementById('noticeNext');
+
+            // 读取公告数据
+            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length > 0) {
+                noticeList = ALL_SOFTWARES.announcements.filter(ann => ann.title && ann.title.trim() !== '');
+            } else {
+                noticeList = [];
+            }
+
+            // 清空容器
+            carousel.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            // 如果没有公告，隐藏整个面板
+            if (noticeList.length === 0) {
+                document.getElementById('noticePanel').style.display = 'none';
+                return;
+            }
+
+            // 创建幻灯片
+            noticeList.forEach((ann, idx) => {
+                const slide = document.createElement('div');
+                slide.className = 'notice-slide' + (idx === 0 ? ' active' : '');
+                slide.textContent = ann.title; // 直接显示标题，保留原有风格
+                slide.dataset.index = idx;
+                carousel.appendChild(slide);
+
+                // 创建指示点
+                const dot = document.createElement('button');
+                dot.className = 'notice-dot' + (idx === 0 ? ' active' : '');
+                dot.dataset.index = idx;
+                dot.setAttribute('aria-label', '切换到公告 ' + (idx + 1));
+                dotsContainer.appendChild(dot);
+            });
+
+            // 如果只有一条公告，隐藏控制条
+            if (noticeList.length <= 1) {
+                controls.classList.add('hidden');
+            } else {
+                controls.classList.remove('hidden');
+            }
+
+            // 绑定事件
+            prevBtn.addEventListener('click', () => goToNotice(currentNoticeIndex - 1));
+            nextBtn.addEventListener('click', () => goToNotice(currentNoticeIndex + 1));
+            dotsContainer.querySelectorAll('.notice-dot').forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index, 10);
+                    if (!isNaN(idx) && idx !== currentNoticeIndex) {
+                        goToNotice(idx);
                     }
                 });
-                if (html) {
-                    listContainer.innerHTML = html;
-                    listContainer.parentElement.style.display = 'block';
-                } else {
-                    listContainer.parentElement.style.display = 'none';
-                }
-            } else {
-                listContainer.parentElement.style.display = 'none';
+            });
+
+            // 启动轮播
+            startAutoPlay();
+
+            // 鼠标悬停暂停
+            const panel = document.getElementById('noticePanel');
+            panel.addEventListener('mouseenter', pauseAutoPlay);
+            panel.addEventListener('mouseleave', startAutoPlay);
+            // 移动端触摸暂停
+            panel.addEventListener('touchstart', pauseAutoPlay, { passive: true });
+            panel.addEventListener('touchend', startAutoPlay, { passive: true });
+
+            // 初始显示
+            currentNoticeIndex = 0;
+            updateNotice();
+        }
+
+        function goToNotice(index) {
+            if (noticeList.length === 0) return;
+            if (index < 0) index = noticeList.length - 1;
+            if (index >= noticeList.length) index = 0;
+            if (index === currentNoticeIndex) return;
+            currentNoticeIndex = index;
+            updateNotice();
+            // 重置自动播放计时器
+            resetAutoPlay();
+        }
+
+        function updateNotice() {
+            const slides = document.querySelectorAll('.notice-slide');
+            const dots = document.querySelectorAll('.notice-dot');
+            slides.forEach((s, i) => {
+                s.classList.toggle('active', i === currentNoticeIndex);
+            });
+            dots.forEach((d, i) => {
+                d.classList.toggle('active', i === currentNoticeIndex);
+            });
+        }
+
+        // 自动播放控制
+        function startAutoPlay() {
+            if (noticeList.length <= 1) return;
+            if (noticeTimer) clearInterval(noticeTimer);
+            noticeTimer = setInterval(() => {
+                goToNotice(currentNoticeIndex + 1);
+            }, INTERVAL);
+        }
+
+        function pauseAutoPlay() {
+            if (noticeTimer) {
+                clearInterval(noticeTimer);
+                noticeTimer = null;
             }
         }
 
+        function resetAutoPlay() {
+            pauseAutoPlay();
+            startAutoPlay();
+        }
+
+        // ============================================================
+        // 推荐 & 友情链接（原样保留）
+        // ============================================================
         function loadRecommendations() {
             const recZone = document.getElementById('recommendZone');
             const recList = document.getElementById('recommendList');

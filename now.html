@@ -367,8 +367,25 @@
     }
 
     /* ================================================================
-       项目里程碑 —— 纯列表
+       项目里程碑 —— 翻页容器（固定高度，不随条目增多而增高）
     ================================================================ */
+    .milestone-container {
+      position: relative;
+      min-height: 120px;
+      overflow: hidden;
+    }
+    .milestone-page {
+      display: none;
+      animation: milestoneFade 0.4s ease forwards;
+    }
+    .milestone-page.active {
+      display: block;
+    }
+    @keyframes milestoneFade {
+      0% { opacity: 0; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
     .milestone-item {
       display: flex;
       align-items: flex-start;
@@ -395,10 +412,71 @@
       min-width: 80px;
       font-weight: 500;
       padding-top: 2px;
+      flex-shrink: 0;
     }
     .milestone-desc {
       flex: 1;
       color: #1e293b;
+    }
+
+    /* 翻页控制器 */
+    .milestone-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #f0f4f8;
+    }
+    .milestone-pagination .page-btn {
+      background: none;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 2px 12px;
+      font-size: .8rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: all .25s ease;
+      line-height: 1.8;
+    }
+    .milestone-pagination .page-btn:hover:not(:disabled) {
+      background: rgba(74, 144, 226, 0.06);
+      border-color: #4A90E2;
+      color: #4A90E2;
+    }
+    .milestone-pagination .page-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .milestone-pagination .page-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .milestone-pagination .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      transition: all .3s ease;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+    }
+    .milestone-pagination .dot.active {
+      background: #4A90E2;
+      transform: scale(1.2);
+      box-shadow: 0 0 8px rgba(74, 144, 226, 0.25);
+    }
+    .milestone-pagination .dot:hover:not(.active) {
+      background: #cbd5e1;
+    }
+    .milestone-pagination .page-info {
+      font-size: .7rem;
+      color: #94a3b8;
+      font-weight: 500;
     }
 
     /* ===== 访客信笺 ===== */
@@ -664,11 +742,15 @@
       .milestone-time { min-width: 70px; font-size: .7rem; }
       .milestone-dot { width: 10px; height: 10px; margin-top: 4px; }
       .beacon-btn { min-width: 160px; padding: 8px 20px; font-size: .78rem; gap: 8px; }
+      .milestone-pagination { gap: 10px; }
+      .milestone-pagination .page-btn { font-size: .7rem; padding: 1px 10px; }
+      .milestone-pagination .dot { width: 7px; height: 7px; }
     }
     @media (max-width: 400px) {
       .status-emoji { font-size: 1.5rem; }
       .status-text { font-size: .95rem; }
       .card-content { font-size: .88rem; }
+      .milestone-container { min-height: 100px; }
     }
   </style>
 </head>
@@ -736,10 +818,14 @@
           <div class="card-content" id="worksContent"></div>
         </div>
 
-        <!-- 项目里程碑 -->
+        <!-- 项目里程碑（翻页版） -->
         <div class="card" id="milestonesCard">
           <div class="card-label">🚩 项目里程碑 <span class="badge">时间轴</span></div>
-          <div class="card-content" id="milestonesContent"></div>
+          <div class="card-content">
+            <div class="milestone-container" id="milestonesContainer">
+              <!-- 由 JS 动态渲染分页 -->
+            </div>
+          </div>
         </div>
       </div>
 
@@ -796,9 +882,7 @@
     (function() {
       'use strict';
 
-      // ============================================================
-      // 0. 加载 Now 内容 (从 ALL_SOFTWARES.nowContent 读取，若缺失则使用默认硬编码)
-      // ============================================================
+
       function loadNowContent() {
         // 默认数据（与原来硬编码一致）
         var defaultData = {
@@ -850,13 +934,12 @@
         // ---- 渲染循环 ----
         document.getElementById('musicContent').innerHTML = nowData.music;
 
-        // ---- ★★★ 优化后的偶的作品渲染（统一间距） ★★★ ----
+        // ---- 渲染作品 ----
         var worksContainer = document.getElementById('worksContent');
         worksContainer.innerHTML = '';
-        // 使用 flex 容器，保证所有条目间距一致
         worksContainer.style.display = 'flex';
         worksContainer.style.flexDirection = 'column';
-        worksContainer.style.gap = '6px';  // 统一间距
+        worksContainer.style.gap = '6px';
 
         nowData.works.forEach(function(w) {
           var line = document.createElement('div');
@@ -877,23 +960,169 @@
           }
           worksContainer.appendChild(line);
         });
-        // ---- 作品渲染结束 ----
 
-        // ---- 渲染里程碑 ----
-        var milestonesContainer = document.getElementById('milestonesContent');
-        milestonesContainer.innerHTML = '';
+        // ---- ★★★ 渲染里程碑（带翻页） ★★★ ----
+        renderMilestones(nowData.milestones);
+      }
+
+      // ============================================================
+      // 里程碑翻页渲染函数
+      // ============================================================
+      var milestoneCurrentPage = 0;
+      var milestoneTotalPages = 0;
+      var milestoneData = [];
+
+      function renderMilestones(milestones) {
+        var container = document.getElementById('milestonesContainer');
+        if (!container) return;
+
         // 按日期降序排序（最新在上）
-        var sortedMilestones = nowData.milestones.slice().sort(function(a, b) {
+        var sorted = milestones.slice().sort(function(a, b) {
           return b.date.localeCompare(a.date);
         });
-        sortedMilestones.forEach(function(m) {
-          var item = document.createElement('div');
-          item.className = 'milestone-item';
-          item.innerHTML = '<span class="milestone-dot"></span>' +
-            '<span class="milestone-time">' + m.date + '</span>' +
-            '<span class="milestone-desc">' + m.text + '</span>';
-          milestonesContainer.appendChild(item);
+
+        milestoneData = sorted;
+        var total = sorted.length;
+        var perPage = 5;
+        var totalPages = Math.ceil(total / perPage);
+
+        milestoneTotalPages = totalPages;
+        milestoneCurrentPage = 0;
+
+        // 如果不超过5条，直接全部显示，不加翻页控件
+        if (total <= perPage) {
+          container.innerHTML = '';
+          var list = document.createElement('div');
+          list.className = 'milestone-page active';
+          sorted.forEach(function(m) {
+            var item = document.createElement('div');
+            item.className = 'milestone-item';
+            item.innerHTML = '<span class="milestone-dot"></span>' +
+              '<span class="milestone-time">' + m.date + '</span>' +
+              '<span class="milestone-desc">' + m.text + '</span>';
+            list.appendChild(item);
+          });
+          container.appendChild(list);
+          return;
+        }
+
+        // 超过5条：分页显示
+        container.innerHTML = '';
+
+        // 创建所有页面（但只显示第一页）
+        for (var p = 0; p < totalPages; p++) {
+          var pageDiv = document.createElement('div');
+          pageDiv.className = 'milestone-page' + (p === 0 ? ' active' : '');
+          pageDiv.dataset.page = p;
+
+          var start = p * perPage;
+          var end = Math.min(start + perPage, total);
+          for (var i = start; i < end; i++) {
+            var m = sorted[i];
+            var item = document.createElement('div');
+            item.className = 'milestone-item';
+            item.innerHTML = '<span class="milestone-dot"></span>' +
+              '<span class="milestone-time">' + m.date + '</span>' +
+              '<span class="milestone-desc">' + m.text + '</span>';
+            pageDiv.appendChild(item);
+          }
+          container.appendChild(pageDiv);
+        }
+
+        // 创建翻页控件
+        var pagination = document.createElement('div');
+        pagination.className = 'milestone-pagination';
+
+        // 上一页按钮
+        var prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.textContent = '‹';
+        prevBtn.setAttribute('aria-label', '上一页');
+        prevBtn.disabled = true;
+        prevBtn.addEventListener('click', function() {
+          if (milestoneCurrentPage > 0) {
+            goToMilestonePage(milestoneCurrentPage - 1);
+          }
         });
+        pagination.appendChild(prevBtn);
+
+        // 页码指示点
+        var dotsWrapper = document.createElement('span');
+        dotsWrapper.className = 'page-dots';
+        for (var d = 0; d < totalPages; d++) {
+          var dot = document.createElement('button');
+          dot.className = 'dot' + (d === 0 ? ' active' : '');
+          dot.dataset.index = d;
+          dot.setAttribute('aria-label', '第 ' + (d + 1) + ' 页');
+          dot.addEventListener('click', function() {
+            var idx = parseInt(this.dataset.index, 10);
+            if (!isNaN(idx) && idx !== milestoneCurrentPage) {
+              goToMilestonePage(idx);
+            }
+          });
+          dotsWrapper.appendChild(dot);
+        }
+        pagination.appendChild(dotsWrapper);
+
+        // 下一页按钮
+        var nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.textContent = '›';
+        nextBtn.setAttribute('aria-label', '下一页');
+        if (totalPages <= 1) nextBtn.disabled = true;
+        nextBtn.addEventListener('click', function() {
+          if (milestoneCurrentPage < milestoneTotalPages - 1) {
+            goToMilestonePage(milestoneCurrentPage + 1);
+          }
+        });
+        pagination.appendChild(nextBtn);
+
+        container.appendChild(pagination);
+
+        // 存储控件引用以便更新状态
+        container._prevBtn = prevBtn;
+        container._nextBtn = nextBtn;
+        container._dots = dotsWrapper.querySelectorAll('.dot');
+
+        // 初始更新按钮状态
+        updateMilestoneControls(container);
+      }
+
+      // 跳转到指定页码
+      function goToMilestonePage(pageIndex) {
+        var container = document.getElementById('milestonesContainer');
+        if (!container) return;
+        var pages = container.querySelectorAll('.milestone-page');
+        if (pageIndex < 0 || pageIndex >= pages.length) return;
+
+        // 切换页面
+        pages.forEach(function(p, idx) {
+          p.classList.toggle('active', idx === pageIndex);
+        });
+
+        milestoneCurrentPage = pageIndex;
+
+        // 更新控件状态
+        updateMilestoneControls(container);
+      }
+
+      // 更新翻页控件状态（按钮禁用、指示点激活）
+      function updateMilestoneControls(container) {
+        var prevBtn = container._prevBtn;
+        var nextBtn = container._nextBtn;
+        var dots = container._dots;
+
+        if (prevBtn) {
+          prevBtn.disabled = (milestoneCurrentPage === 0);
+        }
+        if (nextBtn) {
+          nextBtn.disabled = (milestoneCurrentPage >= milestoneTotalPages - 1);
+        }
+        if (dots) {
+          dots.forEach(function(dot, idx) {
+            dot.classList.toggle('active', idx === milestoneCurrentPage);
+          });
+        }
       }
 
       // ============================================================
@@ -1148,9 +1377,8 @@
       }
 
       // ============================================================
-      // 7. 初始化：先加载内容，再处理其他...
+      // 7. 初始化
       // ============================================================
-      // 待 DOM 完全加载后再执行，免得影响效果
       if (document.readyState === 'complete' || document.readyState === 'interactive') {
         loadNowContent();
         setTimeout(updateSvgViewBox, 100);
@@ -1163,7 +1391,7 @@
 
       window.addEventListener('resize', updateSvgViewBox);
 
-      console.log('%c✦ Dream · Now 已完全动态化，数据源自 softwares.js ✦', 'font-size:16px;font-weight:bold;color:#4A90E2;');
+      console.log('%c✦ Dream · Now 已完全动态化，里程碑支持自动翻页 ✦', 'font-size:16px;font-weight:bold;color:#4A90E2;');
     })();
   </script>
 </body>
