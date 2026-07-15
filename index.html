@@ -200,13 +200,11 @@
         }
         .glimmer-meta .meta-year { color: #4A90E2; font-weight: 600; }
 
-        /* 桌面端邮箱卡片：水平布局 */
         .envelope-card {
             position: relative; display: flex; justify-content: center;
             align-items: center; flex-shrink: 0; margin-top: 4px;
             z-index: 5; min-height: 48px; width: 100%;
         }
-        /* 信封按钮：绝对居中 */
         .envelope-btn {
             position: absolute; left: 50%; top: 50%;
             transform: translate(-50%, -50%);
@@ -248,7 +246,6 @@
         .envelope-btn.revealed .envelope-text { opacity: 0; pointer-events: none; }
         .envelope-btn.revealed .email-display { opacity: 1; pointer-events: auto; }
 
-        /* 复制标签：绝对定位，桌面端在按钮右侧 */
         .copy-badge {
             position: absolute;
             left: calc(50% + 130px);
@@ -286,7 +283,6 @@
             background: rgba(74,144,226,0.15);
         }
 
-        /* 三连击彩蛋 */
         .easter-egg-toast {
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
@@ -338,45 +334,61 @@
         }
         .fade-in-wrapper { animation: containerFade 1.4s cubic-bezier(0.22,1,0.36,1); }
 
-        /* 移动端适配：标签换行显示 */
+        /* ===== 移动端适配（优化微光碎片高度） ===== */
         @media (max-width: 600px) {
             header { padding:40px 20px 35px; }
             header h1 { font-size:1.6rem; }
-            .glimmer-section { height: auto; min-height: 380px; padding: 20px 16px 18px; }
-            .glimmer-text { font-size:1rem; }
-            
-            /* 邮箱卡片改为纵向排列 */
+
+            /* ★ 核心优化：降低卡片高度，更紧凑 */
+            .glimmer-section {
+                height: auto;
+                min-height: 300px; /* 从 380px → 300px，降低高度 */
+                padding: 18px 14px 16px; /* 内边距适当缩减 */
+            }
+            .glimmer-text {
+                font-size: 0.95rem; /* 字体稍微缩小，更协调 */
+                line-height: 1.8;
+                max-width: 100%;
+            }
+            .glimmer-label {
+                font-size: 0.6rem;
+                padding: 2px 12px;
+                margin-bottom: 4px;
+            }
+            .glimmer-meta {
+                font-size: 0.7rem;
+                margin-bottom: 6px;
+            }
             .envelope-card {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
                 min-height: auto;
+                margin-top: 2px;
             }
-            /* 按钮和标签重置为相对定位，自动居中 */
             .envelope-btn {
                 position: relative;
                 left: auto;
                 top: auto;
                 transform: none;
-                min-width: 180px;
-                padding: 10px 20px;
-                font-size: 0.85rem;
+                min-width: 170px;
+                padding: 9px 18px;
+                font-size: 0.82rem;
                 width: fit-content;
                 margin: 0 auto;
             }
             .envelope-btn:active { transform: scale(0.96); }
-            .text-slot { width: 150px; }
-            .email-display { font-size: 0.8rem; }
-            
-            /* 复制标签在下方独立成行 */
+            .text-slot { width: 140px; }
+            .email-display { font-size: 0.78rem; }
+
             .copy-badge {
                 position: relative;
                 left: auto;
                 top: auto;
                 transform: scale(0.9);
                 margin: 0 auto;
-                padding: 8px 16px;
-                font-size: 0.75rem;
-                border-radius: 20px;
+                padding: 7px 14px;
+                font-size: 0.72rem;
+                border-radius: 18px;
                 width: fit-content;
             }
             .copy-badge.visible {
@@ -391,19 +403,48 @@
             .copy-badge:active {
                 transform: scale(0.93);
             }
-            
+
             .easter-egg-toast {
                 font-size: 0.85rem; padding: 12px 20px;
                 max-width: 92vw; white-space: normal;
             }
+            .glimmer-toast {
+                font-size: 0.65rem;
+                padding: 4px 12px;
+            }
         }
+
+        /* 更小屏设备（<400px）再压缩一点 */
         @media (max-width: 400px) {
-            .glimmer-section { min-height: 350px; padding:18px 12px 14px; }
-            .glimmer-text { font-size:0.9rem; }
-            .envelope-btn { min-width: 160px; padding:8px 16px; }
-            .text-slot { width: 140px; }
-            .email-display { font-size: 0.75rem; }
-            .copy-badge { padding: 7px 14px; font-size: 0.7rem; border-radius: 18px; gap: 3px; }
+            .glimmer-section {
+                min-height: 260px;
+                padding: 14px 10px 12px;
+            }
+            .glimmer-text {
+                font-size: 0.85rem;
+                line-height: 1.7;
+            }
+            .glimmer-label {
+                font-size: 0.55rem;
+                padding: 2px 10px;
+            }
+            .glimmer-meta {
+                font-size: 0.65rem;
+                margin-bottom: 4px;
+            }
+            .envelope-btn {
+                min-width: 150px;
+                padding: 8px 14px;
+                font-size: 0.78rem;
+            }
+            .text-slot { width: 130px; }
+            .email-display { font-size: 0.72rem; padding: 2px 10px; }
+            .copy-badge {
+                padding: 6px 12px;
+                font-size: 0.68rem;
+                border-radius: 16px;
+                gap: 3px;
+            }
         }
     </style>
 </head>
@@ -497,7 +538,6 @@
             const glimmerMeta = document.getElementById('glimmerMeta');
             const card = document.getElementById('glimmerCard');
 
-            // 三连击彩蛋
             const welcomeSection = document.getElementById('home');
             const easterEggToast = document.getElementById('easterEggToast');
             let clickCount = 0, eggTimer;
@@ -506,7 +546,7 @@
                 '你发现了藏在时光里的秘密。',
                 '浮生若梦，为欢几何？',
                 '风起于青萍之末，浪成于微澜之间。',
-				'月落乌啼霜满天，江枫渔火对愁眠。',
+                '月落乌啼霜满天，江枫渔火对愁眠。',
                 '偷得浮生半日闲。',
                 '且将新火试新茶，诗酒趁年华。',
                 '人生如逆旅，我亦是行人。',
@@ -531,7 +571,6 @@
                 }
             });
 
-            // 时间配色
             const applyTimeColor = () => {
                 const hour = new Date().getHours();
                 let hue = 260, sat = 25;
@@ -573,7 +612,6 @@
                 lastShard = shard;
             });
 
-            // 邮箱模块
             const envelopeBtn = document.getElementById('envelopeBtn');
             const copyBadge = document.getElementById('copyBadge');
             const toast = document.getElementById('glimmerToast');
