@@ -35,7 +35,7 @@
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260616231606251.png",
       "detailImages": "logo/logo_20260616232359267.png,logo/logo_20260616232405150.png",
-      "resourcePath": "https://pan.quark.cn/s/9ed01080788c;https://pan.quark.cn/s/77568eb1b455",
+      "resourcePath": "https://pan.quark.cn/s/2ab91181f629;https://pan.quark.cn/s/77568eb1b455",
       "isRecommend": false,
       "version": "6.0.0",
       "size": "1.11GB",
