@@ -223,6 +223,7 @@
             .notice-slide { font-size: 0.75rem; padding: 6px 10px; }
         }
 
+        /* 侧边栏精品推荐（保留） */
         .recommend-zone {
             background: #fff;
             border-radius: 14px;
@@ -263,6 +264,7 @@
             min-width: 0;
         }
 
+        /* 热门推荐轮播 */
         #hotCarouselContainer {
             display: none;
             margin-bottom: 4px;
@@ -414,76 +416,63 @@
             .hot-btn.next { right: 4px; }
         }
 
-        #recommendZoneBottom {
-            display: none;
-            margin-top: 8px;
-            padding: 16px 20px;
-            background: #fff;
-            border-radius: 14px;
-            border: 1px solid #E6EFFB;
-        }
-        #recommendZoneBottom .rec-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        #recommendZoneBottom .rec-header .icon {
-            font-size: 1.2rem;
-        }
-        #recommendZoneBottom .rec-header .title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #1a1a2e;
-        }
-        .rec-list-bottom {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 16px;
-        }
-        .rec-item-bottom {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: #606F7B;
-            padding: 6px 12px;
-            background: #F8FAFD;
-            border-radius: 8px;
-            border: 1px solid #EDF3FA;
-            transition: 0.2s;
-            text-decoration: none;
-            color: inherit;
-        }
-        .rec-item-bottom:hover {
-            border-color: #D6E4F7;
-            background: #F1F6FC;
-        }
-        .rec-item-bottom .label {
-            font-weight: 500;
-        }
-        .rec-item-bottom .link {
-            color: #4A90E2;
-            font-weight: 600;
-            margin-left: 4px;
-        }
-        @media (max-width: 480px) {
-            .rec-list-bottom {
-                flex-direction: column;
-                gap: 6px;
-            }
-            .rec-item-bottom {
-                justify-content: space-between;
-                width: 100%;
-            }
-        }
-
+        /* 底部精品推荐已删除，不再使用 #recommendZoneBottom */
+        /* 移动端适配：侧边栏精品推荐在移动端保留（不隐藏） */
         @media (max-width: 768px) {
             .recommend-zone {
-                display: none !important;
+                display: block !important; /* 保留侧边栏 */
             }
-            #recommendZoneBottom {
-                display: block !important;
+            /* 移除底部显示规则，因为已无此元素 */
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+            .header { padding: 40px 20px 35px; }
+            .header h1 { font-size: 1.6rem; }
+            .main-container { flex-direction: column; }
+            .sidebar-wrapper { width: 100%; }
+            .category-list {
+                display: flex;
+                overflow-x: auto;
+                gap: 6px;
+            }
+            .category-list::-webkit-scrollbar { display: none; }
+            .category-item {
+                flex-shrink: 0;
+                margin-bottom: 0;
+                background: #EDF3FA;
+                color: #5C6E80;
+                border-radius: 6px;
+            }
+            .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .search-box-wrapper { width: 100%; max-width: 100%; }
+            .pagination-bar {
+                gap: 14px 20px;
+                padding: 12px 16px;
+            }
+            .pagination-group { gap: 8px; }
+            .page-btn {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+            .page-jump input { width: 48px; }
+        }
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .pagination-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 12px;
+            }
+            .pagination-group {
+                justify-content: center;
+            }
+            .pagination-group--jump {
+                justify-content: center;
             }
         }
 
@@ -734,60 +723,6 @@
             100% { background-position: -200% 0; }
         }
 
-        @media (max-width: 768px) {
-            .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
-            }
-            .header { padding: 40px 20px 35px; }
-            .header h1 { font-size: 1.6rem; }
-            .main-container { flex-direction: column; }
-            .sidebar-wrapper { width: 100%; }
-            .category-list {
-                display: flex;
-                overflow-x: auto;
-                gap: 6px;
-            }
-            .category-list::-webkit-scrollbar { display: none; }
-            .category-item {
-                flex-shrink: 0;
-                margin-bottom: 0;
-                background: #EDF3FA;
-                color: #5C6E80;
-                border-radius: 6px;
-            }
-            .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .search-box-wrapper { width: 100%; max-width: 100%; }
-            .pagination-bar {
-                gap: 14px 20px;
-                padding: 12px 16px;
-            }
-            .pagination-group { gap: 8px; }
-            .page-btn {
-                padding: 4px 12px;
-                font-size: 0.8rem;
-            }
-            .page-jump input { width: 48px; }
-        }
-        @media (max-width: 480px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            .pagination-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-                padding: 12px;
-            }
-            .pagination-group {
-                justify-content: center;
-            }
-            .pagination-group--jump {
-                justify-content: center;
-            }
-        }
-
         .site-footer {
             background: #fff;
             border-top: 1px solid #E6EFFB;
@@ -841,8 +776,7 @@
 <body>
     <div class="header">
         <span class="tag">✦ 资源大厅</span>
-       <!---重新装修一下风格……-->
-	   <h1>畅享创意工坊</h1>
+        <h1>畅享创意工坊</h1>
         <p>欢迎畅游工坊中心</p>
     </div>
 
@@ -861,6 +795,7 @@
                     <button class="notice-arrow" id="noticeNext">▶</button>
                 </div>
             </div>
+            <!-- 仅保留侧边栏精品推荐 -->
             <div id="recommendZone" class="recommend-zone">
                 <div class="notice-sub-title">⭐ 精品推荐</div>
                 <ul id="recommendList" class="recommend-list"></ul>
@@ -901,14 +836,6 @@
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-            </div>
-
-            <div id="recommendZoneBottom">
-                <div class="rec-header">
-                    <span class="icon">⭐</span>
-                    <span class="title">精品推荐</span>
-                </div>
-                <div class="rec-list-bottom" id="recommendListBottom"></div>
             </div>
 
             <div class="pagination-bar" id="paginationBar">
@@ -974,7 +901,7 @@
             renderCategories();
             loadAnnouncements();
             loadHotCarousel();
-            loadRecommendations();
+            loadRecommendations();  // 只渲染侧边栏，不再处理底部
             loadFriendLinks();
             updateCategoryUI(currentCategory);
             renderProductGrid();
@@ -1119,17 +1046,13 @@
         function loadRecommendations() {
             const sideZone = document.getElementById('recommendZone');
             const sideList = document.getElementById('recommendList');
-            const bottomZone = document.getElementById('recommendZoneBottom');
-            const bottomList = document.getElementById('recommendListBottom');
 
             const recommends = allProducts.filter(p => p.isRecommend === true);
             if (recommends.length === 0) {
                 sideZone.style.display = 'none';
-                bottomZone.style.display = 'none';
                 return;
             }
             sideZone.style.display = 'block';
-            bottomZone.style.display = 'block';
 
             let sideHtml = '';
             recommends.forEach(rec => {
@@ -1148,24 +1071,6 @@
                 `;
             });
             sideList.innerHTML = sideHtml;
-
-            let bottomHtml = '';
-            recommends.forEach(rec => {
-                let detailUrl, targetAttr = '';
-                if (rec.detailPageType === "自定义模板" && rec.detailPagePath) {
-                    detailUrl = rec.detailPagePath;
-                    targetAttr = ' target="_blank"';
-                } else {
-                    detailUrl = `tail.html?id=${rec.id}`;
-                }
-                bottomHtml += `
-                    <a href="${detailUrl}"${targetAttr} class="rec-item-bottom">
-                        <span class="label">${rec.name}</span>
-                        <span class="link">查看详情 →</span>
-                    </a>
-                `;
-            });
-            bottomList.innerHTML = bottomHtml;
         }
 
         function scrollToControlBar() {
