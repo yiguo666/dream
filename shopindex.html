@@ -212,18 +212,7 @@
         .notice-dot:hover { background: #A0B8D0; }
         .notice-controls.hidden { display: none; }
 
-        @media (max-width: 768px) {
-            .notice-carousel { min-height: 50px; }
-            .notice-slide { font-size: 0.78rem; padding: 8px 12px; }
-            .notice-controls { gap: 8px; margin-top: 6px; padding-top: 6px; }
-            .notice-arrow { font-size: 1rem; }
-            .notice-dot { width: 7px; height: 7px; }
-        }
-        @media (max-width: 480px) {
-            .notice-slide { font-size: 0.75rem; padding: 6px 10px; }
-        }
-
-        /* 侧边栏精品推荐（保留） */
+        /* ===== PC端精品推荐（侧边栏） ===== */
         .recommend-zone {
             background: #fff;
             border-radius: 14px;
@@ -264,7 +253,7 @@
             min-width: 0;
         }
 
-        /* 热门推荐轮播 */
+        /* ===== 热门推荐轮播 ===== */
         #hotCarouselContainer {
             display: none;
             margin-bottom: 4px;
@@ -387,46 +376,25 @@
         .hot-btn.prev { left: 6px; }
         .hot-btn.next { right: 6px; }
 
-        @media (max-width: 640px) {
-            .hot-slide {
-                flex-direction: column;
-                text-align: center;
-                padding: 16px;
-                min-height: auto;
-            }
-            .hot-slide img {
-                width: 60px;
-                height: 60px;
-                margin-right: 0;
-                margin-bottom: 12px;
-            }
-            .hot-slide .info h3 {
-                font-size: 1rem;
-            }
-            .hot-slide .info p {
-                font-size: 0.8rem;
-                -webkit-line-clamp: 1;
-            }
-            .hot-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 1.2rem;
-            }
-            .hot-btn.prev { left: 4px; }
-            .hot-btn.next { right: 4px; }
-        }
-
-        /* 底部精品推荐已删除，不再使用 #recommendZoneBottom */
-        /* 移动端适配：侧边栏精品推荐在移动端保留（不隐藏） */
+        /* ===== 移动端适配（仅针对移动端优化，PC端不变） ===== */
         @media (max-width: 768px) {
-            .recommend-zone {
-                display: block !important; /* 保留侧边栏 */
+            /* 1. 热门推荐指示器遮挡文字：增加滑块底部内边距 */
+            .hot-slide {
+                padding-bottom: 44px;
             }
-            /* 移除底部显示规则，因为已无此元素 */
+
+            /* 2. 移动端卡片容器回退旧版：两列紧凑布局 */
             .grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
+
+            /* 3. 侧边栏精品推荐在移动端隐藏（由JS移动到商品下方） */
+            .recommend-zone {
+                display: none !important;
+            }
+
+            /* 其他移动端适配（原有） */
             .header { padding: 40px 20px 35px; }
             .header h1 { font-size: 1.6rem; }
             .main-container { flex-direction: column; }
@@ -457,10 +425,12 @@
             }
             .page-jump input { width: 48px; }
         }
+
+        /* 更小屏幕保持两列 */
         @media (max-width: 480px) {
             .grid-container {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
+                gap: 6px;
             }
             .pagination-bar {
                 flex-direction: column;
@@ -476,6 +446,7 @@
             }
         }
 
+        /* ===== PC端控制栏及通用样式（不变） ===== */
         .control-bar {
             background: #fff;
             padding: 12px 20px;
@@ -795,7 +766,7 @@
                     <button class="notice-arrow" id="noticeNext">▶</button>
                 </div>
             </div>
-            <!-- 仅保留侧边栏精品推荐 -->
+            <!-- 精品推荐（侧边栏，PC端显示，移动端由JS移动） -->
             <div id="recommendZone" class="recommend-zone">
                 <div class="notice-sub-title">⭐ 精品推荐</div>
                 <ul id="recommendList" class="recommend-list"></ul>
@@ -901,10 +872,13 @@
             renderCategories();
             loadAnnouncements();
             loadHotCarousel();
-            loadRecommendations();  // 只渲染侧边栏，不再处理底部
+            loadRecommendations();
             loadFriendLinks();
             updateCategoryUI(currentCategory);
             renderProductGrid();
+
+            // 移动端调整：将精品推荐移动到商品网格下方
+            moveRecommendZoneMobile();
 
             const searchInput = document.getElementById('searchInput');
             searchInput.addEventListener('input', (e) => {
@@ -938,7 +912,46 @@
             document.getElementById('pageJumpInput').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') { document.getElementById('pageJumpBtn').click(); }
             });
+
+            // 窗口变化时重新调整移动端布局
+            window.addEventListener('resize', moveRecommendZoneMobile);
         });
+
+        function moveRecommendZoneMobile() {
+            const zone = document.getElementById('recommendZone');
+            const grid = document.getElementById('productGrid');
+            const pagination = document.getElementById('paginationBar');
+            if (!zone || !grid || !pagination) return;
+
+            // 只在移动端（<=768px）移动，PC端恢复原位
+            if (window.innerWidth <= 768) {
+                // 如果zone不在grid和pagination之间，则移动
+                const nextSibling = zone.nextSibling;
+                if (zone.parentElement !== grid.parentElement || zone !== grid.nextSibling) {
+                    // 从原位置移除
+                    if (zone.parentElement) zone.parentElement.removeChild(zone);
+                    // 插入到grid和pagination之间
+                    grid.parentNode.insertBefore(zone, pagination);
+                    // 确保显示
+                    zone.style.display = 'block';
+                }
+            } else {
+                // PC端：放回侧边栏
+                const sidebarWrapper = document.querySelector('.sidebar-wrapper');
+                if (sidebarWrapper && zone.parentElement !== sidebarWrapper) {
+                    if (zone.parentElement) zone.parentElement.removeChild(zone);
+                    // 插入到公告栏之后
+                    const noticePanel = document.getElementById('noticePanel');
+                    if (noticePanel) {
+                        sidebarWrapper.insertBefore(zone, noticePanel.nextSibling);
+                    } else {
+                        sidebarWrapper.appendChild(zone);
+                    }
+                    // 还原display
+                    zone.style.display = 'block';
+                }
+            }
+        }
 
         function loadHotCarousel() {
             const container = document.getElementById('hotCarouselContainer');
@@ -1044,16 +1057,13 @@
         }
 
         function loadRecommendations() {
-            const sideZone = document.getElementById('recommendZone');
             const sideList = document.getElementById('recommendList');
-
             const recommends = allProducts.filter(p => p.isRecommend === true);
             if (recommends.length === 0) {
-                sideZone.style.display = 'none';
+                document.getElementById('recommendZone').style.display = 'none';
                 return;
             }
-            sideZone.style.display = 'block';
-
+            document.getElementById('recommendZone').style.display = 'block';
             let sideHtml = '';
             recommends.forEach(rec => {
                 let detailUrl, targetAttr = '';
