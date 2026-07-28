@@ -219,7 +219,6 @@
             padding: 16px;
             border: 1px solid #E6EFFB;
             margin-top: 0;
-            display: block;
         }
         .recommend-list {
             list-style: none;
@@ -384,71 +383,80 @@
                 padding-bottom: 44px;
             }
 
-            /* 移动端卡片容器回退旧版：两列紧凑布局 */
+            /* 卡片：强制两列，压缩内边距和字体，回退到精致大小 */
             .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            .item {
+                border-radius: 8px;
             }
             .item-content {
-                padding: 6px;
+                padding: 6px 8px !important;
             }
             .item-title {
-                font-size: 0.75rem;
+                font-size: 0.75rem !important;
+                line-height: 1.3;
             }
             .item-link {
-                font-size: 0.7rem;
-                padding: 4px 0;
+                font-size: 0.7rem !important;
+                padding: 4px 0 !important;
             }
             .item-zodiac {
-                font-size: 0.65rem;
+                font-size: 0.65rem !important;
+            }
+            .item-image-wrapper {
+                aspect-ratio: 1/1;
             }
 
-            /* 分页控件：页码在上，按钮在下左右平行 */
+            /* 分页控件：三个元素同行，紧凑 */
             .pagination-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-                padding: 12px;
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 8px !important;
+                padding: 10px 12px !important;
             }
             .pagination-group:first-child {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                gap: 8px;
-                width: 100%;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 6px !important;
+                flex-wrap: nowrap !important;
+                width: 100% !important;
             }
             #pageInfo {
-                flex: 0 0 100%;
-                text-align: center;
-                font-size: 0.9rem;
-                padding: 4px 0;
+                flex: 0 0 auto !important;
+                font-size: 0.8rem !important;
+                padding: 0 4px !important;
+                white-space: nowrap;
             }
             #prevPageBtn, #nextPageBtn {
-                flex: 0 0 auto;
-                padding: 4px 12px;
-                font-size: 0.8rem;
+                flex: 0 0 auto !important;
+                padding: 4px 10px !important;
+                font-size: 0.75rem !important;
+                white-space: nowrap;
             }
             .pagination-group--jump {
-                width: 100%;
-                justify-content: center;
-                gap: 6px;
+                width: 100% !important;
+                justify-content: center !important;
+                gap: 6px !important;
             }
             .pagination-group--jump input {
-                width: 48px;
-                font-size: 0.8rem;
-                padding: 2px 4px;
+                width: 44px !important;
+                font-size: 0.75rem !important;
+                padding: 2px 4px !important;
             }
             .pagination-group--jump button {
-                font-size: 0.75rem;
-                padding: 2px 10px;
+                font-size: 0.7rem !important;
+                padding: 2px 8px !important;
             }
 
-            /* 侧边栏精品推荐在移动端隐藏（由JS移动到商品下方） */
+            /* 侧边栏精品推荐在移动端隐藏（由JS移动到底部） */
             .recommend-zone {
                 display: none !important;
             }
 
-            /* 其他移动端适配（原有） */
+            /* 其他移动端适配 */
             .header { padding: 40px 20px 35px; }
             .header h1 { font-size: 1.6rem; }
             .main-container { flex-direction: column; }
@@ -470,31 +478,35 @@
             .search-box-wrapper { width: 100%; max-width: 100%; }
         }
 
-        /* 更小屏幕保持两列 */
+        /* 更小屏幕进一步压缩 */
         @media (max-width: 480px) {
             .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
+                gap: 6px !important;
             }
             .item-content {
-                padding: 4px;
+                padding: 4px 6px !important;
             }
             .item-title {
-                font-size: 0.7rem;
+                font-size: 0.7rem !important;
             }
             .item-link {
-                font-size: 0.65rem;
-                padding: 3px 0;
+                font-size: 0.65rem !important;
+                padding: 3px 0 !important;
             }
-            .pagination-bar {
-                padding: 10px;
+            #pageInfo {
+                font-size: 0.7rem !important;
             }
             #prevPageBtn, #nextPageBtn {
-                padding: 3px 10px;
-                font-size: 0.75rem;
+                font-size: 0.7rem !important;
+                padding: 3px 8px !important;
             }
             .pagination-group--jump input {
-                width: 40px;
+                width: 38px !important;
+                font-size: 0.7rem !important;
+            }
+            .pagination-group--jump button {
+                font-size: 0.65rem !important;
+                padding: 2px 6px !important;
             }
         }
 
@@ -802,7 +814,7 @@
         <h1>畅享创意工坊</h1>
         <p>欢迎畅游工坊中心</p>
     </div>
-    <!---今天才重新装修了一遍环境……--->
+
     <div class="main-container">
         <div class="sidebar-wrapper">
             <div class="sidebar">
@@ -818,7 +830,7 @@
                     <button class="notice-arrow" id="noticeNext">▶</button>
                 </div>
             </div>
-
+           <!---今天才重新装修了一遍环境……--->
             <div id="recommendZone" class="recommend-zone">
                 <div class="notice-sub-title">⭐ 精品推荐</div>
                 <ul id="recommendList" class="recommend-list"></ul>
@@ -851,6 +863,7 @@
             </div>
 
             <div class="grid-container" id="productGrid">
+                <!-- 优化骨架屏……更好的展示吧 -->
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
@@ -873,6 +886,8 @@
                     <button id="pageJumpBtn">GO</button>
                 </div>
             </div>
+
+      
         </div>
     </div>
 
@@ -929,7 +944,7 @@
             updateCategoryUI(currentCategory);
             renderProductGrid();
 
-
+       
             moveRecommendZoneMobile();
 
             const searchInput = document.getElementById('searchInput');
@@ -965,25 +980,24 @@
                 if (e.key === 'Enter') { document.getElementById('pageJumpBtn').click(); }
             });
 
-            // 窗口变化时重新调整移动端布局
+      
             window.addEventListener('resize', moveRecommendZoneMobile);
         });
 
         function moveRecommendZoneMobile() {
             const zone = document.getElementById('recommendZone');
-            const grid = document.getElementById('productGrid');
             const pagination = document.getElementById('paginationBar');
-            if (!zone || !grid || !pagination) return;
+            const contentPanel = document.querySelector('.content-panel');
+            if (!zone || !pagination || !contentPanel) return;
 
             // 只在移动端（<=768px）移动，PC端恢复原位
             if (window.innerWidth <= 768) {
-                // 如果zone不在grid和pagination之间，则移动
-                const nextSibling = zone.nextSibling;
-                if (zone.parentElement !== grid.parentElement || zone !== grid.nextSibling) {
+                // 如果zone不在pagination之后，则移动
+                if (zone.parentElement !== contentPanel || zone.nextElementSibling !== null || zone !== pagination.nextElementSibling) {
                     // 从原位置移除
                     if (zone.parentElement) zone.parentElement.removeChild(zone);
-                    // 插入到grid和pagination之间
-                    grid.parentNode.insertBefore(zone, pagination);
+                    // 插入到pagination之后
+                    contentPanel.insertBefore(zone, pagination.nextSibling);
                     // 确保显示
                     zone.style.display = 'block';
                 }
