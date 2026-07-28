@@ -219,6 +219,7 @@
             padding: 16px;
             border: 1px solid #E6EFFB;
             margin-top: 0;
+            display: block;
         }
         .recommend-list {
             list-style: none;
@@ -378,18 +379,71 @@
 
         /* ===== 移动端适配（仅针对移动端优化，PC端不变） ===== */
         @media (max-width: 768px) {
-            /* 1. 热门推荐指示器遮挡文字：增加滑块底部内边距 */
+            /* 热门推荐指示器遮挡文字：增加滑块底部内边距 */
             .hot-slide {
                 padding-bottom: 44px;
             }
 
-            /* 2. 移动端卡片容器回退旧版：两列紧凑布局 */
+            /* 移动端卡片容器回退旧版：两列紧凑布局 */
             .grid-container {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 8px;
             }
+            .item-content {
+                padding: 6px;
+            }
+            .item-title {
+                font-size: 0.75rem;
+            }
+            .item-link {
+                font-size: 0.7rem;
+                padding: 4px 0;
+            }
+            .item-zodiac {
+                font-size: 0.65rem;
+            }
 
-            /* 3. 侧边栏精品推荐在移动端隐藏（由JS移动到商品下方） */
+            /* 分页控件：页码在上，按钮在下左右平行 */
+            .pagination-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px;
+            }
+            .pagination-group:first-child {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 8px;
+                width: 100%;
+            }
+            #pageInfo {
+                flex: 0 0 100%;
+                text-align: center;
+                font-size: 0.9rem;
+                padding: 4px 0;
+            }
+            #prevPageBtn, #nextPageBtn {
+                flex: 0 0 auto;
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+            .pagination-group--jump {
+                width: 100%;
+                justify-content: center;
+                gap: 6px;
+            }
+            .pagination-group--jump input {
+                width: 48px;
+                font-size: 0.8rem;
+                padding: 2px 4px;
+            }
+            .pagination-group--jump button {
+                font-size: 0.75rem;
+                padding: 2px 10px;
+            }
+
+            /* 侧边栏精品推荐在移动端隐藏（由JS移动到商品下方） */
             .recommend-zone {
                 display: none !important;
             }
@@ -414,16 +468,6 @@
             }
             .control-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
             .search-box-wrapper { width: 100%; max-width: 100%; }
-            .pagination-bar {
-                gap: 14px 20px;
-                padding: 12px 16px;
-            }
-            .pagination-group { gap: 8px; }
-            .page-btn {
-                padding: 4px 12px;
-                font-size: 0.8rem;
-            }
-            .page-jump input { width: 48px; }
         }
 
         /* 更小屏幕保持两列 */
@@ -432,17 +476,25 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 6px;
             }
+            .item-content {
+                padding: 4px;
+            }
+            .item-title {
+                font-size: 0.7rem;
+            }
+            .item-link {
+                font-size: 0.65rem;
+                padding: 3px 0;
+            }
             .pagination-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-                padding: 12px;
+                padding: 10px;
             }
-            .pagination-group {
-                justify-content: center;
+            #prevPageBtn, #nextPageBtn {
+                padding: 3px 10px;
+                font-size: 0.75rem;
             }
-            .pagination-group--jump {
-                justify-content: center;
+            .pagination-group--jump input {
+                width: 40px;
             }
         }
 
