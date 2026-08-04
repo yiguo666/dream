@@ -60,10 +60,10 @@
       "detailImages": "logo/logo_20260714233438110.png,logo/logo_20260714233440080.png,logo/logo_20260714233442078.png,logo/logo_20260727120202582.png,",
       "resourcePath": "https://pan.quark.cn/s/d4743abba3b4;https://pan.quark.cn/s/cbb7a2aa1d20",
       "isRecommend": true,
-      "version": "1.0.1",
+      "version": "1.3.0",
       "size": "323.5kb",
       "environment": "Win 10 | Win 11",
-      "description": "没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。\r\n全网独家，重新定义了本地音乐的打开方式。\r\n歌词跳转，可以玩的音乐模式！\r\n告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。",
+      "description": "没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。\r\n全网独家，重新定义了本地音乐的享受方式。\r\n歌词跳转，可以玩的音乐模式！\r\n告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。",
       "detailPageType": "自定义模板",
       "detailPagePath": "projects/lrcplayer.html",
       "customPagePath": "projects/lrcplayer.html"
@@ -332,5 +332,105 @@
     "P466",
     "P733",
     "P241"
+  ],
+  "socialLinks": [
+    {
+      "platform": "bilibili",
+      "name": "B站",
+      "icon": "📺",
+      "url": "https://space.bilibili.com/2027317299?spm_id_from=333.788.0.0",
+      "enabled": true
+    },
+    {
+      "platform": "email",
+      "name": "邮箱",
+      "icon": "✉️",
+      "url": "1771232219@qq.com",
+      "enabled": true
+    },
+    {
+      "platform": "qq",
+      "name": "QQ",
+      "icon": "🐧",
+      "url": "1771232219",
+      "enabled": true
+    },
+    {
+      "platform": "github",
+      "name": "GitHub",
+      "icon": "🐙",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "wechat",
+      "name": "微信",
+      "icon": "💬",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "xiaohongshu",
+      "name": "小红书",
+      "icon": "📕",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "zhihu",
+      "name": "知乎",
+      "icon": "🧠",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "weibo",
+      "name": "微博",
+      "icon": "📱",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "douyin",
+      "name": "抖音",
+      "icon": "🎵",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "twitter",
+      "name": "Twitter",
+      "icon": "🐦",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "youtube",
+      "name": "YouTube",
+      "icon": "▶️",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "instagram",
+      "name": "Instagram",
+      "icon": "📷",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "steam",
+      "name": "Steam",
+      "icon": "🎮",
+      "url": "",
+      "enabled": false
+    },
+    {
+      "platform": "telegram",
+      "name": "Telegram",
+      "icon": "✈️",
+      "url": "",
+      "enabled": false
+    }
   ]
 };

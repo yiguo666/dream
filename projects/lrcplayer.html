@@ -2,100 +2,659 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
     <title>LrcPlayer · 歌词跳转播放器</title>
     <meta name="description" content="LrcPlayer 自研本地音乐播放器，独家歌词一键跳转 + 自定义彩蛋机制，纯离线无广告，支持全格式无损音频" />
     <meta name="keywords" content="LrcPlayer,本地音乐播放器,歌词跳转,无损音乐,无广告听歌" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { min-height: 100vh; overflow-x: hidden; background: linear-gradient(145deg, #f9f3ff 0%, #e8f0ff 100%); color: #1a1a2e; position: relative; }
-        #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .mouse-light { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(120, 80, 255, 0.12) 0%, transparent 70%); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; transition: 0.06s ease; }
-        header { position: sticky; top: 0; z-index: 99; backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.75); border-bottom: 2px solid rgba(110, 70, 255, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04); }
-        .nav-wrap { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
-        .nav-logo { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; background: linear-gradient(135deg, #6e46ff, #ff4b9d); background-clip: text; -webkit-background-clip: text; color: transparent; text-shadow: 0 0 30px rgba(110, 70, 255, 0.2); white-space: nowrap; }
-        .nav-logo small { font-size: 1rem; font-weight: 400; color: #5a5a8a; background: none; -webkit-background-clip: unset; background-clip: unset; margin-left: 6px; }
-        .nav-menu ul { display: flex; gap: 32px; list-style: none; }
-        .nav-menu a { color: #2c2c5e; text-decoration: none; font-size: 1rem; font-weight: 600; transition: 0.2s; position: relative; }
-        .nav-menu a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 2px; background: linear-gradient(90deg, #6e46ff, #ff4b9d); transition: 0.3s; }
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: linear-gradient(145deg, #f9f3ff 0%, #e8f0ff 100%);
+            color: #1a1a2e;
+            position: relative;
+            font-family: -apple-system, 'Noto Sans SC', 'Segoe UI', Roboto, sans-serif;
+        }
+
+     
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .mouse-light {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(120, 80, 255, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 2;
+            transition: 0.06s ease;
+        }
+
+        /* ===== 旧版导航 ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.75);
+            border-bottom: 2px solid rgba(110, 70, 255, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
+        }
+        .nav-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #6e46ff, #ff4b9d);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(110, 70, 255, 0.2);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .nav-logo small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #5a5a8a;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            margin-left: 6px;
+        }
+        .nav-menu ul {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-menu a {
+            color: #2c2c5e;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.2s;
+            position: relative;
+        }
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #6e46ff, #ff4b9d);
+            transition: 0.3s;
+        }
         .nav-menu a:hover { color: #6e46ff; }
         .nav-menu a:hover::after { width: 100%; }
-        .mobile-toggle { display: none; color: #1a1a2e; font-size: 28px; cursor: pointer; }
-        .container { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        #banner, #feature, #screenshot, #download { scroll-margin-top: 80px; }
-        .banner-section { min-height: 85vh; display: flex; align-items: center; padding: 40px 0 60px; gap: 40px; flex-wrap: wrap; justify-content: center; }
-        .banner-text { flex: 1; min-width: 300px; }
-        .main-title { font-size: clamp(3.2rem, 10vw, 6.5rem); font-weight: 900; letter-spacing: 6px; line-height: 1.1; background: linear-gradient(135deg, #6e46ff, #ff4b9d, #ffb347); background-clip: text; -webkit-background-clip: text; color: transparent; animation: rainbow-shine 4s ease infinite alternate; filter: drop-shadow(0 0 30px rgba(110, 70, 255, 0.25)); position: relative; }
-        .main-title .deco { display: inline-block; animation: float-star 3s ease-in-out infinite alternate; }
-        @keyframes rainbow-shine { 0% { filter: drop-shadow(0 0 20px rgba(110, 70, 255, 0.3)); } 100% { filter: drop-shadow(0 0 50px rgba(255, 75, 157, 0.4)); } }
-        @keyframes float-star { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-10px) rotate(20deg); } }
-        .sub-desc { margin: 16px 0 12px; font-size: 1.4rem; color: #3a3a6a; letter-spacing: 2px; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .sub-desc span { background: rgba(110, 70, 255, 0.08); padding: 0 12px; border-radius: 30px; font-size: 1rem; color: #6e46ff; }
-        .banner-desc { color: #3d3d6b; line-height: 1.9; font-size: 1.05rem; margin-bottom: 32px; max-width: 600px; }
-        .download-btn { display: inline-block; padding: 16px 48px; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; color: #fff; text-decoration: none; background: linear-gradient(135deg, #6e46ff, #ff4b9d); border-radius: 60px; box-shadow: 0 8px 30px rgba(110, 70, 255, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .mobile-toggle {
+            display: none;
+            color: #1a1a2e;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-toggle { display: block; }
+            .nav-logo { font-size: 1.5rem; }
+            .nav-logo small { font-size: 0.8rem; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        #banner, #feature, #screenshot, #download {
+            scroll-margin-top: 80px;
+        }
+
+        .banner-section {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            padding: 40px 0 60px;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .banner-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        .main-title {
+            font-size: clamp(3.2rem, 10vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #6e46ff, #ff4b9d, #ffb347);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow-shine 4s ease infinite alternate;
+            filter: drop-shadow(0 0 30px rgba(110, 70, 255, 0.25));
+            position: relative;
+        }
+        .main-title .deco {
+            display: inline-block;
+            animation: float-star 3s ease-in-out infinite alternate;
+        }
+        @keyframes rainbow-shine {
+            0% { filter: drop-shadow(0 0 20px rgba(110, 70, 255, 0.3)); }
+            100% { filter: drop-shadow(0 0 50px rgba(255, 75, 157, 0.4)); }
+        }
+        @keyframes float-star {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-10px) rotate(20deg); }
+        }
+
+        .sub-desc {
+            margin: 16px 0 12px;
+            font-size: 1.4rem;
+            color: #3a3a6a;
+            letter-spacing: 2px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .sub-desc span {
+            background: rgba(110, 70, 255, 0.08);
+            padding: 0 12px;
+            border-radius: 30px;
+            font-size: 1rem;
+            color: #6e46ff;
+        }
+
+        .divider {
+            width: 300px;
+            height: 3px;
+            margin: 40px auto;
+            background: linear-gradient(90deg, transparent, #6e46ff, #ff4b9d, #ffb347, transparent);
+            border-radius: 10px;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -300px 0; }
+            100% { background-position: 300px 0; }
+        }
+
+        .banner-desc {
+            color: #3d3d6b;
+            line-height: 1.9;
+            font-size: 1.05rem;
+            margin-bottom: 32px;
+            max-width: 600px;
+        }
+        .banner-desc p + p { margin-top: 10px; }
+
+        .download-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            text-decoration: none;
+            background: linear-gradient(135deg, #6e46ff, #ff4b9d);
+            border-radius: 60px;
+            box-shadow: 0 8px 30px rgba(110, 70, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
         .download-btn::before { content: '✨'; margin-right: 8px; }
-        .download-btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 40px rgba(255, 75, 157, 0.4); }
-        .banner-img { flex: 1; min-width: 280px; text-align: center; position: relative; }
-        .banner-img img { width: 100%; max-width: 100%; border-radius: 20px; box-shadow: 0 20px 60px rgba(110, 70, 255, 0.15); background: #fff; padding: 6px; border: 2px solid rgba(255, 255, 255, 0.6); transition: 0.4s; }
+        .download-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(255, 75, 157, 0.4);
+        }
+
+        .banner-img {
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+            position: relative;
+        }
+        .banner-img img {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(110, 70, 255, 0.15);
+            background: #fff;
+            padding: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            transition: 0.4s;
+        }
         .banner-img img:hover { transform: scale(1.02) rotate(1deg); }
-        .banner-img .floating-emoji { position: absolute; font-size: 2.4rem; animation: float 4s ease-in-out infinite; }
+        .banner-img .floating-emoji {
+            position: absolute;
+            font-size: 2.4rem;
+            animation: float 4s ease-in-out infinite;
+        }
         .banner-img .floating-emoji:nth-child(2) { top: 10%; left: -5%; animation-delay: 0.5s; }
         .banner-img .floating-emoji:nth-child(3) { bottom: 15%; right: -5%; animation-delay: 1.2s; }
-        @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } 100% { transform: translateY(0) rotate(0deg); } }
-        .divider { width: 300px; height: 3px; margin: 40px auto; background: linear-gradient(90deg, transparent, #6e46ff, #ff4b9d, #ffb347, transparent); border-radius: 10px; animation: shimmer 2s infinite; }
-        @keyframes shimmer { 0% { background-position: -300px 0; } 100% { background-position: 300px 0; } }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
         .feature-section { padding: 20px 0 80px; text-align: center; }
-        .block-title { font-size: 2.4rem; margin-bottom: 8px; color: #1a1a2e; font-weight: 800; letter-spacing: 2px; }
-        .block-title i { font-style: normal; display: inline-block; animation: float-star 2.4s ease-in-out infinite alternate; }
-        .feature-group { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-top: 48px; }
-        .feature-item { width: 260px; padding: 28px 18px 32px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); border-radius: 24px; border: 1px solid rgba(110, 70, 255, 0.12); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04); transition: all 0.35s ease; position: relative; overflow: hidden; }
-        .feature-item::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(110, 70, 255, 0.03) 0%, transparent 70%); opacity: 0; transition: 0.5s; pointer-events: none; }
+        .block-title {
+            font-size: 2.4rem;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        .block-title i {
+            font-style: normal;
+            display: inline-block;
+            animation: float-star 2.4s ease-in-out infinite alternate;
+        }
+
+        .feature-group {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 48px;
+        }
+        .feature-item {
+            width: 260px;
+            padding: 28px 18px 32px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            border: 1px solid rgba(110, 70, 255, 0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(110, 70, 255, 0.03) 0%, transparent 70%);
+            opacity: 0;
+            transition: 0.5s;
+            pointer-events: none;
+        }
         .feature-item:hover::before { opacity: 1; }
-        .feature-item:hover { transform: translateY(-10px) scale(1.02); border-color: #6e46ff; box-shadow: 0 16px 48px rgba(110, 70, 255, 0.15); background: rgba(255, 255, 255, 0.9); }
+        .feature-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #6e46ff;
+            box-shadow: 0 16px 48px rgba(110, 70, 255, 0.15);
+            background: rgba(255, 255, 255, 0.9);
+        }
         .feature-icon { font-size: 2.8rem; margin-bottom: 12px; display: block; }
         .feature-item h4 { font-size: 1.3rem; margin: 10px 0 8px; color: #1a1a2e; }
         .feature-item p { color: #4a4a7a; line-height: 1.7; font-size: 0.95rem; }
+
+
         .screenshot-section { padding: 20px 0 80px; text-align: center; }
-        .screenshot-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; margin-top: 40px; align-items: stretch; }
-        .screenshot-item { flex: 1 1 280px; max-width: 380px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(6px); border-radius: 20px; padding: 10px; border: 1px solid rgba(110, 70, 255, 0.08); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04); transition: 0.3s; display: flex; flex-direction: column; }
-        .screenshot-item:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(110, 70, 255, 0.10); border-color: rgba(110, 70, 255, 0.2); }
-        .screenshot-item img { width: 100%; height: auto; border-radius: 14px; display: block; background: #fff; border: 1px solid rgba(255, 255, 255, 0.5); flex: 1; object-fit: contain; max-height: 280px; }
-        .screenshot-item .caption { margin-top: 10px; min-height: 3rem; font-weight: 500; color: #4a4a7a; font-size: 0.95rem; text-align: center; flex-shrink: 0; }
+        .screenshot-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            margin-top: 40px;
+            align-items: stretch;
+        }
+        .screenshot-item {
+            flex: 1 1 280px;
+            max-width: 380px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            border-radius: 20px;
+            padding: 10px;
+            border: 1px solid rgba(110, 70, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .screenshot-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(110, 70, 255, 0.10);
+            border-color: rgba(110, 70, 255, 0.2);
+        }
+        .screenshot-item:active { transform: scale(0.97); transition: transform 0.1s ease; }
+        .screenshot-item .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(110, 70, 255, 0.06);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .screenshot-item:hover .overlay { opacity: 1; }
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            display: block;
+            background: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            flex: 1;
+            object-fit: contain;
+            max-height: 280px;
+            position: relative;
+            z-index: 3;
+            transition: transform 0.4s ease;
+        }
+        .screenshot-item:hover img { transform: scale(1.02); }
+        .screenshot-item:active img { transform: scale(0.98); }
+        .screenshot-item .caption {
+            margin-top: 10px;
+            min-height: 3rem;
+            font-weight: 500;
+            color: #4a4a7a;
+            font-size: 0.95rem;
+            text-align: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 3;
+            transition: color 0.3s;
+        }
+        .screenshot-item:hover .caption { color: #6e46ff; }
+        .screenshot-item .zoom-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 4px 14px;
+            border-radius: 30px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+            pointer-events: none;
+            z-index: 4;
+        }
+        .screenshot-item:hover .zoom-hint { opacity: 1; transform: translateY(0); }
+
         .download-section { padding: 20px 0 100px; text-align: center; }
-        .version-info { color: #4a4a7a; margin: 16px 0 40px; font-size: 1.05rem; background: rgba(110, 70, 255, 0.04); display: inline-block; padding: 6px 24px; border-radius: 40px; }
-        .download-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .download-item { padding: 14px 36px; border-radius: 60px; color: #1a1a2e; text-decoration: none; background: rgba(255, 255, 255, 0.6); border: 1.5px solid rgba(255, 75, 157, 0.2); font-weight: 600; transition: 0.3s; min-width: 160px; backdrop-filter: blur(4px); }
-        .download-item:hover { background: rgba(255, 75, 157, 0.08); border-color: #ff4b9d; box-shadow: 0 8px 24px rgba(255, 75, 157, 0.12); transform: translateY(-3px); }
-        footer { position: relative; z-index: 10; padding: 32px 20px 28px; text-align: center; border-top: 1px solid rgba(110, 70, 255, 0.08); color: #5a5a8a; font-size: 0.9rem; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(4px); }
-        footer a { color: #6e46ff; text-decoration: none; margin: 0 10px; font-weight: 500; cursor: pointer; }
+        .version-info {
+            color: #4a4a7a;
+            margin: 16px 0 40px;
+            font-size: 1.05rem;
+            background: rgba(110, 70, 255, 0.04);
+            display: inline-block;
+            padding: 6px 24px;
+            border-radius: 40px;
+        }
+        .download-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .download-item {
+            padding: 14px 36px;
+            border-radius: 60px;
+            color: #1a1a2e;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1.5px solid rgba(255, 75, 157, 0.2);
+            font-weight: 600;
+            transition: 0.3s;
+            min-width: 160px;
+            backdrop-filter: blur(4px);
+        }
+        .download-item:hover {
+            background: rgba(255, 75, 157, 0.08);
+            border-color: #ff4b9d;
+            box-shadow: 0 8px 24px rgba(255, 75, 157, 0.12);
+            transform: translateY(-3px);
+        }
+        .download-item.download-primary {
+            background: linear-gradient(135deg, #6e46ff, #ff4b9d);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(110, 70, 255, 0.2);
+        }
+        .download-item.download-primary:hover {
+            box-shadow: 0 8px 28px rgba(255, 75, 157, 0.3);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            padding: 32px 20px 28px;
+            text-align: center;
+            border-top: 1px solid rgba(110, 70, 255, 0.08);
+            color: #5a5a8a;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+        }
+        footer a {
+            color: #6e46ff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+            cursor: pointer;
+        }
         footer a:hover { color: #ff4b9d; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 24px; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(6px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
         .modal-overlay.active { display: flex; }
-        .modal-box { max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px); border-radius: 32px; padding: 40px 44px; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12); border: 1px solid rgba(255, 255, 255, 0.6); position: relative; animation: modalFade 0.3s ease; }
-        @keyframes modalFade { from { opacity: 0; transform: scale(0.96) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .modal-box .close-btn { position: sticky; top: 0; float: right; font-size: 2rem; font-weight: 300; color: #5a5a8a; background: none; border: none; cursor: pointer; transition: 0.2s; line-height: 1; padding: 0 8px; }
+        .modal-box {
+            max-width: 720px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 40px 44px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            animation: modalFade 0.3s ease;
+        }
+        @keyframes modalFade {
+            from { opacity: 0; transform: scale(0.96) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-box .close-btn {
+            position: sticky;
+            top: 0;
+            float: right;
+            font-size: 2rem;
+            font-weight: 300;
+            color: #5a5a8a;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1;
+            padding: 0 8px;
+        }
         .modal-box .close-btn:hover { color: #ff4b9d; transform: rotate(90deg); }
-        .modal-box h2 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; background: linear-gradient(135deg, #6e46ff, #ff4b9d); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .modal-box .subtitle { color: #5a5a8a; font-size: 0.95rem; border-bottom: 2px solid rgba(110, 70, 255, 0.08); padding-bottom: 16px; margin-bottom: 20px; }
-        .modal-box .clause { margin-bottom: 14px; padding-left: 8px; border-left: 3px solid #6e46ff; padding-left: 16px; }
+        .modal-box h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #6e46ff, #ff4b9d);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .modal-box .subtitle {
+            color: #5a5a8a;
+            font-size: 0.95rem;
+            border-bottom: 2px solid rgba(110, 70, 255, 0.08);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .modal-box .clause {
+            margin-bottom: 14px;
+            padding-left: 8px;
+            border-left: 3px solid #6e46ff;
+            padding-left: 16px;
+        }
         .modal-box .clause strong { color: #1a1a2e; display: inline-block; min-width: 24px; }
         .modal-box .clause p { color: #3d3d6b; line-height: 1.7; font-size: 0.98rem; }
-        .modal-box .contact { margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(110, 70, 255, 0.08); color: #4a4a7a; }
+        .modal-box .contact {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(110, 70, 255, 0.08);
+            color: #4a4a7a;
+        }
         .modal-box .contact a { color: #6e46ff; text-decoration: none; font-weight: 600; }
         .modal-box .contact a:hover { color: #ff4b9d; }
-        @media (max-width: 768px) { .nav-menu { display: none; } .mobile-toggle { display: block; } .banner-section { text-align: center; padding: 20px 0; } .banner-text { min-width: unset; } .banner-img img { width: 100%; max-width: 320px; } .nav-logo { font-size: 1.5rem; } .nav-logo small { font-size: 0.8rem; } .main-title { font-size: clamp(2.8rem, 12vw, 4rem); } .sub-desc { font-size: 1.1rem; justify-content: center; } .modal-box { padding: 28px 20px; } .screenshot-item { flex: 0 1 160px; } }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .image-modal.active { display: flex; }
+        .image-modal .modal-content {
+            position: relative;
+            max-width: 85%;
+            max-height: 85%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            animation: modalFade 0.3s ease;
+        }
+        .image-modal .modal-content img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 14px;
+            display: block;
+        }
+        .image-modal .close-image {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(110, 70, 255, 0.15);
+            font-size: 1.6rem;
+            font-weight: 300;
+            color: #5a5a8a;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+        .image-modal .close-image:hover { color: #ff4b9d; transform: rotate(90deg) scale(1.1); }
+
+         @media (max-width: 768px) {
+            .navbar { padding: 8px 16px; gap: 6px 16px; }
+            .navbar .logo { font-size: 1.2rem; }
+            .nav-links a { padding: 4px 10px; font-size: 0.75rem; }
+            .container { padding: 0 16px; }
+            .banner-section { text-align: center; padding: 20px 0; }
+            .banner-text { min-width: unset; }
+            .banner-img img { width: 100%; max-width: 320px; }
+            .main-title { font-size: clamp(2.8rem, 12vw, 4rem); }
+            .sub-desc { font-size: 1.1rem; justify-content: center; }
+            .divider { margin: 20px auto; width: 160px; }
+            .modal-box { padding: 28px 20px; }
+            .screenshot-item { flex: 0 1 160px; }
+            .block-title { font-size: 1.6rem; }
+            .feature-group { gap: 16px; }
+            .feature-item { width: 100%; max-width: 300px; }
+            .download-item { min-width: 120px; padding: 10px 20px; font-size: 0.85rem; }
+            .image-modal { padding: 20px; }
+            .image-modal .modal-content { max-width: 95%; }
+            .image-modal .close-image { width: 32px; height: 32px; font-size: 1.2rem; top: -10px; right: -10px; }
+        }
+        @media (max-width: 480px) {
+            .banner-img img { max-width: 260px; }
+            .main-title { font-size: clamp(2.4rem, 10vw, 3.2rem); }
+            .banner-desc { font-size: 0.92rem; }
+            .download-btn { padding: 14px 32px; font-size: 0.95rem; }
+            .download-item { min-width: 100px; padding: 8px 16px; font-size: 0.8rem; }
+            .version-info { font-size: 0.85rem; padding: 4px 16px; }
+            .image-modal { padding: 12px; }
+        }
     </style>
 </head>
 <body>
+
     <canvas id="particleCanvas"></canvas>
     <div class="mouse-light"></div>
 
     <header>
         <div class="nav-wrap">
-            <div class="nav-logo">
-                LrcPlayer <small>✦ 歌词跳转</small>
-            </div>
+            <a class="nav-logo" href="../shopindex.html">
+                畅享工坊 <small>✦ 歌词跳转</small>
+            </a>
             <nav class="nav-menu">
                 <ul>
                     <li><a href="#banner">首页</a></li>
@@ -109,6 +668,7 @@
     </header>
 
     <div class="container">
+
         <section class="banner-section" id="banner">
             <div class="banner-text">
                 <h1 class="main-title">
@@ -119,9 +679,7 @@
                     <span>✨ <span id="versionDisplay">v1.0.0</span></span>
                 </p>
                 <div class="divider"></div>
-                <div class="banner-desc" id="descContainer">
-                    <!-- 由 JS 动态填充 -->
-                </div>
+                <div class="banner-desc" id="descContainer"></div>
                 <a href="#download" class="download-btn">立即下载播放器</a>
             </div>
             <div class="banner-img">
@@ -162,9 +720,7 @@
         <section class="screenshot-section" id="screenshot">
             <h2 class="block-title">📸 软件演示截图</h2>
             <div class="divider"></div>
-            <div class="screenshot-grid" id="screenshotGrid">
-                <!-- 由 JS 动态生成 -->
-            </div>
+            <div class="screenshot-grid" id="screenshotGrid"></div>
         </section>
 
         <section class="download-section" id="download">
@@ -173,10 +729,9 @@
             <p class="version-info" id="versionInfo">
                 当前版本：<span id="versionInfoText">V1.0.0</span> &nbsp;|&nbsp; 安装包大小：<span id="sizeText">323.5KB</span> &nbsp;|&nbsp; 授权方式：完全免费
             </p>
-            <div class="download-group" id="downloadGroup">
-                <!-- 动态按钮由 JS 生成，固定按钮：历史更新包 + 更多资源 -->
-            </div>
+            <div class="download-group" id="downloadGroup"></div>
         </section>
+
     </div>
 
     <footer>
@@ -203,20 +758,28 @@
         </div>
     </div>
 
+    <div class="image-modal" id="imageModal">
+        <div class="modal-content">
+            <button class="close-image" id="closeImageBtn">✕</button>
+            <img id="modalImage" src="" alt="放大预览" />
+        </div>
+    </div>
+
     <script src="../softwares.js"></script>
     <script>
         (function() {
-            // ===== 鼠标柔光 =====
-            const light = document.querySelector('.mouse-light');
-            window.addEventListener('mousemove', e => {
+            'use strict';
+
+ 
+            var light = document.querySelector('.mouse-light');
+            window.addEventListener('mousemove', function(e) {
                 light.style.left = e.clientX + 'px';
                 light.style.top = e.clientY + 'px';
             });
 
-            // ===== 粒子背景 =====
-            const canvas = document.getElementById('particleCanvas');
-            const ctx = canvas.getContext('2d');
-            let w, h, particles = [];
+            var canvas = document.getElementById('particleCanvas');
+            var ctx = canvas.getContext('2d');
+            var w, h, particles = [];
 
             function resizeCanvas() {
                 w = canvas.width = window.innerWidth;
@@ -225,549 +788,263 @@
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
 
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * w;
-                    this.y = Math.random() * h;
-                    this.r = Math.random() * 2.0 + 0.5;
-                    this.speedX = (Math.random() - 0.5) * 0.5;
-                    this.speedY = (Math.random() - 0.5) * 0.5;
-                    this.opacity = Math.random() * 0.2 + 0.05;
-                }
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    if (this.x < 0) this.x = w;
-                    if (this.x > w) this.x = 0;
-                    if (this.y < 0) this.y = h;
-                    if (this.y > h) this.y = 0;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(110, 70, 255, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
+            var Particle = function() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.r = Math.random() * 2.0 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.2 + 0.05;
+            };
+            Particle.prototype.update = function() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0) this.x = w;
+                if (this.x > w) this.x = 0;
+                if (this.y < 0) this.y = h;
+                if (this.y > h) this.y = 0;
+            };
+            Particle.prototype.draw = function() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(110, 70, 255, ' + this.opacity + ')';
+                ctx.fill();
+            };
 
-            function initParticles(num = 100) {
+            function initParticles(num) {
+                num = num || 100;
                 particles = [];
-                for (let i = 0; i < num; i++) particles.push(new Particle());
+                for (var i = 0; i < num; i++) particles.push(new Particle());
             }
             initParticles();
 
             function render() {
                 ctx.clearRect(0, 0, w, h);
-                particles.forEach(p => { p.update(); p.draw(); });
+                for (var i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
                 requestAnimationFrame(render);
             }
             render();
 
-            const modal = document.getElementById('disclaimerModal');
-            const openBtn = document.getElementById('disclaimerLink');
-            const closeBtn = document.getElementById('modalCloseBtn');
+            var modal = document.getElementById('disclaimerModal');
+            var openBtn = document.getElementById('disclaimerLink');
+            var closeBtn = document.getElementById('modalCloseBtn');
 
             function openModal() {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
+
             function closeModal() {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
             }
             openBtn.addEventListener('click', openModal);
             closeBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-            document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
-
-            // ===== id=P466' =====
-            function ensureAbsolutePath(src) {
-                if (!src) return '';
-                if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')) return src;
-                return '../' + src;
-            }
-
-            function renderProduct() {
-                if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
-                    document.body.innerHTML = '<h1 style="text-align:center;margin-top:100px;">❌ 数据加载失败，请检查 softwares.js</h1>';
-                    return;
-                }
-                const product = ALL_SOFTWARES.products.find(p => p.id === 'P466');
-                if (!product) {
-                    document.body.innerHTML = '<h1 style="text-align:center;margin-top:100px;">❌ 未找到 LrcPlayer (P466) 产品数据</h1>';
-                    return;
-                }
-
-                // 版本号，和JS对齐.............
-                const version = product.version || 'v1.0.0';
-                document.getElementById('versionDisplay').textContent = version;
-                document.getElementById('versionInfoText').textContent = version.toUpperCase();
-
-                const size = product.size || '323.5KB';
-                document.getElementById('sizeText').textContent = size;
-
-                const descContainer = document.getElementById('descContainer');
-                if (product.description) {
-                    const paragraphs = product.description.split('\n').filter(p => p.trim() !== '');
-                    descContainer.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
-                } else {
-                    descContainer.innerHTML = '<p>历时三个月，我把它做出来了，那个只存在于想象中的播放器，没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。</p><p>这是音律的艺术，全网独家的音乐播放器重新定义了本地音乐的打开方式。</p><p>创新性制作了歌词跳转模式，可以玩的音乐模式！</p><p>告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。</p>';
-                }
-
-                let detailImages = [];
-                if (product.detailImages) {
-                    detailImages = product.detailImages.split(',').map(s => s.trim()).filter(Boolean);
-                }
-
-                // ===== ★★★ 顶部主图：使用 detailImages 的第一张 ★★★ =====
-                const mainLogo = document.getElementById('mainLogo');
-                if (detailImages.length > 0) {
-                    mainLogo.src = ensureAbsolutePath(detailImages[0]);
-                    mainLogo.alt = product.name || 'LrcPlayer 产品展示';
-                } else if (product.mainImage) {
-                    // 降级：如果没有 detailImages，用 mainImage
-                    mainLogo.src = ensureAbsolutePath(product.mainImage);
-                    mainLogo.alt = product.name || 'LrcPlayer 产品展示';
-                }
-
-                const grid = document.getElementById('screenshotGrid');
-                grid.innerHTML = '';
-                const screenshotList = detailImages.slice(1);
-                const finalScreenshots = screenshotList.length > 0 ? screenshotList : detailImages;
-
-                if (finalScreenshots.length === 0) {
-                    grid.innerHTML = '<div style="color:#94A3B8; padding:40px;">暂无截图</div>';
-                } else {
-                    const captionList = [
-                        '产品主界面 · 沉浸式体验',
-                        '核心功能 · 歌词跳转',
-                        '特色彩蛋 · 个性化玩法',
-                        '设置面板 · 自由定制',
-                        '迷你模式 · 轻量随行'
-                    ];
-                    finalScreenshots.forEach((src, idx) => {
-                        const item = document.createElement('div');
-                        item.className = 'screenshot-item';
-                        const img = document.createElement('img');
-                        img.src = ensureAbsolutePath(src);
-                        img.alt = `LrcPlayer 界面展示 ${idx+1}`;
-                        img.loading = 'lazy';
-                        const cap = document.createElement('div');
-                        cap.className = 'caption';
-                        cap.textContent = captionList[idx % captionList.length];
-                        item.appendChild(img);
-                        item.appendChild(cap);
-                        grid.appendChild(item);
-                    });
-                }
-
-                <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LrcPlayer · 歌词跳转播放器</title>
-    <meta name="description" content="LrcPlayer 自研本地音乐播放器，独家歌词一键跳转 + 自定义彩蛋机制，纯离线无广告，支持全格式无损音频" />
-    <meta name="keywords" content="LrcPlayer,本地音乐播放器,歌词跳转,无损音乐,无广告听歌" />
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif; }
-        html { scroll-behavior: smooth; }
-        body { min-height: 100vh; overflow-x: hidden; background: linear-gradient(145deg, #f9f3ff 0%, #e8f0ff 100%); color: #1a1a2e; position: relative; }
-        #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .mouse-light { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(120, 80, 255, 0.12) 0%, transparent 70%); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; transition: 0.06s ease; }
-        header { position: sticky; top: 0; z-index: 99; backdrop-filter: blur(16px); background: rgba(255, 255, 255, 0.75); border-bottom: 2px solid rgba(110, 70, 255, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04); }
-        .nav-wrap { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
-        .nav-logo { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; background: linear-gradient(135deg, #6e46ff, #ff4b9d); background-clip: text; -webkit-background-clip: text; color: transparent; text-shadow: 0 0 30px rgba(110, 70, 255, 0.2); white-space: nowrap; }
-        .nav-logo small { font-size: 1rem; font-weight: 400; color: #5a5a8a; background: none; -webkit-background-clip: unset; background-clip: unset; margin-left: 6px; }
-        .nav-menu ul { display: flex; gap: 32px; list-style: none; }
-        .nav-menu a { color: #2c2c5e; text-decoration: none; font-size: 1rem; font-weight: 600; transition: 0.2s; position: relative; }
-        .nav-menu a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 2px; background: linear-gradient(90deg, #6e46ff, #ff4b9d); transition: 0.3s; }
-        .nav-menu a:hover { color: #6e46ff; }
-        .nav-menu a:hover::after { width: 100%; }
-        .mobile-toggle { display: none; color: #1a1a2e; font-size: 28px; cursor: pointer; }
-        .container { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        #banner, #feature, #screenshot, #download { scroll-margin-top: 80px; }
-        .banner-section { min-height: 85vh; display: flex; align-items: center; padding: 40px 0 60px; gap: 40px; flex-wrap: wrap; justify-content: center; }
-        .banner-text { flex: 1; min-width: 300px; }
-        .main-title { font-size: clamp(3.2rem, 10vw, 6.5rem); font-weight: 900; letter-spacing: 6px; line-height: 1.1; background: linear-gradient(135deg, #6e46ff, #ff4b9d, #ffb347); background-clip: text; -webkit-background-clip: text; color: transparent; animation: rainbow-shine 4s ease infinite alternate; filter: drop-shadow(0 0 30px rgba(110, 70, 255, 0.25)); position: relative; }
-        .main-title .deco { display: inline-block; animation: float-star 3s ease-in-out infinite alternate; }
-        @keyframes rainbow-shine { 0% { filter: drop-shadow(0 0 20px rgba(110, 70, 255, 0.3)); } 100% { filter: drop-shadow(0 0 50px rgba(255, 75, 157, 0.4)); } }
-        @keyframes float-star { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-10px) rotate(20deg); } }
-        .sub-desc { margin: 16px 0 12px; font-size: 1.4rem; color: #3a3a6a; letter-spacing: 2px; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .sub-desc span { background: rgba(110, 70, 255, 0.08); padding: 0 12px; border-radius: 30px; font-size: 1rem; color: #6e46ff; }
-        .banner-desc { color: #3d3d6b; line-height: 1.9; font-size: 1.05rem; margin-bottom: 32px; max-width: 600px; }
-        .download-btn { display: inline-block; padding: 16px 48px; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; color: #fff; text-decoration: none; background: linear-gradient(135deg, #6e46ff, #ff4b9d); border-radius: 60px; box-shadow: 0 8px 30px rgba(110, 70, 255, 0.3); transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .download-btn::before { content: '✨'; margin-right: 8px; }
-        .download-btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 40px rgba(255, 75, 157, 0.4); }
-        .banner-img { flex: 1; min-width: 280px; text-align: center; position: relative; }
-        .banner-img img { width: 100%; max-width: 100%; border-radius: 20px; box-shadow: 0 20px 60px rgba(110, 70, 255, 0.15); background: #fff; padding: 6px; border: 2px solid rgba(255, 255, 255, 0.6); transition: 0.4s; }
-        .banner-img img:hover { transform: scale(1.02) rotate(1deg); }
-        .banner-img .floating-emoji { position: absolute; font-size: 2.4rem; animation: float 4s ease-in-out infinite; }
-        .banner-img .floating-emoji:nth-child(2) { top: 10%; left: -5%; animation-delay: 0.5s; }
-        .banner-img .floating-emoji:nth-child(3) { bottom: 15%; right: -5%; animation-delay: 1.2s; }
-        @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } 100% { transform: translateY(0) rotate(0deg); } }
-        .divider { width: 300px; height: 3px; margin: 40px auto; background: linear-gradient(90deg, transparent, #6e46ff, #ff4b9d, #ffb347, transparent); border-radius: 10px; animation: shimmer 2s infinite; }
-        @keyframes shimmer { 0% { background-position: -300px 0; } 100% { background-position: 300px 0; } }
-        .feature-section { padding: 20px 0 80px; text-align: center; }
-        .block-title { font-size: 2.4rem; margin-bottom: 8px; color: #1a1a2e; font-weight: 800; letter-spacing: 2px; }
-        .block-title i { font-style: normal; display: inline-block; animation: float-star 2.4s ease-in-out infinite alternate; }
-        .feature-group { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-top: 48px; }
-        .feature-item { width: 260px; padding: 28px 18px 32px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px); border-radius: 24px; border: 1px solid rgba(110, 70, 255, 0.12); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04); transition: all 0.35s ease; position: relative; overflow: hidden; }
-        .feature-item::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(110, 70, 255, 0.03) 0%, transparent 70%); opacity: 0; transition: 0.5s; pointer-events: none; }
-        .feature-item:hover::before { opacity: 1; }
-        .feature-item:hover { transform: translateY(-10px) scale(1.02); border-color: #6e46ff; box-shadow: 0 16px 48px rgba(110, 70, 255, 0.15); background: rgba(255, 255, 255, 0.9); }
-        .feature-icon { font-size: 2.8rem; margin-bottom: 12px; display: block; }
-        .feature-item h4 { font-size: 1.3rem; margin: 10px 0 8px; color: #1a1a2e; }
-        .feature-item p { color: #4a4a7a; line-height: 1.7; font-size: 0.95rem; }
-        .screenshot-section { padding: 20px 0 80px; text-align: center; }
-        .screenshot-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; margin-top: 40px; align-items: stretch; }
-        .screenshot-item { flex: 1 1 280px; max-width: 380px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(6px); border-radius: 20px; padding: 10px; border: 1px solid rgba(110, 70, 255, 0.08); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04); transition: 0.3s; display: flex; flex-direction: column; }
-        .screenshot-item:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(110, 70, 255, 0.10); border-color: rgba(110, 70, 255, 0.2); }
-        .screenshot-item img { width: 100%; height: auto; border-radius: 14px; display: block; background: #fff; border: 1px solid rgba(255, 255, 255, 0.5); flex: 1; object-fit: contain; max-height: 280px; }
-        .screenshot-item .caption { margin-top: 10px; min-height: 3rem; font-weight: 500; color: #4a4a7a; font-size: 0.95rem; text-align: center; flex-shrink: 0; }
-        .download-section { padding: 20px 0 100px; text-align: center; }
-        .version-info { color: #4a4a7a; margin: 16px 0 40px; font-size: 1.05rem; background: rgba(110, 70, 255, 0.04); display: inline-block; padding: 6px 24px; border-radius: 40px; }
-        .download-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .download-item { padding: 14px 36px; border-radius: 60px; color: #1a1a2e; text-decoration: none; background: rgba(255, 255, 255, 0.6); border: 1.5px solid rgba(255, 75, 157, 0.2); font-weight: 600; transition: 0.3s; min-width: 160px; backdrop-filter: blur(4px); }
-        .download-item:hover { background: rgba(255, 75, 157, 0.08); border-color: #ff4b9d; box-shadow: 0 8px 24px rgba(255, 75, 157, 0.12); transform: translateY(-3px); }
-        footer { position: relative; z-index: 10; padding: 32px 20px 28px; text-align: center; border-top: 1px solid rgba(110, 70, 255, 0.08); color: #5a5a8a; font-size: 0.9rem; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(4px); }
-        footer a { color: #6e46ff; text-decoration: none; margin: 0 10px; font-weight: 500; cursor: pointer; }
-        footer a:hover { color: #ff4b9d; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); z-index: 999; justify-content: center; align-items: center; padding: 24px; }
-        .modal-overlay.active { display: flex; }
-        .modal-box { max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(20px); border-radius: 32px; padding: 40px 44px; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12); border: 1px solid rgba(255, 255, 255, 0.6); position: relative; animation: modalFade 0.3s ease; }
-        @keyframes modalFade { from { opacity: 0; transform: scale(0.96) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .modal-box .close-btn { position: sticky; top: 0; float: right; font-size: 2rem; font-weight: 300; color: #5a5a8a; background: none; border: none; cursor: pointer; transition: 0.2s; line-height: 1; padding: 0 8px; }
-        .modal-box .close-btn:hover { color: #ff4b9d; transform: rotate(90deg); }
-        .modal-box h2 { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; margin-bottom: 8px; background: linear-gradient(135deg, #6e46ff, #ff4b9d); background-clip: text; -webkit-background-clip: text; color: transparent; }
-        .modal-box .subtitle { color: #5a5a8a; font-size: 0.95rem; border-bottom: 2px solid rgba(110, 70, 255, 0.08); padding-bottom: 16px; margin-bottom: 20px; }
-        .modal-box .clause { margin-bottom: 14px; padding-left: 8px; border-left: 3px solid #6e46ff; padding-left: 16px; }
-        .modal-box .clause strong { color: #1a1a2e; display: inline-block; min-width: 24px; }
-        .modal-box .clause p { color: #3d3d6b; line-height: 1.7; font-size: 0.98rem; }
-        .modal-box .contact { margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(110, 70, 255, 0.08); color: #4a4a7a; }
-        .modal-box .contact a { color: #6e46ff; text-decoration: none; font-weight: 600; }
-        .modal-box .contact a:hover { color: #ff4b9d; }
-        @media (max-width: 768px) { .nav-menu { display: none; } .mobile-toggle { display: block; } .banner-section { text-align: center; padding: 20px 0; } .banner-text { min-width: unset; } .banner-img img { width: 100%; max-width: 320px; } .nav-logo { font-size: 1.5rem; } .nav-logo small { font-size: 0.8rem; } .main-title { font-size: clamp(2.8rem, 12vw, 4rem); } .sub-desc { font-size: 1.1rem; justify-content: center; } .modal-box { padding: 28px 20px; } .screenshot-item { flex: 0 1 160px; } }
-    </style>
-</head>
-<body>
-    <canvas id="particleCanvas"></canvas>
-    <div class="mouse-light"></div>
-
-    <header>
-        <div class="nav-wrap">
-            <div class="nav-logo">
-                LrcPlayer <small>✦ 歌词跳转</small>
-            </div>
-            <nav class="nav-menu">
-                <ul>
-                    <li><a href="#banner">首页</a></li>
-                    <li><a href="#feature">核心功能</a></li>
-                    <li><a href="#screenshot">截图</a></li>
-                    <li><a href="#download">下载</a></li>
-                </ul>
-            </nav>
-            <div class="mobile-toggle">≡</div>
-        </div>
-    </header>
-
-    <div class="container">
-        <section class="banner-section" id="banner">
-            <div class="banner-text">
-                <h1 class="main-title">
-                    <span class="deco">🎵</span> Lrc<br />Player
-                </h1>
-                <p class="sub-desc">
-                    原创本地歌词跳转音乐播放器
-                    <span>✨ <span id="versionDisplay">v1.0.0</span></span>
-                </p>
-                <div class="divider"></div>
-                <div class="banner-desc" id="descContainer">
-                    <!-- 由 JS 动态填充 -->
-                </div>
-                <a href="#download" class="download-btn">立即下载播放器</a>
-            </div>
-            <div class="banner-img">
-                <span class="floating-emoji">🎶</span>
-                <span class="floating-emoji">⭐</span>
-                <span class="floating-emoji">☁️</span>
-                <img id="mainLogo" src="logo/default.png" alt="LrcPlayer 产品展示" />
-            </div>
-        </section>
-
-        <section class="feature-section" id="feature">
-            <h2 class="block-title">✨ 核心功能亮点</h2>
-            <div class="divider"></div>
-            <div class="feature-group">
-                <div class="feature-item">
-                    <span class="feature-icon">🎯</span>
-                    <h4>独家歌词跳转</h4>
-                    <p>点击任意一行 LRC 歌词，播放器精准跳转至对应播放时间点，听歌点播无需拖拽进度条</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🎁</span>
-                    <h4>自定义彩蛋机制</h4>
-                    <p>设置歌词跳转累计次数，达标后自动播放专属隐藏彩蛋曲目，个性化拉满</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">📂</span>
-                    <h4>全格式无损兼容</h4>
-                    <p>全盘自动扫描本地音频，自动匹配内嵌歌曲与本地 LRC 歌词，无需手动整理曲库</p>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🚫</span>
-                    <h4>纯离线无广告</h4>
-                    <p>全程本地运行不上传任何数据，无开屏广告、无付费 VIP，所有音乐永久保存在本机</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="screenshot-section" id="screenshot">
-            <h2 class="block-title">📸 软件演示截图</h2>
-            <div class="divider"></div>
-            <div class="screenshot-grid" id="screenshotGrid">
-                <!-- 由 JS 动态生成 -->
-            </div>
-        </section>
-
-        <section class="download-section" id="download">
-            <h2 class="block-title">⬇️ 软件下载通道</h2>
-            <div class="divider"></div>
-            <p class="version-info" id="versionInfo">
-                当前版本：<span id="versionInfoText">V1.0.0</span> &nbsp;|&nbsp; 安装包大小：<span id="sizeText">323.5KB</span> &nbsp;|&nbsp; 授权方式：完全免费
-            </p>
-            <div class="download-group" id="downloadGroup">
-                <!-- 动态按钮由 JS 生成，固定按钮：历史更新包 + 更多资源 -->
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <p>© 2026 All Projects Made by Dream &nbsp;|&nbsp; 全部功能独立原创自研</p>
-        <p style="margin-top: 12px;">
-            <a href="javascript:void(0)" id="disclaimerLink">免责声明</a>
-            <a href="mailto:1771232219@qq.com">反馈联系</a>
-        </p>
-    </footer>
-
-    <div class="modal-overlay" id="disclaimerModal">
-        <div class="modal-box">
-            <button class="close-btn" id="modalCloseBtn">✕</button>
-            <h2>📄 免责声明</h2>
-            <div class="subtitle">使用 LrcPlayer 即表示您已阅读、理解并同意以下条款</div>
-            <div class="clause"><p><strong>1.</strong> 本软件为 <strong>免费个人版</strong>，仅供学习、研究及私人娱乐使用。禁止用于任何商业目的或非法盈利活动。</p></div>
-            <div class="clause"><p><strong>2.</strong> 本软件按“<strong>现状</strong>”提供，不附带任何明示或默示的担保。用户应自行承担使用本软件的全部风险，因使用本软件产生的任何直接或间接损失，作者概不负责。</p></div>
-            <div class="clause"><p><strong>3.</strong> 用户须遵守所在国家/地区的法律法规，不得利用本软件从事任何违法或侵犯他人权益的行为。本软件不存储、分发任何音频内容，用户需自行确保所播放音乐的版权合法性。</p></div>
-            <div class="clause"><p><strong>4.</strong> 本软件的著作权、商标权及其他知识产权归作者所有。未经授权，不得对软件进行修改、反编译、分发或转售。</p></div>
-            <div class="clause"><p><strong>5.</strong> 如您认为本软件或其展示内容侵犯了您的合法权益，请通过下方联系方式提供详细说明，我们将在核实后依法处理。</p></div>
-            <div class="clause"><p><strong>6.</strong> 作者保留随时修订本免责声明的权利，修订内容将在本页面公布，恕不单独通知。</p></div>
-            <div class="clause"><p><strong>7.</strong> 本免责声明的 <strong>最终解释权</strong> 归作者所有。</p></div>
-            <div class="contact">📧 电子邮箱：<a href="mailto:1771232219@qq.com">Dream-email@qq.com</a> &nbsp;&nbsp;|&nbsp;&nbsp; 如有异议，欢迎联系。</div>
-        </div>
-    </div>
-
-    <script src="../softwares.js"></script>
-    <script>
-        (function() {
-            const light = document.querySelector('.mouse-light');
-            window.addEventListener('mousemove', e => {
-                light.style.left = e.clientX + 'px';
-                light.style.top = e.clientY + 'px';
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
             });
 
-            const canvas = document.getElementById('particleCanvas');
-            const ctx = canvas.getContext('2d');
-            let w, h, particles = [];
+            var imageModal = document.getElementById('imageModal');
+            var modalImage = document.getElementById('modalImage');
+            var closeImageBtn = document.getElementById('closeImageBtn');
 
-            function resizeCanvas() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * w;
-                    this.y = Math.random() * h;
-                    this.r = Math.random() * 2.0 + 0.5;
-                    this.speedX = (Math.random() - 0.5) * 0.5;
-                    this.speedY = (Math.random() - 0.5) * 0.5;
-                    this.opacity = Math.random() * 0.2 + 0.05;
-                }
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    if (this.x < 0) this.x = w;
-                    if (this.x > w) this.x = 0;
-                    if (this.y < 0) this.y = h;
-                    if (this.y > h) this.y = 0;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(110, 70, 255, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
-
-            function initParticles(num = 100) {
-                particles = [];
-                for (let i = 0; i < num; i++) particles.push(new Particle());
-            }
-            initParticles();
-
-            function render() {
-                ctx.clearRect(0, 0, w, h);
-                particles.forEach(p => { p.update(); p.draw(); });
-                requestAnimationFrame(render);
-            }
-            render();
-
-            const modal = document.getElementById('disclaimerModal');
-            const openBtn = document.getElementById('disclaimerLink');
-            const closeBtn = document.getElementById('modalCloseBtn');
-
-            function openModal() {
-                modal.classList.add('active');
+            function openImageModal(src) {
+                modalImage.src = src;
+                imageModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
-            function closeModal() {
-                modal.classList.remove('active');
+
+            function closeImageModal() {
+                imageModal.classList.remove('active');
                 document.body.style.overflow = '';
+                setTimeout(function() { modalImage.src = ''; }, 300);
             }
-            openBtn.addEventListener('click', openModal);
-            closeBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-            document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
+            closeImageBtn.addEventListener('click', closeImageModal);
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === this) closeImageModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && imageModal.classList.contains('active')) closeImageModal();
+            });
 
             function ensureAbsolutePath(src) {
                 if (!src) return '';
-                if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')) return src;
+                if (src.indexOf('http://') === 0 || src.indexOf('https://') === 0 || src.indexOf('/') === 0) return src;
                 return '../' + src;
             }
 
             function renderProduct() {
+                var descContainer = document.getElementById('descContainer');
+                var mainLogo = document.getElementById('mainLogo');
+                var versionDisplay = document.getElementById('versionDisplay');
+                var versionInfoText = document.getElementById('versionInfoText');
+                var sizeText = document.getElementById('sizeText');
+                var screenshotGrid = document.getElementById('screenshotGrid');
+                var downloadGroup = document.getElementById('downloadGroup');
+
                 if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
-                    document.body.innerHTML = '<h1 style="text-align:center;margin-top:100px;">❌ 数据加载失败，请检查 softwares.js</h1>';
+                    descContainer.innerHTML = '<p style="color:#EF4444;">⚠️ 数据加载失败，请检查 softwares.js 文件。</p>';
+                    console.error('[LrcPlayer] ALL_SOFTWARES 未定义');
                     return;
                 }
-                const product = ALL_SOFTWARES.products.find(p => p.id === 'P466');
+
+                var product = null;
+                for (var i = 0; i < ALL_SOFTWARES.products.length; i++) {
+                    if (ALL_SOFTWARES.products[i].id === 'P466') {
+                        product = ALL_SOFTWARES.products[i];
+                        break;
+                    }
+                }
+
                 if (!product) {
-                    document.body.innerHTML = '<h1 style="text-align:center;margin-top:100px;">❌ 未找到 LrcPlayer (P466) 产品数据</h1>';
+                    descContainer.innerHTML = '<p style="color:#EF4444;">⚠️ 未找到 LrcPlayer (P466) 产品数据</p>';
+                    console.error('[LrcPlayer] 未找到 id 为 P466 的产品');
                     return;
                 }
 
-                const version = product.version || 'v1.0.0';
-                document.getElementById('versionDisplay').textContent = version;
-                document.getElementById('versionInfoText').textContent = version.toUpperCase();
+                var version = product.version || 'v1.0.0';
+                versionDisplay.textContent = version;
+                versionInfoText.textContent = version.toUpperCase();
 
-                const size = product.size || '323.5KB';
-                document.getElementById('sizeText').textContent = size;
+                var size = product.size || '323.5KB';
+                sizeText.textContent = size;
 
-                const descContainer = document.getElementById('descContainer');
                 if (product.description) {
-                    const paragraphs = product.description.split('\n').filter(p => p.trim() !== '');
-                    descContainer.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+                    var paragraphs = product.description.split('\n').filter(function(p) { return p.trim() !== ''; });
+                    descContainer.innerHTML = paragraphs.map(function(p) { return '<p>' + p + '</p>'; }).join('');
                 } else {
-                    descContainer.innerHTML = '<p>历时三个月，我把它做出来了，那个只存在于想象中的播放器，没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。</p><p>这是音律的艺术，全网独家的音乐播放器重新定义了本地音乐的打开方式。</p><p>创新性制作了歌词跳转模式，可以玩的音乐模式！</p><p>告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。</p>';
+                    descContainer.innerHTML =
+                        '<p>历时三个月，我把它做出来了，那个只存在于想象中的播放器，没有广告推送，没有社交干扰，只有精心打磨的桌面可视化动效和纯净的音质输出。</p><p>这是音律的艺术，全网独家的音乐播放器重新定义了本地音乐的打开方式。</p><p>创新性制作了歌词跳转模式，可以玩的音乐模式！</p><p>告别繁琐的媒体库，追求控制感与独特性的迷你音乐播放器，不联网、不扫描，保护隐私的同时实现毫秒级响应。</p>';
                 }
 
-                let detailImages = [];
+                var detailImages = [];
                 if (product.detailImages) {
-                    detailImages = product.detailImages.split(',').map(s => s.trim()).filter(Boolean);
+                    detailImages = product.detailImages.split(',').map(function(s) { return s.trim(); }).filter(function(
+                    s) { return s !== ''; });
                 }
 
-                const mainLogo = document.getElementById('mainLogo');
                 if (detailImages.length > 0) {
                     mainLogo.src = ensureAbsolutePath(detailImages[0]);
                     mainLogo.alt = product.name || 'LrcPlayer 产品展示';
                 } else if (product.mainImage) {
                     mainLogo.src = ensureAbsolutePath(product.mainImage);
-                    mainLogo.alt = product.name || 'LrcPlayer 产品展示';
+                } else {
+                    mainLogo.src = 'logo/default.png';
                 }
 
-                const grid = document.getElementById('screenshotGrid');
-                grid.innerHTML = '';
-                const screenshotList = detailImages.slice(1);
-                const finalScreenshots = screenshotList.length > 0 ? screenshotList : detailImages;
+                screenshotGrid.innerHTML = '';
+                var screenshotList = detailImages.slice(1);
+                var finalScreenshots = screenshotList.length > 0 ? screenshotList : detailImages;
 
                 if (finalScreenshots.length === 0) {
-                    grid.innerHTML = '<div style="color:#94A3B8; padding:40px;">暂无截图</div>';
+                    screenshotGrid.innerHTML = '<div style="color:#94A3B8;padding:40px;">暂无截图</div>';
                 } else {
-                    const captionList = [
+                    var captionList = [
                         '产品主界面 · 沉浸式体验',
                         '核心功能 · 歌词跳转',
                         '特色彩蛋 · 个性化玩法',
                         '设置面板 · 自由定制',
                         '迷你模式 · 轻量随行'
                     ];
-                    finalScreenshots.forEach((src, idx) => {
-                        const item = document.createElement('div');
+                    finalScreenshots.forEach(function(src, idx) {
+                        var item = document.createElement('div');
                         item.className = 'screenshot-item';
-                        const img = document.createElement('img');
+
+                        var overlay = document.createElement('div');
+                        overlay.className = 'overlay';
+
+                        var zoomHint = document.createElement('div');
+                        zoomHint.className = 'zoom-hint';
+                        zoomHint.textContent = '🔍 点击放大';
+
+                        var img = document.createElement('img');
                         img.src = ensureAbsolutePath(src);
-                        img.alt = `LrcPlayer 界面展示 ${idx+1}`;
+                        img.alt = 'LrcPlayer 界面展示 ' + (idx + 1);
                         img.loading = 'lazy';
-                        const cap = document.createElement('div');
+
+                        var cap = document.createElement('div');
                         cap.className = 'caption';
                         cap.textContent = captionList[idx % captionList.length];
+
+                        item.addEventListener('click', function(e) {
+                            this.style.transition = 'transform 0.1s ease';
+                            this.style.transform = 'scale(0.96)';
+                            setTimeout(function() {
+                                this.style.transform = '';
+                            }.bind(this), 100);
+
+                            var srcAttr = this.querySelector('img').src;
+                            if (srcAttr) {
+                                setTimeout(function() {
+                                    openImageModal(srcAttr);
+                                }, 120);
+                            }
+                        });
+
+                        item.appendChild(overlay);
+                        item.appendChild(zoomHint);
                         item.appendChild(img);
                         item.appendChild(cap);
-                        grid.appendChild(item);
+                        screenshotGrid.appendChild(item);
                     });
                 }
 
-                const downloadGroup = document.getElementById('downloadGroup');
                 downloadGroup.innerHTML = '';
 
-                let urls = [];
+                var urls = [];
                 if (product.resourcePath) {
-                    const raw = product.resourcePath;
-                    urls = raw.split(/[;,]\s*|\n/).map(s => s.trim()).filter(Boolean);
+                    var raw = product.resourcePath;
+                    urls = raw.split(/[;,]\s*|\n/).map(function(s) { return s.trim(); }).filter(function(s) { return s !==
+                            ''; });
                 }
 
                 if (urls.length === 0) {
-                    const placeholder = document.createElement('a');
+                    var placeholder = document.createElement('a');
                     placeholder.className = 'download-item';
                     placeholder.textContent = '暂无下载链接';
                     placeholder.href = '#';
                     placeholder.style.cursor = 'default';
-                    placeholder.style.opacity = '0.6';
+                    placeholder.style.opacity = '0.5';
                     downloadGroup.appendChild(placeholder);
                 } else {
-                    urls.forEach((url, index) => {
-                        const a = document.createElement('a');
-                        a.className = 'download-item';
+                    urls.forEach(function(url, index) {
+                        var a = document.createElement('a');
+                        a.className = 'download-item' + (index === 0 ? ' download-primary' : '');
                         a.href = url;
                         a.target = '_blank';
                         a.rel = 'noopener noreferrer';
                         if (urls.length === 1) {
-                            a.textContent = '下载最新版';
+                            a.textContent = '📥 下载最新版';
                         } else {
-                            const labels = ['⭐ 通道一', '通道二', '通道三', '通道四', '通道五'];
-                            a.textContent = labels[index] || `通道 ${index+1}`;
+                            var labels = ['⭐ 推荐通道', '通道二', '通道三', '通道四', '通道五'];
+                            a.textContent = labels[index] || ('通道 ' + (index + 1));
                         }
                         downloadGroup.appendChild(a);
                     });
                 }
 
-                // ===== ★★★ 历史更新包（需要的小伙伴来看看）+ 更多资源 ★★★ =====
-                const fixedButtons = [
-                    { text: '历史更新包', url: 'https://pan.quark.cn/s/2fdaf58a30b8', fixed: true },
-                    { text: '更多资源', url: 'https://01guo.com/shopindex.html', fixed: true }
+                var fixedButtons = [
+                    { text: '📦 历史更新包', url: 'https://pan.quark.cn/s/2fdaf58a30b8' },
+                    { text: '🔗 更多资源', url: 'https://01guo.com/shopindex.html' }
                 ];
-                fixedButtons.forEach(btn => {
-                    const a = document.createElement('a');
+                fixedButtons.forEach(function(btn) {
+                    var a = document.createElement('a');
                     a.className = 'download-item';
                     a.href = btn.url;
                     a.textContent = btn.text;
-                    if (btn.url.startsWith('http')) {
-                        a.target = '_blank';
-                        a.rel = 'noopener noreferrer';
-                    }
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
                     downloadGroup.appendChild(a);
                 });
+
+                console.log('[LrcPlayer] 产品数据加载成功，版本：', product.version);
             }
 
             if (document.readyState === 'loading') {
@@ -775,10 +1052,19 @@
             } else {
                 renderProduct();
             }
+
+            
+            var resizeTimer = null;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    resizeCanvas();
+                    initParticles();
+                }, 300);
+            });
+
+            console.log('✨ LrcPlayer · 面包屑已移除，导航改为畅享工坊 ✨');
         })();
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
