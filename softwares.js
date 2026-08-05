@@ -58,7 +58,7 @@
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260714233422130.png",
       "detailImages": "logo/logo_20260714233438110.png,logo/logo_20260714233440080.png,logo/logo_20260714233442078.png,logo/logo_20260727120202582.png,",
-      "resourcePath": "https://pan.quark.cn/s/d4743abba3b4;https://pan.quark.cn/s/cbb7a2aa1d20",
+      "resourcePath": "https://pan.quark.cn/s/6df4604c61f2;https://pan.quark.cn/s/16f422b19cc0",
       "isRecommend": true,
       "version": "1.3.0",
       "size": "323.5kb",
