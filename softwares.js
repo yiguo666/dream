@@ -58,7 +58,7 @@
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260714233422130.png",
       "detailImages": "logo/logo_20260714233438110.png,logo/logo_20260714233440080.png,logo/logo_20260714233442078.png,logo/logo_20260727120202582.png,",
-      "resourcePath": "https://pan.quark.cn/s/4443136d6122;https://pan.quark.cn/s/433e93f70239",
+      "resourcePath": "https://pan.quark.cn/s/283387f25f59;https://pan.quark.cn/s/f192e9f63708",
       "isRecommend": true,
       "version": "1.3.0",
       "size": "323.5kb",
@@ -339,98 +339,112 @@
       "name": "B站",
       "icon": "📺",
       "url": "https://space.bilibili.com/2027317299?spm_id_from=333.788.0.0",
-      "enabled": true
+      "enabled": true,
+      "action": "link"
     },
     {
       "platform": "email",
       "name": "邮箱",
       "icon": "✉️",
       "url": "1771232219@qq.com",
-      "enabled": true
+      "enabled": true,
+      "action": "copy"
     },
     {
       "platform": "qq",
       "name": "QQ",
       "icon": "🐧",
       "url": "1771232219",
-      "enabled": true
+      "enabled": true,
+      "action": "copy"
     },
     {
       "platform": "github",
       "name": "GitHub",
       "icon": "🐙",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "wechat",
       "name": "微信",
       "icon": "💬",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "xiaohongshu",
       "name": "小红书",
       "icon": "📕",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "zhihu",
       "name": "知乎",
       "icon": "🧠",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "weibo",
       "name": "微博",
       "icon": "📱",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "douyin",
       "name": "抖音",
       "icon": "🎵",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "twitter",
       "name": "Twitter",
       "icon": "🐦",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "youtube",
       "name": "YouTube",
       "icon": "▶️",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "instagram",
       "name": "Instagram",
       "icon": "📷",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "steam",
       "name": "Steam",
       "icon": "🎮",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     },
     {
       "platform": "telegram",
       "name": "Telegram",
       "icon": "✈️",
       "url": "",
-      "enabled": false
+      "enabled": false,
+      "action": "copy"
     }
   ]
 };

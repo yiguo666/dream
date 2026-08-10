@@ -1345,14 +1345,60 @@
                 container.innerHTML = '';
                 links.forEach(function(item) {
                     const a = document.createElement('a');
-                    a.href = item.url;
-                    a.target = '_blank';
+                    a.href = '#';
                     a.title = item.name || item.platform || '社交链接';
                     a.textContent = item.icon || '🔗';
+                    a.dataset.action = item.action || 'link';
+                    a.dataset.url = item.url;
+                    a.classList.add('social-link-item');
                     container.appendChild(a);
                 });
                 container.style.display = 'flex';
             })();
+
+            function copyToClipboard(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(function() {
+                            alert('✅ 已复制：' + text);
+                        })
+                        .catch(function() {
+                            fallbackCopy(text);
+                        });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('✅ 已复制：' + text);
+                } catch (err) {
+                    alert('❌ 复制失败，请手动复制：' + text);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            document.addEventListener('click', function(e) {
+                const target = e.target.closest('.social-link-item');
+                if (!target) return;
+
+                e.preventDefault();
+
+                const action = target.dataset.action;
+                const url = target.dataset.url;
+
+                if (action === 'link') {
+                    window.open(url, '_blank');
+                } else if (action === 'copy') {
+                    copyToClipboard(url);
+                }
+            });
 
             console.log('✨ 主页 · 完全依赖 softwares.js 注入 ✨');
         })();
