@@ -1621,9 +1621,11 @@
                 }
 
                 if (links.length) {
-                    zone.innerHTML = links.map(l =>
+                    let html = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
+                    html += links.map(l =>
                         `<a href="${l.jumpUrl}" target="_blank" class="friend-link-node">${l.siteName}</a>`
                     ).join('');
+                    zone.innerHTML = html;
                     zone.style.display = 'flex';
                 } else {
                     zone.style.display = 'none';

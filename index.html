@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Dream · 的空间</title>
+    <title>Dream · 的空间 (test)</title>
     <style>
         :root {
             --brand-blue: #4A90E2;
@@ -31,7 +31,21 @@
             scroll-behavior: smooth;
             line-height: 1.6;
             min-height: 100vh;
-            transition: background 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: none; /* 背景切换由叠加层完成，body 自身不变化 */
+        }
+
+        /* ---- 水彩背景叠加层（位于粒子层下方） ---- */
+        #bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 在 body 背景和粒子之间 */
+            pointer-events: none;
+            transition: background-color 0.8s ease;
+            mix-blend-mode: multiply;
+            background-color: transparent; /* 初始无颜色 */
         }
 
         #particle-bg {
@@ -129,6 +143,7 @@
         }
 
         .card {
+            position: relative;
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -137,6 +152,25 @@
             box-shadow: 0 4px 24px var(--shadow-blue);
             padding: 20px;
             transition: all 0.4s var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: var(--radius);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .card:hover {
@@ -234,25 +268,25 @@
             padding: 0 4px;
         }
 
-        .status-card {
-            margin-top: 16px;
-            padding: 20px 16px;
-            min-height: 150px;
-            background: rgba(255, 255, 255, 0.4);
+        /* ---- 状态卡片合并 ---- */
+        .status-inline {
+            margin-top: 14px;
+            padding: 14px 16px;
             border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.4);
             border: 1px solid rgba(74, 144, 226, 0.06);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            transition: border-color 0.3s;
+            gap: 10px;
+            transition: border-color 0.5s ease;
         }
-        .status-card:hover {
+        .status-inline:hover {
             border-color: rgba(74, 144, 226, 0.12);
         }
 
-        .status-top {
+        .status-top-inline {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -260,7 +294,7 @@
             gap: 6px 12px;
             width: 100%;
         }
-        .status-clock {
+        .status-clock-inline {
             font-size: 0.85rem;
             font-weight: 600;
             color: #4A90E2;
@@ -272,22 +306,22 @@
             align-items: center;
             gap: 6px;
         }
-        .status-clock #clock {
+        .status-clock-inline #clock {
             font-weight: 700;
         }
-        .status-clock #greeting {
+        .status-clock-inline #greeting {
             opacity: 0.75;
             font-weight: 400;
         }
 
-        .status-center {
+        .status-center-inline {
             display: flex;
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
-        .status-dot {
+        .status-dot-inline {
             display: inline-block;
             width: 8px;
             height: 8px;
@@ -300,26 +334,26 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.4; transform: scale(0.7); }
         }
-        .status-emoji {
+        .status-emoji-inline {
             font-size: 1.6rem;
             line-height: 1;
             flex-shrink: 0;
         }
-        .status-text {
+        .status-text-inline {
             font-size: 0.95rem;
             font-weight: 600;
             color: #1A2A4A;
             white-space: nowrap;
         }
-        .status-text .doing {
+        .status-text-inline .doing {
             color: var(--brand-blue);
         }
-        .status-meta {
+        .status-meta-inline {
             font-size: 0.75rem;
             color: #94a3b8;
             white-space: nowrap;
         }
-        .refresh-btn {
+        .refresh-btn-inline {
             background: rgba(74, 144, 226, 0.08);
             border: none;
             padding: 5px 16px;
@@ -332,12 +366,18 @@
             white-space: nowrap;
             flex-shrink: 0;
         }
-        .refresh-btn:hover {
+        .refresh-btn-inline:hover {
             background: rgba(74, 144, 226, 0.16);
             transform: scale(1.03);
         }
-        .refresh-btn:active {
+        .refresh-btn-inline:active {
             transform: scale(0.95);
+        }
+
+        .profile-divider {
+            border: none;
+            border-top: 1px solid rgba(74,144,226,0.06);
+            margin: 12px 0;
         }
 
         .welcome-area {
@@ -737,11 +777,11 @@
             .grid-3 { grid-template-columns: 1fr; gap: 16px; }
             .profile-card .avatar { width: 72px; height: 72px; }
             .welcome-area .greeting { font-size: 1.1rem; }
-            .status-card { min-height: 130px; padding: 16px 14px; }
-            .status-clock { font-size: 0.75rem; }
-            .status-emoji { font-size: 1.3rem; }
-            .status-text { font-size: 0.85rem; }
-            .status-meta { font-size: 0.7rem; }
+            .status-inline { padding: 12px 14px; }
+            .status-clock-inline { font-size: 0.75rem; }
+            .status-emoji-inline { font-size: 1.3rem; }
+            .status-text-inline { font-size: 0.85rem; }
+            .status-meta-inline { font-size: 0.7rem; }
             .milestone-container { min-height: 80px; }
             .guest-area .input-row input { min-width: 80px; font-size: 0.75rem; }
             .guest-area .input-row button { font-size: 0.7rem; padding: 6px 12px; }
@@ -752,12 +792,12 @@
         @media (max-width: 480px) {
             .nav-links a:nth-child(n+4) { display: none; }
             .welcome-area .greeting { font-size: 0.95rem; flex-direction: column; gap: 4px; }
-            .status-card { min-height: 110px; padding: 12px 10px; }
-            .status-top { gap: 4px 8px; }
-            .status-center { gap: 4px 8px; }
-            .status-emoji { font-size: 1.1rem; }
-            .status-text { font-size: 0.78rem; }
-            .status-meta { font-size: 0.6rem; }
+            .status-inline { padding: 10px; }
+            .status-top-inline { gap: 4px 8px; }
+            .status-center-inline { gap: 4px 8px; }
+            .status-emoji-inline { font-size: 1.1rem; }
+            .status-text-inline { font-size: 0.78rem; }
+            .status-meta-inline { font-size: 0.6rem; }
             .milestone-container { min-height: 70px; }
             .guest-area .input-row { flex-direction: column; align-items: stretch; }
             .guest-area .input-row input { min-width: auto; }
@@ -768,6 +808,9 @@
     </style>
 </head>
 <body>
+
+    <!-- 水彩背景叠加层（在粒子层下方） -->
+    <div id="bg-overlay"></div>
 
     <canvas id="particle-bg"></canvas>
 
@@ -792,26 +835,28 @@
 
                     <div class="social-row" id="socialRow"></div>
 
-                    <hr style="border: none; border-top: 1px solid rgba(74,144,226,0.06); margin: 12px 0;">
+                    <hr class="profile-divider">
+
+                    <div class="status-inline" id="statusInline">
+                        <div class="status-top-inline">
+                            <span class="status-clock-inline">
+                                <span id="clock">--:--:--</span>
+                                <span id="greeting">🌤</span>
+                            </span>
+                        </div>
+                        <div class="status-center-inline">
+                            <span class="status-dot-inline"></span>
+                            <span class="status-emoji-inline" id="statusEmoji">🧘</span>
+                            <span class="status-text-inline">此刻 · <span class="doing" id="statusDoing">静心思考</span></span>
+                            <span class="status-meta-inline" id="statusMeta">更新于 刚刚</span>
+                            <button class="refresh-btn-inline" id="refreshStatus">⟳ 换状态</button>
+                        </div>
+                    </div>
+
+                    <hr class="profile-divider">
 
                     <div class="profile-desc">
                         Dream_Webmaster，<br>欢迎到来，<br>畅游我的第四维度。
-                    </div>
-                </div>
-
-                <div class="status-card">
-                    <div class="status-top">
-                        <span class="status-clock">
-                            <span id="clock">--:--:--</span>
-                            <span id="greeting">🌤</span>
-                        </span>
-                    </div>
-                    <div class="status-center">
-                        <span class="status-dot"></span>
-                        <span class="status-emoji" id="statusEmoji">🧘</span>
-                        <span class="status-text">此刻 · <span class="doing" id="statusDoing">静心思考</span></span>
-                        <span class="status-meta" id="statusMeta">更新于 刚刚</span>
-                        <button class="refresh-btn" id="refreshStatus">⟳ 换状态</button>
                     </div>
                 </div>
             </aside>
@@ -1022,30 +1067,34 @@
                     { emoji: '📖', text: '阅读中' },
                     { emoji: '💻', text: '编码中' },
                     { emoji: '🎵', text: '听音乐' },
-                    { emoji: '☕', text: '喝咖啡' },
+                    { emoji: '☕', text: '喝咖啡放空' },
                     { emoji: '🌱', text: '灵感迸发' },
                     { emoji: '🚀', text: '专注冲刺' },
                     { emoji: '🌧️', text: '发呆看雨' },
                     { emoji: '✨', text: '做白日梦' },
                 ];
 
-                const statusColors = {
-                    '🧘': '#fcfaf8',
-                    '✍️': '#faf8f4',
-                    '📖': '#f6f2ee',
-                    '💻': '#f2eee8',
-                    '🎵': '#fcf0ea',
-                    '☕': '#f6ece0',
-                    '🌱': '#f0f4ec',
-                    '🚀': '#f2eff5',
-                    '🌧️': '#ecf0f2',
-                    '✨': '#faf2f6',
+                // 水彩颜色——极低透明度（0.08~0.15），中国画淡彩感
+                const watercolorMap = {
+                    '🧘': 'rgba(74, 144, 226, 0.06)',
+                    '✍️': 'rgba(107, 114, 128, 0.06)',
+                    '📖': 'rgba(245, 158, 11, 0.08)',
+                    '💻': 'rgba(59, 130, 246, 0.06)',
+                    '🎵': 'rgba(236, 72, 153, 0.06)',
+                    '☕': 'rgba(180, 83, 9, 0.08)',
+                    '🌱': 'rgba(16, 185, 129, 0.08)',
+                    '🚀': 'rgba(99, 102, 241, 0.06)',
+                    '🌧️': 'rgba(100, 116, 139, 0.06)',
+                    '✨': 'rgba(251, 191, 36, 0.10)',
                 };
 
                 const emojiEl = document.getElementById('statusEmoji');
                 const doingEl = document.getElementById('statusDoing');
                 const metaEl = document.getElementById('statusMeta');
                 const refreshBtn = document.getElementById('refreshStatus');
+
+                // 获取背景叠加层
+                const bgOverlay = document.getElementById('bg-overlay');
 
                 let currentIndex = 0;
 
@@ -1054,8 +1103,11 @@
                     emojiEl.textContent = s.emoji;
                     doingEl.textContent = s.text;
 
-                    const color = statusColors[s.emoji] || '#f7f7f7';
-                    document.body.style.background = color;
+                    // 修改叠加层的背景色（水彩效果）
+                    const waterColor = watercolorMap[s.emoji] || 'rgba(74, 144, 226, 0.06)';
+                    if (bgOverlay) {
+                        bgOverlay.style.backgroundColor = waterColor;
+                    }
 
                     const now = new Date();
                     const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
@@ -1315,9 +1367,11 @@
                 }
 
                 if (links.length) {
-                    zone.innerHTML = links.map(function(l) {
+                    let html = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
+                    html += links.map(function(l) {
                         return `<a href="${l.jumpUrl}" target="_blank" class="friend-link-node">${l.siteName}</a>`;
                     }).join('');
+                    zone.innerHTML = html;
                     zone.style.display = 'flex';
                 } else {
                     zone.style.display = 'none';
@@ -1400,7 +1454,7 @@
                 }
             });
 
-            console.log('✨ 主页 · 完全依赖 softwares.js 注入 ✨');
+            console.log('✨ 主页 · test 版本（水彩全局背景 + 状态合并 + 渐变叠加）✨');
         })();
     </script>
 </body>

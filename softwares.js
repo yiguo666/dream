@@ -234,7 +234,24 @@
       "size": "55.6MB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
       "description": "工坊原创项目大多依赖于微软环境.net8.0框架，系统里没有更新版本的小伙伴们可以在这里下载DotNet8的一键下载器，程序会自动检测、运行并安装，一键完成！\r\n下载器内置安装包，单击第一个按钮一键完成所有部署。\r\n如果实在无法运行且手动下载也失败的，可访问微软官方备用下载链接：https://dotnet.microsoft.com/en-us/download/dotnet/8.0",
-      "detailPageType": "通用模板 (tail.html)",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "P545",
+      "name": "原色之力",
+      "category": "🎮 游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260818164544718.png",
+      "detailImages": "logo/logo_20260818164553132.png, logo/logo_20260818164556965.png",
+      "resourcePath": "https://pan.quark.cn/s/f4289435fedc#/list/share",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "6.64MB",
+      "environment": "win通用",
+      "description": "原色之力 原名为Primary，主角可切换红蓝黄三原色小人，蓝色空格能向前释放冰块，红色空格喷出火焰击杀怪物掉落加分气泡，黄色按S隐身无敌可穿过红外线障碍。",
+      "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
     }

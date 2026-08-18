@@ -1459,7 +1459,7 @@
             const zone = document.getElementById('friendLinksZone');
             if (!zone) return;
             if (ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
-                let linksHtml = '';
+                let linksHtml = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
                 ALL_SOFTWARES.friendLinks.forEach(link => {
                     if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
                         linksHtml += `<a href="${link.jumpUrl}" target="_blank" class="friend-link-node">${link.siteName}</a>`;
