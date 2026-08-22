@@ -31,21 +31,21 @@
             scroll-behavior: smooth;
             line-height: 1.6;
             min-height: 100vh;
-            transition: none; /* 背景切换由叠加层完成，body 自身不变化 */
+            transition: none; 
         }
 
-        /* ---- 水彩背景叠加层（位于粒子层下方） ---- */
+        /* ---- 水彩背景叠加层（换个皮肤玩玩儿） ---- */
         #bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* 在 body 背景和粒子之间 */
+            z-index: -1; 
             pointer-events: none;
             transition: background-color 0.8s ease;
             mix-blend-mode: multiply;
-            background-color: transparent; /* 初始无颜色 */
+            background-color: transparent; 
         }
 
         #particle-bg {
