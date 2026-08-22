@@ -314,7 +314,7 @@
         "url": "tail.html?id=P687"
       },
       {
-        "name": "跳转歌词音乐播放器",
+        "name": "歌词跳转音乐播放器",
         "url": "tail.html?id=P466"
       },
       {
