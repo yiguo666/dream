@@ -1,4 +1,4 @@
-﻿const ALL_SOFTWARES ={
+﻿﻿const ALL_SOFTWARES ={
   "products": [
     {
       "id": "soft_20260614113912",
@@ -139,16 +139,16 @@
     {
       "id": "854408",
       "name": "混乱大枪战2",
-      "category": "游戏",
+      "category": "🎮 游戏",   // ← 修正：原为 "游戏"
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260831135309455.png",
       "detailImages": "logo/logo_20260831135312704.png",
-      "resourcePath": "混乱大枪战系列续作。;以卡通风格和物理引擎为特色，玩家操控角色进行快节奏对战。;天空上还会随机掉落武器，可对对手造成更强的击退效果，当成功把对手击落到平台下方即可获胜。;游戏还包含多种PVP对战模式，如团队竞技、个人突围、野外生存、夺旗混战、限时乱斗、赏金赛、排位赛等，大幅提升了此版本的可玩性。",
+      "resourcePath": "",   // ← 原误填描述，现清空（或可填写真实链接）
       "isRecommend": false,
       "version": "1.1.0",
       "size": "",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "",
+      "description": "混乱大枪战系列续作。以卡通风格和物理引擎为特色，玩家操控角色进行快节奏对战。天空上还会随机掉落武器，可对对手造成更强的击退效果，当成功把对手击落到平台下方即可获胜。游戏还包含多种PVP对战模式，如团队竞技、个人突围、野外生存、夺旗混战、限时乱斗、赏金赛、排位赛等，大幅提升了此版本的可玩性。",   // ← 移自 resourcePath
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
@@ -256,23 +256,6 @@
       "customPagePath": ""
     },
     {
-      "id": "P350",
-      "name": "大小写金额转换",
-      "category": "🎯 原创",
-      "weight": "⭐⭐⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260706181249783.png",
-      "detailImages": "logo/logo_20260706181249783.png,logo/logo_20260706181257923.png,logo/logo_20260706181300226.png",
-      "resourcePath": "https://pan.quark.cn/s/69abefa36f2f;https://pan.quark.cn/s/cba9270156eb",
-      "isRecommend": false,
-      "version": "1.0.0",
-      "size": "207.2kb",
-      "environment": "Win 10 | Win 11",
-      "description": "专注于金额数字与中文大写互转的桌面效率工具。\r\n它的核心是解决财务、报销、合同等文件填写等场景下，手动转换大写金额易出错、效率低的问题。\r\n毫秒级精准转换支持一键复制，彻底告别“壹贰叁”写错重写的烦恼。\r\n针对小写数字，可灵活切换千分位分隔符（逗号/空格）和小数精度（保留整数/1位/2位），满足不同财务系统的录入规范，支持一键导出TXT日志。",
-      "detailPageType": "",
-      "detailPagePath": "",
-      "customPagePath": ""
-    },
-    {
       "id": "P733_2",
       "name": "Ruffle",
       "category": "🛠️ 工具",
@@ -286,6 +269,23 @@
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
       "description": "Ruffle是一款基于Adobe Flash Player技术的开源Flash播放器，无需安装Flash插件，支持大多数SWF格式，包括ActionScript 2和3等高级功能。",
       "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "P350",
+      "name": "大小写金额转换",
+      "category": "🎯 原创",
+      "weight": "⭐⭐⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260706181249783.png",
+      "detailImages": "logo/logo_20260706181249783.png,logo/logo_20260706181257923.png,logo/logo_20260706181300226.png",
+      "resourcePath": "https://pan.quark.cn/s/69abefa36f2f;https://pan.quark.cn/s/cba9270156eb",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "207.2kb",
+      "environment": "Win 10 | Win 11",
+      "description": "专注于金额数字与中文大写互转的桌面效率工具。\r\n它的核心是解决财务、报销、合同等文件填写等场景下，手动转换大写金额易出错、效率低的问题。\r\n毫秒级精准转换支持一键复制，彻底告别“壹贰叁”写错重写的烦恼。\r\n针对小写数字，可灵活切换千分位分隔符（逗号/空格）和小数精度（保留整数/1位/2位），满足不同财务系统的录入规范，支持一键导出TXT日志。",
+      "detailPageType": "",
       "detailPagePath": "",
       "customPagePath": ""
     },
@@ -336,6 +336,40 @@
       "size": "12.9MB",
       "environment": "Windows通用",
       "description": "作为祖玛系列正统续作，游戏承袭经典消除玩法。\r\n故事舞台坐落于波利尼西亚群岛，拥有神秘丛林、海底洞穴等 6 个场景、60 道关卡，新增首领战与生存模式。\r\n玩家操控蟾蜍发射彩球达成三连消除，阻止珠串进入骷髅口；可使用滑动瞄准、莲叶跳跃等新操作。游戏配备电光眼、炫彩闪电、炸弹等道具，各 BOSS 需要针对性策略击破。",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "322926",
+      "name": "Q版泡泡堂4",
+      "category": "🎮 游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260831163239824.png",
+      "detailImages": "logo/logo_20260831163242398.png",
+      "resourcePath": "https://pan.quark.cn/s/315a1d0922bd",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "4.21MB",
+      "environment": "Windows通用",
+      "description": "Q版泡泡堂4承袭经典炸弹人玩法，支持双人同屏对战。\r\n除传统竞技外，新增收集、涂色等趣味模式；拳击手套、弹跳器、魔力毯等全新道具登场，还可积攒积分解锁各式角色时装。\r\n在多样主题地图中放置炸弹，炸开障碍、击败敌人，体验欢乐的休闲对战乐趣。",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "687038",
+      "name": "Q版泡泡堂5",
+      "category": "🎮 游戏",   // ← 修正：原为 "游戏"
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260831162716231.png",
+      "detailImages": "logo/logo_20260831162718993.png",
+      "resourcePath": "https://pan.quark.cn/s/49352a35590a",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "7.83MB",
+      "environment": "Windows通用",
+      "description": "Q版泡泡堂5延续炸弹人核心玩法，支持单人闯关、双人本地对战。\r\n除传统对战外，带来吃豆人、据点占领全新趣味模式。\r\n海量全新主题地图，机枪、重磅炸弹等强力武器登场，青蛙、猛犸象、跑车等全新坐骑。\r\n依旧支持积分解锁角色时装，可自由调整难度、敌人数量，单人闯关或双人欢乐对战都可体验。",
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""

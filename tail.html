@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>畅享资源详情 · Dream 工坊</title>
     <style>
-        /* ============================================================
-           1. 重新装修一下的详情页。
-           ============================================================ */
         :root {
             --brand-blue: #4A90E2;
             --brand-blue-bright: #5BA0F5;
@@ -35,7 +32,6 @@
             min-height: 100vh;
         }
 
-       
         .navbar {
             position: sticky;
             top: 0;
@@ -98,7 +94,6 @@
             background: rgba(74, 144, 226, 0.08);
         }
 
-      
         .container {
             max-width: 820px;
             margin: 20px auto 30px;
@@ -464,7 +459,6 @@
             transform: scale(0.96);
         }
 
-
         .curtain-loading-layer {
             position: fixed;
             top: 0;
@@ -543,7 +537,6 @@
             padding-top: 10px;
             border-top: none;
         }
-
 
         @media (max-width: 640px) {
             .navbar { padding: 8px 16px; gap: 6px 16px; }
@@ -631,7 +624,6 @@
 </head>
 <body>
 
-    <!-- ===== 顶部导航重新装修？？？？？？！！！！！！ ===== -->
     <nav class="navbar">
         <a href="index.html" class="logo">Dream <small>主页世界</small></a>
         <div class="nav-links">
@@ -648,7 +640,6 @@
 
     <div class="container">
 
-        <!-- 面包屑（保留旧版样式的好看） -->
         <ul class="breadcrumbs-nav" id="bind_breadcrumbs">
             <li><a href="shopindex.html">全部资源</a></li>
             <li id="breadcrumb_category_node" style="display: none;">
@@ -657,7 +648,6 @@
             <li><span class="current-node" id="bind_breadcrumb_name">加载中...</span></li>
         </ul>
 
-        <!-- 这里是错误墙，看到我，就说明JS不见啦 -->
         <div id="fatalErrorWall" class="fatal-error-wall">
             <h2>❌ 资源同步链路破损</h2>
             <p id="errorMessageSlot">未能在当前资源池中捕获该软件的标示凭证。</p>
@@ -680,7 +670,6 @@
                 </div>
             </div>
 
-            <!-- 规格网格 -->
             <div class="specification-grid">
                 <div class="spec-node"><span class="spec-label">资源ID</span><span id="bind_id" class="spec-value">-</span></div>
                 <div class="spec-node"><span class="spec-label">版本</span><span id="bind_version" class="spec-value">-</span></div>
@@ -688,7 +677,6 @@
                 <div class="spec-node"><span class="spec-label">运行环境</span><span id="bind_environment" class="spec-value">-</span></div>
             </div>
 
-            <!-- 正文 -->
             <div class="article-body">
                 <h2 class="section-headline">资源描述</h2>
                 <div id="bind_desc_container" class="rich-desc-container">
@@ -697,11 +685,9 @@
 
                 <h2 class="section-headline">详情图片</h2>
                 <div id="detail-images-list">
-                    <!-- 由 JS 动态渲染 -->
                 </div>
             </div>
 
-            <!-- 下载区域 -->
             <div class="download-action-card">
                 <div class="download-header">
                     <div class="title">🚀 请选择高速下载航道</div>
@@ -715,14 +701,13 @@
 
                 <div class="btn-group">
                     <button id="btnToggleDownload" class="btn">立即获取资源</button>
-                    <a href="shopindex.html" class="btn btn-secondary">返回资源大厅</a>
+                    <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">返回资源大厅</a>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- ===== 页脚 ===== -->
     <footer>
         <div id="friendLinksZone" class="friend-links-zone"></div>
         <div class="copyright-line">
@@ -791,7 +776,6 @@
                 return html;
             }
 
-            // ---- 渲染详情图（无闪烁） ----
             function renderDetailImages(imageSrcs) {
                 const container = document.getElementById('detail-images-list');
                 if (!container) return;
@@ -855,7 +839,6 @@
                 container.appendChild(fragment);
             }
 
-            // ===== 主初始化 =====
             function init() {
                 if (!targetId) {
                     showFatalError("❌ 详情页传参指针丢失，请从大厅重新进入。");
@@ -872,7 +855,6 @@
                     return;
                 }
 
-                // 填充基本信息
                 document.getElementById('bind_name').innerText = product.name || '未命名';
                 document.getElementById('bind_category').innerText = product.category || '未分类';
                 const weightText = product.weight ? `权重 ${product.weight}` : '未设置';
@@ -882,7 +864,6 @@
                 document.getElementById('bind_size').innerText = product.size || '-';
                 document.getElementById('bind_environment').innerText = product.environment || '全平台';
 
-                // 面包屑
                 document.getElementById('bind_breadcrumb_name').innerText = product.name;
                 if (product.category) {
                     const catNode = document.getElementById('breadcrumb_category_node');
@@ -894,13 +875,11 @@
                     document.getElementById('breadcrumb_category_node').style.display = 'none';
                 }
 
-                // Logo
                 const logoImg = document.getElementById('bind_logo');
                 if (product.mainImage && product.mainImage.trim() !== '') {
                     logoImg.src = product.mainImage;
                 }
 
-                // 描述
                 const descContainer = document.getElementById('bind_desc_container');
                 if (product.description && product.description.trim() !== '') {
                     descContainer.innerHTML = `<p>${product.description.replace(/\n/g, '</p><p>')}</p>`;
@@ -908,18 +887,15 @@
                     descContainer.innerHTML = '<p>该资源暂无详细描述。</p>';
                 }
 
-                // 详情图片
                 const detailImagesStr = product.detailImages || '';
                 const imgList = detailImagesStr.split(',').map(s => s.trim()).filter(Boolean);
                 renderDetailImages(imgList);
 
-                // 下载通道
                 const resourcePath = product.resourcePath || '';
                 const urls = parseResourceUrls(resourcePath);
                 const downloadContainer = document.getElementById('downloadButtons');
                 downloadContainer.innerHTML = buildDownloadButtons(urls);
 
-                // 下载面板切换
                 const panel = document.getElementById('downloadPanel');
                 const toggleBtn = document.getElementById('btnToggleDownload');
                 let isPanelOpen = false;
@@ -942,12 +918,10 @@
                     }
                 });
 
-                // 显示主内容
                 hideCurtain();
                 wrapper.style.display = 'block';
             }
 
-            // ===== 友情链接 =====
             function loadFriendLinks() {
                 const zone = document.getElementById('friendLinksZone');
                 if (!zone) return;
@@ -973,7 +947,6 @@
                 }
             }
 
-            // ===== 启动 =====
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
                     init();

@@ -20,11 +20,7 @@
             --radius-sm: 12px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, 'Noto Sans SC', 'Segoe UI', Roboto, sans-serif;
@@ -223,14 +219,8 @@
             display: block;
         }
         @keyframes fadeSlide {
-            0% {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .notice-controls {
@@ -651,12 +641,8 @@
             margin-top: 2px;
         }
         @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .pagination-bar {
@@ -1246,6 +1232,21 @@
         let currentPage = 0;
         const ZODIAC = ['🐭', '🐮', '🐯', '🐰', '🐲', '🐍', '🐴', '🐏', '🐵', '🐔', '🐶', '🐷'];
 
+        function updateUrlParams() {
+            const params = new URLSearchParams();
+            if (currentCategory && currentCategory !== "全部资源") {
+                params.set('category', currentCategory);
+            }
+            if (currentPage > 0) {
+                params.set('page', currentPage + 1);
+            }
+            if (searchKeyword) {
+                params.set('search', searchKeyword);
+            }
+            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+            history.pushState({ category: currentCategory, page: currentPage, search: searchKeyword }, '', newUrl);
+        }
+
         function initNoticeBoard(config) {
             const {
                 containerId,
@@ -1397,6 +1398,17 @@
             } else {
                 currentCategory = "全部资源";
             }
+            const pageParam = parseInt(urlParams.get('page'), 10);
+            if (!isNaN(pageParam) && pageParam >= 1) {
+                currentPage = pageParam - 1;
+            } else {
+                currentPage = 0;
+            }
+            const searchParam = urlParams.get('search');
+            if (searchParam) {
+                searchKeyword = searchParam;
+                document.getElementById('searchInput').value = searchKeyword;
+            }
 
             renderCategories();
             loadHotCarousel();
@@ -1429,19 +1441,22 @@
                 searchKeyword = e.target.value.trim().toLowerCase();
                 currentPage = 0;
                 renderProductGrid();
+                updateUrlParams();
             });
 
             document.getElementById('prevPageBtn').addEventListener('click', function() {
                 if (currentPage > 0) { currentPage--;
                     renderProductGrid();
-                    scrollToControlBar(); }
+                    scrollToControlBar();
+                    updateUrlParams(); }
             });
             document.getElementById('nextPageBtn').addEventListener('click', function() {
                 const total = getFilteredCount();
                 const totalPages = Math.ceil(total / PAGE_SIZE);
                 if (currentPage < totalPages - 1) { currentPage++;
                     renderProductGrid();
-                    scrollToControlBar(); }
+                    scrollToControlBar();
+                    updateUrlParams(); }
             });
             document.getElementById('pageJumpBtn').addEventListener('click', function() {
                 const input = document.getElementById('pageJumpInput');
@@ -1454,6 +1469,7 @@
                     currentPage = val - 1;
                     renderProductGrid();
                     scrollToControlBar();
+                    updateUrlParams();
                 }
                 input.value = '';
             });
@@ -1667,6 +1683,7 @@
             if (pageItems.length === 0) {
                 grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;padding:40px;">💡 未检索到符合条件的资源。</div>';
                 updatePagination(total, totalPages);
+                updateUrlParams();
                 return;
             }
 
@@ -1698,6 +1715,7 @@
             });
             grid.innerHTML = html;
             updatePagination(total, totalPages);
+            updateUrlParams();
         }
 
         function updatePagination(total, totalPages) {
@@ -1723,11 +1741,14 @@
             const ul = document.getElementById('categoryUl');
             ul.innerHTML = '';
             categories.forEach(function(cat) {
+                if (cat === "全部资源") return;
                 const li = document.createElement('li');
                 li.className = 'category-item' + (cat === currentCategory ? ' active' : '');
                 li.textContent = cat;
                 li.setAttribute('data-cat', cat);
-                li.onclick = function() { filterCategory(cat); };
+                li.onclick = function() {
+                    window.location.href = 'shopindex.html?category=' + encodeURIComponent(cat);
+                };
                 ul.appendChild(li);
             });
         }
@@ -1737,14 +1758,6 @@
             document.querySelectorAll('.category-item').forEach(function(item) {
                 item.classList.toggle('active', item.getAttribute('data-cat') === cat);
             });
-        }
-
-        function filterCategory(cat) {
-            currentCategory = cat;
-            currentPage = 0;
-            updateCategoryUI(cat);
-            renderProductGrid();
-            scrollToControlBar();
         }
 
         function loadFriendLinks() {
@@ -1768,7 +1781,6 @@
                 zone.style.display = 'none';
             }
         }
-        window.filterCategory = filterCategory;
     </script>
 
 </body>
