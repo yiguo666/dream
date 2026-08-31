@@ -20,7 +20,11 @@
             --radius-sm: 12px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: -apple-system, 'Noto Sans SC', 'Segoe UI', Roboto, sans-serif;
@@ -110,6 +114,9 @@
             flex-direction: column;
             gap: 16px;
             flex-shrink: 0;
+            position: sticky;
+            top: 80px;
+            align-self: flex-start;
         }
 
         .sidebar {
@@ -141,7 +148,9 @@
             gap: 6px;
         }
 
-        .category-list { list-style: none; }
+        .category-list {
+            list-style: none;
+        }
         .category-item {
             padding: 9px 12px;
             margin-bottom: 3px;
@@ -163,7 +172,7 @@
             background: var(--brand-blue);
             color: #fff;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(74,144,226,0.25);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
         }
 
         .sidebar-notice-panel {
@@ -210,10 +219,18 @@
             border-left: 3px solid var(--brand-blue);
             word-break: break-word;
         }
-        .notice-slide.active { display: block; }
+        .notice-slide.active {
+            display: block;
+        }
         @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(6px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .notice-controls {
@@ -225,7 +242,9 @@
             padding-top: 8px;
             border-top: 1px solid rgba(74, 144, 226, 0.06);
         }
-        .notice-controls.hidden { display: none; }
+        .notice-controls.hidden {
+            display: none;
+        }
         .notice-arrow {
             background: none;
             border: none;
@@ -235,8 +254,14 @@
             padding: 0 4px;
             transition: color 0.2s;
         }
-        .notice-arrow:hover { color: var(--brand-blue); }
-        .notice-dots { display: flex; gap: 5px; align-items: center; }
+        .notice-arrow:hover {
+            color: var(--brand-blue);
+        }
+        .notice-dots {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
         .notice-dot {
             width: 7px;
             height: 7px;
@@ -296,7 +321,7 @@
             font-size: 0.72rem;
             padding: 2px 10px;
             border-radius: 20px;
-            background: rgba(74,144,226,0.06);
+            background: rgba(74, 144, 226, 0.06);
             transition: 0.2s;
         }
         .recommend-item a:hover {
@@ -312,17 +337,21 @@
             min-width: 0;
         }
 
-        #hotCarouselContainer { display: none; }
+        #hotCarouselContainer {
+            display: none;
+        }
         .hot-header {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 10px;
         }
-        .hot-header .icon { font-size: 1.2rem; }
+        .hot-header .icon {
+            font-size: 1.4rem;
+        }
         .hot-header .title {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #1A2A4A;
         }
 
@@ -341,37 +370,42 @@
             transition: transform 0.5s ease;
             will-change: transform;
         }
+
         .hot-slide {
             flex: 0 0 100%;
             display: flex;
             align-items: center;
             text-decoration: none;
             color: inherit;
-            padding: 16px 20px;
-            min-height: 120px;
+            padding: 20px 24px;
+            min-height: 150px;
             background: transparent;
             transition: background 0.3s;
             cursor: pointer;
         }
-        .hot-slide:hover { background: rgba(74, 144, 226, 0.03); }
+        .hot-slide:hover {
+            background: rgba(74, 144, 226, 0.03);
+        }
         .hot-slide img {
-            width: 80px;
-            height: 80px;
+            width: 96px;
+            height: 96px;
             object-fit: cover;
-            border-radius: 12px;
-            margin-right: 20px;
+            border-radius: 14px;
+            margin-right: 24px;
             flex-shrink: 0;
             background: #f1f5f9;
         }
-        .hot-slide .info { flex: 1; }
+        .hot-slide .info {
+            flex: 1;
+        }
         .hot-slide .info h3 {
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: #1A2A4A;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
         .hot-slide .info p {
-            font-size: 0.85rem;
+            font-size: 0.92rem;
             color: #64748b;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -390,8 +424,8 @@
             z-index: 2;
         }
         .hot-dot {
-            width: 9px;
-            height: 9px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: rgba(74, 144, 226, 0.2);
             cursor: pointer;
@@ -399,22 +433,24 @@
             padding: 0;
             transition: background 0.3s;
         }
-        .hot-dot.active { background: var(--brand-blue); }
+        .hot-dot.active {
+            background: var(--brand-blue);
+        }
 
         .hot-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.6);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(4px);
             border: 1px solid rgba(74, 144, 226, 0.1);
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            font-size: 1.2rem;
+            width: 36px;
+            height: 36px;
+            font-size: 1.3rem;
             cursor: pointer;
             z-index: 3;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -422,9 +458,15 @@
             transition: background 0.2s;
             line-height: 1;
         }
-        .hot-btn:hover { background: rgba(255,255,255,0.9); }
-        .hot-btn.prev { left: 6px; }
-        .hot-btn.next { right: 6px; }
+        .hot-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .hot-btn.prev {
+            left: 8px;
+        }
+        .hot-btn.next {
+            right: 8px;
+        }
 
         .control-bar {
             background: var(--glass-bg);
@@ -445,14 +487,15 @@
             box-shadow: 0 8px 36px var(--shadow-hover);
             border-color: rgba(74, 144, 226, 0.15);
         }
-
         .control-bar h2 {
             font-size: 0.95rem;
             color: #1A2A4A;
             font-weight: 700;
             white-space: nowrap;
         }
-        .control-bar h2 span { color: var(--brand-blue); }
+        .control-bar h2 span {
+            color: var(--brand-blue);
+        }
 
         .search-box-wrapper {
             position: relative;
@@ -586,7 +629,12 @@
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
-        .skeleton-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .skeleton-body {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
         .skeleton-line {
             height: 12px;
             border-radius: 6px;
@@ -594,11 +642,21 @@
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
-        .skeleton-line--short { width: 60%; }
-        .skeleton-line--btn { height: 24px; border-radius: 30px; margin-top: 2px; }
+        .skeleton-line--short {
+            width: 60%;
+        }
+        .skeleton-line--btn {
+            height: 24px;
+            border-radius: 30px;
+            margin-top: 2px;
+        }
         @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         .pagination-bar {
@@ -628,10 +686,12 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        .pagination-group--jump { gap: 6px; }
+        .pagination-group--jump {
+            gap: 6px;
+        }
 
         .page-btn {
-            background: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(4px);
             border: 1px solid rgba(74, 144, 226, 0.1);
             border-radius: 30px;
@@ -643,7 +703,7 @@
             font-weight: 500;
         }
         .page-btn:hover:not(:disabled) {
-            background: rgba(255,255,255,0.8);
+            background: rgba(255, 255, 255, 0.8);
             border-color: var(--brand-blue);
             color: var(--brand-blue);
         }
@@ -677,13 +737,13 @@
             border-radius: 30px;
             text-align: center;
             font-size: 0.8rem;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(4px);
             outline: none;
         }
         .page-jump input:focus {
             border-color: var(--brand-blue);
-            background: rgba(255,255,255,0.8);
+            background: rgba(255, 255, 255, 0.8);
         }
         .page-jump button {
             padding: 3px 12px;
@@ -695,7 +755,10 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .page-jump button:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25); }
+        .page-jump button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
+        }
 
         .site-footer {
             text-align: center;
@@ -705,7 +768,6 @@
             border-top: 1px solid rgba(74, 144, 226, 0.06);
             margin-top: 10px;
         }
-
         .site-footer a {
             color: var(--brand-blue);
             text-decoration: none;
@@ -759,11 +821,15 @@
             font-size: 0.72rem;
             padding: 2px 10px;
             border-radius: 20px;
-            background: rgba(74,144,226,0.06);
+            background: rgba(74, 144, 226, 0.06);
         }
         .mobile-recommend .recommend-item a:hover {
             background: var(--brand-blue);
             color: #fff;
+        }
+
+        .content-notice-panel {
+            display: none;
         }
 
         @media (max-width: 1024px) {
@@ -777,56 +843,133 @@
         }
 
         @media (max-width: 768px) {
-            .navbar { padding: 8px 16px; gap: 6px 16px; }
-            .navbar .logo { font-size: 1.2rem; }
-            .nav-links a { padding: 4px 10px; font-size: 0.75rem; }
+            .navbar {
+                padding: 8px 16px;
+                gap: 6px 16px;
+            }
+            .navbar .logo {
+                font-size: 1.2rem;
+            }
+            .nav-links a {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
 
             .main-container {
                 flex-direction: column;
-                padding: 16px 12px 30px;
-                gap: 16px;
+                padding: 12px 12px 30px;
+                gap: 14px;
             }
+
             .sidebar-wrapper {
                 width: 100%;
                 flex-direction: row;
                 flex-wrap: wrap;
-                gap: 12px;
+                gap: 10px;
+                position: static;
+                top: auto;
+                align-self: auto;
             }
-            .sidebar-wrapper > * {
+            .sidebar-wrapper>.sidebar {
                 flex: 1;
-                min-width: 200px;
+                min-width: 100%;
+                padding: 12px 14px 8px;
             }
-            .sidebar {
-                padding: 14px;
-            }
+
             .category-list {
                 display: flex;
                 overflow-x: auto;
-                gap: 6px;
-                padding: 2px 0;
+                gap: 8px;
+                padding: 4px 0 8px;
+                scrollbar-width: none;
             }
-            .category-list::-webkit-scrollbar { display: none; }
+            .category-list::-webkit-scrollbar {
+                display: none;
+            }
             .category-item {
                 flex-shrink: 0;
                 margin-bottom: 0;
-                padding: 6px 14px;
+                padding: 10px 18px;
                 background: rgba(74, 144, 226, 0.04);
                 border-radius: 30px;
-                font-size: 0.8rem;
+                font-size: 0.82rem;
+                font-weight: 500;
             }
             .category-item.active {
                 background: var(--brand-blue);
                 color: #fff;
             }
 
+            .sidebar-notice-panel {
+                display: none !important;
+            }
+            .recommend-zone {
+                display: none !important;
+            }
+
+            .content-notice-panel {
+                display: block !important;
+                background: var(--glass-bg);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-radius: var(--radius-sm);
+                padding: 14px 16px;
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 4px 24px var(--shadow-blue);
+                transition: all 0.3s var(--transition-smooth);
+            }
+            .content-notice-panel:hover {
+                box-shadow: 0 8px 36px var(--shadow-hover);
+                border-color: rgba(74, 144, 226, 0.15);
+            }
+            .content-notice-panel .notice-carousel {
+                min-height: 44px;
+            }
+            .content-notice-panel .notice-slide {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+            .content-notice-panel .notice-controls {
+                margin-top: 6px;
+                padding-top: 6px;
+            }
+
+            .mobile-recommend {
+                display: block !important;
+                background: var(--glass-bg);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-radius: var(--radius-sm);
+                padding: 14px 16px;
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 4px 24px var(--shadow-blue);
+                transition: all 0.3s var(--transition-smooth);
+            }
+            .mobile-recommend:hover {
+                box-shadow: 0 8px 36px var(--shadow-hover);
+                border-color: rgba(74, 144, 226, 0.15);
+            }
+            .mobile-recommend .notice-sub-title {
+                margin-bottom: 8px;
+            }
+
             .grid-container {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
-            .item { border-radius: 10px; }
-            .item-content { padding: 8px; }
-            .item-title { font-size: 0.78rem; }
-            .item-link { font-size: 0.65rem; padding: 4px 0; }
+            .item {
+                border-radius: 10px;
+            }
+            .item-content {
+                padding: 8px;
+            }
+            .item-title {
+                font-size: 0.78rem;
+            }
+            .item-link {
+                font-size: 0.65rem;
+                padding: 4px 0;
+            }
 
             .control-bar {
                 flex-direction: column;
@@ -839,7 +982,9 @@
                 white-space: normal;
                 text-align: center;
             }
-            .search-box-wrapper { max-width: 100%; }
+            .search-box-wrapper {
+                max-width: 100%;
+            }
 
             .pagination-bar {
                 flex-direction: column;
@@ -855,32 +1000,68 @@
                 flex-wrap: nowrap;
                 width: 100%;
             }
-            #pageInfo { font-size: 0.8rem; }
-            #prevPageBtn, #nextPageBtn { padding: 3px 12px; font-size: 0.75rem; }
+            #pageInfo {
+                font-size: 0.8rem;
+            }
+            #prevPageBtn,
+            #nextPageBtn {
+                padding: 3px 12px;
+                font-size: 0.75rem;
+            }
             .pagination-group--jump {
                 width: 100%;
                 justify-content: center;
                 gap: 4px;
             }
-            .pagination-group--jump input { width: 42px; font-size: 0.72rem; }
-            .pagination-group--jump button { font-size: 0.68rem; padding: 3px 10px; }
+            .pagination-group--jump input {
+                width: 42px;
+                font-size: 0.72rem;
+            }
+            .pagination-group--jump button {
+                font-size: 0.68rem;
+                padding: 3px 10px;
+            }
 
             .hot-slide {
-                padding: 14px 14px 40px;
-                min-height: 110px;
+                padding: 16px 16px 44px;
+                min-height: 130px;
             }
             .hot-slide img {
-                width: 64px;
-                height: 64px;
-                margin-right: 14px;
+                width: 76px;
+                height: 76px;
+                margin-right: 16px;
+                border-radius: 12px;
             }
-            .hot-slide .info h3 { font-size: 0.9rem; }
-            .hot-slide .info p { font-size: 0.78rem; }
-            .hot-btn { width: 28px; height: 28px; font-size: 1rem; }
-
-            .recommend-zone { display: none; }
-            .mobile-recommend {
-                display: block !important;
+            .hot-slide .info h3 {
+                font-size: 1rem;
+            }
+            .hot-slide .info p {
+                font-size: 0.82rem;
+            }
+            .hot-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 1.1rem;
+            }
+            .hot-btn.prev {
+                left: 4px;
+            }
+            .hot-btn.next {
+                right: 4px;
+            }
+            .hot-indicators {
+                bottom: 10px;
+                gap: 6px;
+            }
+            .hot-dot {
+                width: 8px;
+                height: 8px;
+            }
+            .hot-header .icon {
+                font-size: 1.2rem;
+            }
+            .hot-header .title {
+                font-size: 1rem;
             }
         }
 
@@ -888,29 +1069,67 @@
             .grid-container {
                 gap: 8px;
             }
-            .item-content { padding: 6px; }
-            .item-title { font-size: 0.7rem; }
-            .item-link { font-size: 0.6rem; padding: 3px 0; }
-            .item-zodiac { font-size: 0.6rem; }
-            .pagination-bar { padding: 8px 10px; }
-            #pageInfo { font-size: 0.7rem; }
-            #prevPageBtn, #nextPageBtn { padding: 2px 8px; font-size: 0.65rem; }
-            .pagination-group--jump input { width: 36px; font-size: 0.65rem; }
-            .pagination-group--jump button { font-size: 0.6rem; padding: 2px 6px; }
+            .item-content {
+                padding: 6px;
+            }
+            .item-title {
+                font-size: 0.7rem;
+            }
+            .item-link {
+                font-size: 0.6rem;
+                padding: 3px 0;
+            }
+            .item-zodiac {
+                font-size: 0.6rem;
+            }
+
+            .pagination-bar {
+                padding: 8px 10px;
+            }
+            #pageInfo {
+                font-size: 0.7rem;
+            }
+            #prevPageBtn,
+            #nextPageBtn {
+                padding: 2px 8px;
+                font-size: 0.65rem;
+            }
+            .pagination-group--jump input {
+                width: 36px;
+                font-size: 0.65rem;
+            }
+            .pagination-group--jump button {
+                font-size: 0.6rem;
+                padding: 2px 6px;
+            }
+
             .hot-slide {
-                padding: 10px 10px 36px;
-                min-height: 90px;
+                padding: 12px 12px 38px;
+                min-height: 110px;
             }
             .hot-slide img {
-                width: 48px;
-                height: 48px;
-                margin-right: 10px;
+                width: 60px;
+                height: 60px;
+                margin-right: 12px;
+                border-radius: 10px;
             }
-            .hot-slide .info h3 { font-size: 0.8rem; }
-            .hot-slide .info p { font-size: 0.7rem; }
-            .hot-btn { width: 24px; height: 24px; font-size: 0.85rem; }
-            .sidebar-wrapper > * {
-                min-width: 100%;
+            .hot-slide .info h3 {
+                font-size: 0.88rem;
+            }
+            .hot-slide .info p {
+                font-size: 0.75rem;
+            }
+            .hot-btn {
+                width: 26px;
+                height: 26px;
+                font-size: 0.95rem;
+            }
+            .sidebar-wrapper>.sidebar {
+                padding: 10px 12px 6px;
+            }
+            .category-item {
+                padding: 8px 14px;
+                font-size: 0.76rem;
             }
         }
     </style>
@@ -930,6 +1149,7 @@
     <div class="main-container">
 
         <div class="sidebar-wrapper">
+
             <div class="sidebar">
                 <div class="sidebar-title">📂 资源类别</div>
                 <ul class="category-list" id="categoryUl"></ul>
@@ -978,18 +1198,6 @@
             </div>
 
             <div class="grid-container" id="productGrid">
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line skeleton-line--short"></div><div class="skeleton-line skeleton-line--btn"></div></div></div>
             </div>
 
             <div class="pagination-bar" id="paginationBar">
@@ -1005,19 +1213,28 @@
                 </div>
             </div>
 
+            <div class="content-notice-panel" id="noticePanelMobile">
+                <div class="notice-sub-title">📢 工坊动态</div>
+                <div class="notice-carousel" id="noticeCarouselMobile"></div>
+                <div class="notice-controls" id="noticeControlsMobile">
+                    <button class="notice-arrow" id="noticePrevMobile">◀</button>
+                    <span class="notice-dots" id="noticeDotsMobile"></span>
+                    <button class="notice-arrow" id="noticeNextMobile">▶</button>
+                </div>
+            </div>
+
             <div id="mobileRecommend" class="mobile-recommend">
                 <div class="notice-sub-title">⭐ 精品推荐</div>
                 <ul id="mobileRecommendList" class="recommend-list"></ul>
             </div>
 
         </div>
+
     </div>
 
     <footer class="site-footer">
         <div id="friendLinksZone" class="friend-links-zone"></div>
-        <p>
-            © 2026 Designed by <strong>Dream</strong>. All Rights Reserved.
-        </p>
+        <p>© 2026 Designed by <strong>Dream</strong>. All Rights Reserved.</p>
     </footer>
 
     <script>
@@ -1025,13 +1242,142 @@
         let categories = ["全部资源"];
         let currentCategory = "全部资源";
         let searchKeyword = "";
-        const PAGE_SIZE = 16;
+        const PAGE_SIZE = 20;
         let currentPage = 0;
         const ZODIAC = ['🐭', '🐮', '🐯', '🐰', '🐲', '🐍', '🐴', '🐏', '🐵', '🐔', '🐶', '🐷'];
 
-        document.addEventListener('DOMContentLoaded', () => {
+        function initNoticeBoard(config) {
+            const {
+                containerId,
+                carouselId,
+                dotsId,
+                prevId,
+                nextId,
+                interval = 5000
+            } = config;
+
+            const container = document.getElementById(containerId);
+            if (!container) return null;
+
+            const carousel = document.getElementById(carouselId);
+            const dotsContainer = document.getElementById(dotsId);
+            const prevBtn = document.getElementById(prevId);
+            const nextBtn = document.getElementById(nextId);
+
+            if (!carousel || !dotsContainer || !prevBtn || !nextBtn) return null;
+
+            let list = [];
+            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length >
+                0) {
+                list = ALL_SOFTWARES.announcements.filter(ann => ann.title && ann.title.trim() !== '');
+            }
+
+            carousel.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            if (list.length === 0) {
+                container.style.display = 'none';
+                return null;
+            }
+
+            let currentIndex = 0;
+            let timer = null;
+
+            list.forEach((ann, idx) => {
+                const slide = document.createElement('div');
+                slide.className = 'notice-slide' + (idx === 0 ? ' active' : '');
+                slide.textContent = ann.title;
+                slide.dataset.index = idx;
+                carousel.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'notice-dot' + (idx === 0 ? ' active' : '');
+                dot.dataset.index = idx;
+                dot.setAttribute('aria-label', '切换到公告 ' + (idx + 1));
+                dotsContainer.appendChild(dot);
+            });
+
+            const controls = container.querySelector('.notice-controls');
+            if (controls) {
+                if (list.length <= 1) {
+                    controls.classList.add('hidden');
+                } else {
+                    controls.classList.remove('hidden');
+                }
+            }
+
+            function goTo(index) {
+                if (list.length === 0) return;
+                if (index < 0) index = list.length - 1;
+                if (index >= list.length) index = 0;
+                if (index === currentIndex) return;
+                currentIndex = index;
+
+                const slides = carousel.querySelectorAll('.notice-slide');
+                const dots = dotsContainer.querySelectorAll('.notice-dot');
+                slides.forEach((s, i) => { s.classList.toggle('active', i === currentIndex); });
+                dots.forEach((d, i) => { d.classList.toggle('active', i === currentIndex); });
+            }
+
+            function next() { goTo(currentIndex + 1); }
+
+            function prev() { goTo(currentIndex - 1); }
+
+            function startAuto() {
+                if (list.length <= 1) return;
+                if (timer) clearInterval(timer);
+                timer = setInterval(next, interval);
+            }
+
+            function stopAuto() {
+                if (timer) { clearInterval(timer);
+                    timer = null; }
+            }
+
+            function resetAuto() {
+                stopAuto();
+                startAuto();
+            }
+
+            prevBtn.addEventListener('click', () => { prev();
+                resetAuto(); });
+            nextBtn.addEventListener('click', () => { next();
+                resetAuto(); });
+
+            dotsContainer.querySelectorAll('.notice-dot').forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index, 10);
+                    if (!isNaN(idx) && idx !== currentIndex) {
+                        goTo(idx);
+                        resetAuto();
+                    }
+                });
+            });
+
+            container.addEventListener('mouseenter', stopAuto);
+            container.addEventListener('mouseleave', startAuto);
+            container.addEventListener('touchstart', stopAuto, { passive: true });
+            container.addEventListener('touchend', startAuto, { passive: true });
+
+            startAuto();
+
+            return {
+                goTo,
+                next,
+                prev,
+                startAuto,
+                stopAuto,
+                resetAuto,
+                getCurrentIndex: () => currentIndex,
+                getList: () => list
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+
             if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
-                document.getElementById('productGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#EF4444;padding:40px;">⚠️ 数据加载失败，请检查 softwares.js 文件。</div>';
+                document.getElementById('productGrid').innerHTML =
+                    '<div style="grid-column:1/-1;text-align:center;color:#EF4444;padding:40px;">⚠️ 数据加载失败，请检查 softwares.js 文件。</div>';
                 return;
             }
             allProducts = ALL_SOFTWARES.products;
@@ -1053,7 +1399,6 @@
             }
 
             renderCategories();
-            loadAnnouncements();
             loadHotCarousel();
             loadRecommendations();
             loadFriendLinks();
@@ -1061,22 +1406,44 @@
             renderProductGrid();
             handleMobileRecommend();
 
+            initNoticeBoard({
+                containerId: 'noticePanel',
+                carouselId: 'noticeCarousel',
+                dotsId: 'noticeDots',
+                prevId: 'noticePrev',
+                nextId: 'noticeNext',
+                interval: 5000
+            });
+
+            initNoticeBoard({
+                containerId: 'noticePanelMobile',
+                carouselId: 'noticeCarouselMobile',
+                dotsId: 'noticeDotsMobile',
+                prevId: 'noticePrevMobile',
+                nextId: 'noticeNextMobile',
+                interval: 5000
+            });
+
             const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', (e) => {
+            searchInput.addEventListener('input', function(e) {
                 searchKeyword = e.target.value.trim().toLowerCase();
                 currentPage = 0;
                 renderProductGrid();
             });
 
-            document.getElementById('prevPageBtn').addEventListener('click', () => {
-                if (currentPage > 0) { currentPage--; renderProductGrid(); scrollToControlBar(); }
+            document.getElementById('prevPageBtn').addEventListener('click', function() {
+                if (currentPage > 0) { currentPage--;
+                    renderProductGrid();
+                    scrollToControlBar(); }
             });
-            document.getElementById('nextPageBtn').addEventListener('click', () => {
+            document.getElementById('nextPageBtn').addEventListener('click', function() {
                 const total = getFilteredCount();
                 const totalPages = Math.ceil(total / PAGE_SIZE);
-                if (currentPage < totalPages - 1) { currentPage++; renderProductGrid(); scrollToControlBar(); }
+                if (currentPage < totalPages - 1) { currentPage++;
+                    renderProductGrid();
+                    scrollToControlBar(); }
             });
-            document.getElementById('pageJumpBtn').addEventListener('click', () => {
+            document.getElementById('pageJumpBtn').addEventListener('click', function() {
                 const input = document.getElementById('pageJumpInput');
                 let val = parseInt(input.value.trim(), 10);
                 const total = getFilteredCount();
@@ -1090,11 +1457,13 @@
                 }
                 input.value = '';
             });
-            document.getElementById('pageJumpInput').addEventListener('keydown', (e) => {
+            document.getElementById('pageJumpInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') { document.getElementById('pageJumpBtn').click(); }
             });
 
             window.addEventListener('resize', handleMobileRecommend);
+
+            renderProductGrid();
         });
 
         function handleMobileRecommend() {
@@ -1146,7 +1515,7 @@
                     detailUrl = product.detailPagePath;
                     targetAttr = '_blank';
                 } else {
-                    detailUrl = `tail.html?id=${product.id}`;
+                    detailUrl = 'tail.html?id=' + product.id;
                 }
                 slide.href = detailUrl;
                 if (targetAttr) slide.target = targetAttr;
@@ -1162,7 +1531,8 @@
                 const title = document.createElement('h3');
                 title.textContent = product.name;
                 const desc = document.createElement('p');
-                const shortDesc = product.description ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) + '...' : '点击查看详情';
+                const shortDesc = product.description ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) +
+                    '...' : '点击查看详情';
                 desc.textContent = shortDesc;
 
                 info.appendChild(title);
@@ -1185,21 +1555,26 @@
                 if (index < 0) index = total - 1;
                 if (index >= total) index = 0;
                 currentIndex = index;
-                track.style.transform = `translateX(-${currentIndex * 100}%)`;
-                document.querySelectorAll('.hot-dot').forEach((dot, i) => {
+                track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+                document.querySelectorAll('.hot-dot').forEach(function(dot, i) {
                     dot.classList.toggle('active', i === currentIndex);
                 });
             }
 
             function nextSlide() { goTo(currentIndex + 1); }
+
             function prevSlide() { goTo(currentIndex - 1); }
 
-            prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
-            nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
-            document.querySelectorAll('.hot-dot').forEach(dot => {
+            prevBtn.addEventListener('click', function() { prevSlide();
+                resetAutoPlay(); });
+            nextBtn.addEventListener('click', function() { nextSlide();
+                resetAutoPlay(); });
+
+            document.querySelectorAll('.hot-dot').forEach(function(dot) {
                 dot.addEventListener('click', function() {
                     const idx = parseInt(this.dataset.index, 10);
-                    if (!isNaN(idx)) { goTo(idx); resetAutoPlay(); }
+                    if (!isNaN(idx)) { goTo(idx);
+                        resetAutoPlay(); }
                 });
             });
 
@@ -1207,6 +1582,7 @@
                 if (autoTimer) clearInterval(autoTimer);
                 autoTimer = setInterval(nextSlide, 5000);
             }
+
             function resetAutoPlay() {
                 clearInterval(autoTimer);
                 startAutoPlay();
@@ -1214,9 +1590,9 @@
             startAutoPlay();
 
             const wrapper = document.querySelector('.hot-wrapper');
-            wrapper.addEventListener('mouseenter', () => clearInterval(autoTimer));
+            wrapper.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
             wrapper.addEventListener('mouseleave', startAutoPlay);
-            wrapper.addEventListener('touchstart', () => clearInterval(autoTimer), { passive: true });
+            wrapper.addEventListener('touchstart', function() { clearInterval(autoTimer); }, { passive: true });
             wrapper.addEventListener('touchend', startAutoPlay, { passive: true });
         }
 
@@ -1230,22 +1606,23 @@
             }
             document.getElementById('recommendZone').style.display = 'block';
             let sideHtml = '';
-            recommends.forEach(rec => {
+            recommends.forEach(function(rec) {
                 let detailUrl, targetAttr = '';
                 if (rec.detailPageType === "自定义模板" && rec.detailPagePath) {
                     detailUrl = rec.detailPagePath;
                     targetAttr = ' target="_blank"';
                 } else {
-                    detailUrl = `tail.html?id=${rec.id}`;
+                    detailUrl = 'tail.html?id=' + rec.id;
                 }
-                sideHtml += `
-                    <li class="recommend-item">
-                        <span>${rec.name}</span>
-                        <a href="${detailUrl}"${targetAttr}>查看</a>
-                    </li>
-                `;
+                sideHtml += '<li class="recommend-item">' +
+                    '<span>' + rec.name + '</span>' +
+                    '<a href="' + detailUrl + '"' + targetAttr + '>查看</a>' +
+                    '</li>';
             });
             sideList.innerHTML = sideHtml;
+
+            const mobileList = document.getElementById('mobileRecommendList');
+            if (mobileList) mobileList.innerHTML = sideHtml;
         }
 
         function scrollToControlBar() {
@@ -1258,16 +1635,24 @@
         }
 
         function getFilteredCount() {
-            let filtered = allProducts;
-            if (currentCategory !== "全部资源") { filtered = filtered.filter(p => p.category === currentCategory); }
-            if (searchKeyword !== "") { filtered = filtered.filter(p => p.name.toLowerCase().includes(searchKeyword)); }
+            let filtered = allProducts.slice();
+            if (currentCategory !== "全部资源") {
+                filtered = filtered.filter(function(p) { return p.category === currentCategory; });
+            }
+            if (searchKeyword !== "") {
+                filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchKeyword); });
+            }
             return filtered.length;
         }
 
         function renderProductGrid() {
-            let filtered = allProducts;
-            if (currentCategory !== "全部资源") { filtered = filtered.filter(p => p.category === currentCategory); }
-            if (searchKeyword !== "") { filtered = filtered.filter(p => p.name.toLowerCase().includes(searchKeyword)); }
+            let filtered = allProducts.slice();
+            if (currentCategory !== "全部资源") {
+                filtered = filtered.filter(function(p) { return p.category === currentCategory; });
+            }
+            if (searchKeyword !== "") {
+                filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchKeyword); });
+            }
 
             const total = filtered.length;
             const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -1286,31 +1671,30 @@
             }
 
             let html = '';
-            pageItems.forEach((product) => {
+            pageItems.forEach(function(product) {
                 const globalIndex = filtered.indexOf(product);
                 const zodiac = ZODIAC[globalIndex % 12];
-                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
+                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage :
+                    'logo/default.png';
                 let detailUrl, targetAttr = '';
                 if (product.detailPageType === "自定义模板" && product.detailPagePath) {
                     detailUrl = product.detailPagePath;
                     targetAttr = ' target="_blank"';
                 } else {
-                    detailUrl = `tail.html?id=${product.id}`;
+                    detailUrl = 'tail.html?id=' + product.id;
                 }
-                html += `
-                    <div class="item">
-                        <div class="item-image-wrapper">
-                            <img src="${logo}" alt="${product.name}" class="item-image" onerror="this.onerror=null; this.src='logo/default.png';">
-                        </div>
-                        <div class="item-content">
-                            <div class="item-title-row">
-                                <span class="item-zodiac">${zodiac}</span>
-                                <span class="item-title" title="${product.name}">${product.name}</span>
-                            </div>
-                            <a href="${detailUrl}"${targetAttr} class="item-link">查看详情</a>
-                        </div>
-                    </div>
-                `;
+                html += '<div class="item">' +
+                    '<div class="item-image-wrapper">' +
+                    '<img src="' + logo + '" alt="' + product.name + '" class="item-image" onerror="this.onerror=null; this.src=\'logo/default.png\';">' +
+                    '</div>' +
+                    '<div class="item-content">' +
+                    '<div class="item-title-row">' +
+                    '<span class="item-zodiac">' + zodiac + '</span>' +
+                    '<span class="item-title" title="' + product.name + '">' + product.name + '</span>' +
+                    '</div>' +
+                    '<a href="' + detailUrl + '"' + targetAttr + ' class="item-link">查看详情</a>' +
+                    '</div>' +
+                    '</div>';
             });
             grid.innerHTML = html;
             updatePagination(total, totalPages);
@@ -1327,30 +1711,30 @@
                 return;
             }
             const currentDisplay = currentPage + 1;
-            pageInfo.textContent = `第 ${currentDisplay} / ${totalPages} 页`;
+            pageInfo.textContent = '第 ' + currentDisplay + ' / ' + totalPages + ' 页';
             prevBtn.disabled = (currentPage === 0);
             nextBtn.disabled = (currentPage >= totalPages - 1);
             const jumpInput = document.getElementById('pageJumpInput');
             jumpInput.max = totalPages;
-            jumpInput.placeholder = `1-${totalPages}`;
+            jumpInput.placeholder = '1-' + totalPages;
         }
 
         function renderCategories() {
             const ul = document.getElementById('categoryUl');
             ul.innerHTML = '';
-            categories.forEach(cat => {
+            categories.forEach(function(cat) {
                 const li = document.createElement('li');
                 li.className = 'category-item' + (cat === currentCategory ? ' active' : '');
                 li.textContent = cat;
                 li.setAttribute('data-cat', cat);
-                li.onclick = () => filterCategory(cat);
+                li.onclick = function() { filterCategory(cat); };
                 ul.appendChild(li);
             });
         }
 
         function updateCategoryUI(cat) {
             document.getElementById('currentCategoryTitle').innerText = cat;
-            document.querySelectorAll('.category-item').forEach(item => {
+            document.querySelectorAll('.category-item').forEach(function(item) {
                 item.classList.toggle('active', item.getAttribute('data-cat') === cat);
             });
         }
@@ -1363,106 +1747,15 @@
             scrollToControlBar();
         }
 
-        let noticeList = [];
-        let currentNoticeIndex = 0;
-        let noticeTimer = null;
-        const INTERVAL = 5000;
-
-        function loadAnnouncements() {
-            const carousel = document.getElementById('noticeCarousel');
-            const controls = document.getElementById('noticeControls');
-            const dotsContainer = document.getElementById('noticeDots');
-            const prevBtn = document.getElementById('noticePrev');
-            const nextBtn = document.getElementById('noticeNext');
-
-            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length > 0) {
-                noticeList = ALL_SOFTWARES.announcements.filter(ann => ann.title && ann.title.trim() !== '');
-            } else {
-                noticeList = [];
-            }
-            carousel.innerHTML = '';
-            dotsContainer.innerHTML = '';
-            if (noticeList.length === 0) {
-                document.getElementById('noticePanel').style.display = 'none';
-                return;
-            }
-            noticeList.forEach((ann, idx) => {
-                const slide = document.createElement('div');
-                slide.className = 'notice-slide' + (idx === 0 ? ' active' : '');
-                slide.textContent = ann.title;
-                slide.dataset.index = idx;
-                carousel.appendChild(slide);
-                const dot = document.createElement('button');
-                dot.className = 'notice-dot' + (idx === 0 ? ' active' : '');
-                dot.dataset.index = idx;
-                dot.setAttribute('aria-label', '切换到公告 ' + (idx + 1));
-                dotsContainer.appendChild(dot);
-            });
-            if (noticeList.length <= 1) {
-                controls.classList.add('hidden');
-            } else {
-                controls.classList.remove('hidden');
-            }
-            prevBtn.addEventListener('click', () => goToNotice(currentNoticeIndex - 1));
-            nextBtn.addEventListener('click', () => goToNotice(currentNoticeIndex + 1));
-            dotsContainer.querySelectorAll('.notice-dot').forEach(dot => {
-                dot.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.index, 10);
-                    if (!isNaN(idx) && idx !== currentNoticeIndex) {
-                        goToNotice(idx);
-                    }
-                });
-            });
-            startAutoPlay();
-            const panel = document.getElementById('noticePanel');
-            panel.addEventListener('mouseenter', pauseAutoPlay);
-            panel.addEventListener('mouseleave', startAutoPlay);
-            panel.addEventListener('touchstart', pauseAutoPlay, { passive: true });
-            panel.addEventListener('touchend', startAutoPlay, { passive: true });
-            currentNoticeIndex = 0;
-            updateNotice();
-        }
-
-        function goToNotice(index) {
-            if (noticeList.length === 0) return;
-            if (index < 0) index = noticeList.length - 1;
-            if (index >= noticeList.length) index = 0;
-            if (index === currentNoticeIndex) return;
-            currentNoticeIndex = index;
-            updateNotice();
-            resetAutoPlay();
-        }
-
-        function updateNotice() {
-            const slides = document.querySelectorAll('.notice-slide');
-            const dots = document.querySelectorAll('.notice-dot');
-            slides.forEach((s, i) => { s.classList.toggle('active', i === currentNoticeIndex); });
-            dots.forEach((d, i) => { d.classList.toggle('active', i === currentNoticeIndex); });
-        }
-
-        function startAutoPlay() {
-            if (noticeList.length <= 1) return;
-            if (noticeTimer) clearInterval(noticeTimer);
-            noticeTimer = setInterval(() => { goToNotice(currentNoticeIndex + 1); }, INTERVAL);
-        }
-
-        function pauseAutoPlay() {
-            if (noticeTimer) { clearInterval(noticeTimer); noticeTimer = null; }
-        }
-
-        function resetAutoPlay() {
-            pauseAutoPlay();
-            startAutoPlay();
-        }
-
         function loadFriendLinks() {
             const zone = document.getElementById('friendLinksZone');
             if (!zone) return;
             if (ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
                 let linksHtml = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
-                ALL_SOFTWARES.friendLinks.forEach(link => {
+                ALL_SOFTWARES.friendLinks.forEach(function(link) {
                     if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
-                        linksHtml += `<a href="${link.jumpUrl}" target="_blank" class="friend-link-node">${link.siteName}</a>`;
+                        linksHtml += '<a href="' + link.jumpUrl + '" target="_blank" class="friend-link-node">' +
+                            link.siteName + '</a>';
                     }
                 });
                 if (linksHtml) {
@@ -1475,6 +1768,7 @@
                 zone.style.display = 'none';
             }
         }
+        window.filterCategory = filterCategory;
     </script>
 
 </body>

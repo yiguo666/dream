@@ -34,7 +34,7 @@
             transition: none; 
         }
 
-        /* ---- 水彩背景叠加层（换个皮肤玩玩儿） ---- */
+        /* ---- 换个皮肤玩玩儿，假装有注释= = ---- */
         #bg-overlay {
             position: fixed;
             top: 0;
@@ -268,7 +268,6 @@
             padding: 0 4px;
         }
 
-        /* ---- 状态卡片合并 ---- */
         .status-inline {
             margin-top: 14px;
             padding: 14px 16px;
@@ -809,7 +808,7 @@
 </head>
 <body>
 
-    <!-- 水彩背景叠加层（换上好看的皮肤） -->
+    <!-- 换上好看的皮肤= = -->
     <div id="bg-overlay"></div>
 
     <canvas id="particle-bg"></canvas>
@@ -1073,8 +1072,6 @@
                     { emoji: '🌧️', text: '发呆看雨' },
                     { emoji: '✨', text: '做白日梦' },
                 ];
-
-                // 水彩颜色——极低透明度（0.08~0.15），中国画淡彩感
                 const watercolorMap = {
                     '🧘': 'rgba(74, 144, 226, 0.06)',
                     '✍️': 'rgba(107, 114, 128, 0.06)',
@@ -1092,8 +1089,6 @@
                 const doingEl = document.getElementById('statusDoing');
                 const metaEl = document.getElementById('statusMeta');
                 const refreshBtn = document.getElementById('refreshStatus');
-
-                // 获取背景叠加层
                 const bgOverlay = document.getElementById('bg-overlay');
 
                 let currentIndex = 0;
@@ -1102,8 +1097,6 @@
                     const s = statusList[index % statusList.length];
                     emojiEl.textContent = s.emoji;
                     doingEl.textContent = s.text;
-
-                    // 修改叠加层的背景色（水彩效果）
                     const waterColor = watercolorMap[s.emoji] || 'rgba(74, 144, 226, 0.06)';
                     if (bgOverlay) {
                         bgOverlay.style.backgroundColor = waterColor;
@@ -1454,7 +1447,7 @@
                 }
             });
 
-            console.log('✨ 主页 · test 版本（水彩全局背景 + 状态合并 + 渐变叠加）✨');
+            console.log('Dream调试色彩渐变，收到请输出文本！');
         })();
     </script>
 </body>

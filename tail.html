@@ -6,7 +6,7 @@
     <title>畅享资源详情 · Dream 工坊</title>
     <style>
         /* ============================================================
-           1. CSS 重新装修一下。
+           1. 重新装修一下的详情页。
            ============================================================ */
         :root {
             --brand-blue: #4A90E2;
@@ -411,7 +411,6 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
         }
 
-        /* ★ 按钮常规状态就有清晰的边框线 ★ */
         .btn-group {
             display: flex;
             justify-content: center;
@@ -448,8 +447,6 @@
         .btn-group .btn:active {
             transform: scale(0.96);
         }
-
-        /* ★ 返回按钮：常规有边框和背景 ★ */
         .btn-group .btn-secondary {
             background-color: #FFFFFF;
             color: #475569;
@@ -649,7 +646,6 @@
         <p>正在加载资源详情...</p>
     </div>
 
-    <!-- ===== 这是主容器 ===== -->
     <div class="container">
 
         <!-- 面包屑（保留旧版样式的好看） -->
@@ -661,15 +657,13 @@
             <li><span class="current-node" id="bind_breadcrumb_name">加载中...</span></li>
         </ul>
 
-        <!-- 错误墙，看到就说明JS不见啦 -->
+        <!-- 这里是错误墙，看到我，就说明JS不见啦 -->
         <div id="fatalErrorWall" class="fatal-error-wall">
             <h2>❌ 资源同步链路破损</h2>
             <p id="errorMessageSlot">未能在当前资源池中捕获该软件的标示凭证。</p>
             <a href="shopindex.html" class="btn" style="background:#475569; text-decoration:none; border-radius:8px; padding:10px 24px; color:#fff; font-weight:600; font-size:0.85rem; border:1.5px solid #475569; transition:all 0.25s ease;">返回主大厅</a>
         </div>
         <div id="templateWrapper" class="template-wrapper">
-
-            <!-- 头部信息区 -->
             <div class="showcase-header">
                 <div class="logo-frame">
                     <img id="bind_logo" src="logo/default.png" alt="Logo"
