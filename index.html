@@ -31,21 +31,20 @@
             scroll-behavior: smooth;
             line-height: 1.6;
             min-height: 100vh;
-            transition: none; 
+            transition: none;
         }
 
-        /* ---- 换个皮肤玩玩儿，假装有注释= = ---- */
         #bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; 
+            z-index: -1;
             pointer-events: none;
             transition: background-color 0.8s ease;
             mix-blend-mode: multiply;
-            background-color: transparent; 
+            background-color: transparent;
         }
 
         #particle-bg {
@@ -563,7 +562,7 @@
             position: relative;
             min-height: 60px;
             height: auto;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .milestone-page {
@@ -593,8 +592,11 @@
             border-radius: 50%;
             background: var(--brand-blue);
             margin-top: 5px;
+            margin-left: 2px;
             border: 2px solid #fff;
             box-shadow: 0 0 0 2px var(--brand-blue);
+            position: relative;
+            z-index: 1;
         }
         .milestone-time {
             font-size: 0.7rem;
@@ -808,7 +810,6 @@
 </head>
 <body>
 
-    <!-- 换上好看的皮肤= = -->
     <div id="bg-overlay"></div>
 
     <canvas id="particle-bg"></canvas>
@@ -828,7 +829,7 @@
 
             <aside>
                 <div class="card profile-card">
-                    <img src="logo.png" alt="Dream" class="avatar" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%234A90E2%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22%3ED%3C/text%3E%3C/svg%3E'">
+                    <img src="logo.png" alt="Dream" class="avatar" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%234A90E2%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22%3ED%3C/text%3E%3C/svg%3E'">
                     <div class="name">Dream</div>
                     <div class="bio">全栈开发 · 独立创作者</div>
 
@@ -970,6 +971,8 @@
                 let w, h, particles = [];
                 const COUNT = 55;
                 const COLORS = ['#4A90E2', '#5BA0F5', '#7BB8F5', '#A0CDF5', '#C4DFF8'];
+                let animId = null;
+                let isPaused = false;
 
                 function resize() {
                     w = canvas.width = window.innerWidth;
@@ -1025,12 +1028,17 @@
                 }
 
                 function animate() {
+                    if (isPaused) { animId = requestAnimationFrame(animate); return; }
                     ctx.clearRect(0, 0, w, h);
                     particles.forEach(p => { p.update(); p.draw(); });
                     drawLines();
-                    requestAnimationFrame(animate);
+                    animId = requestAnimationFrame(animate);
                 }
                 animate();
+
+                document.addEventListener('visibilitychange', function() {
+                    isPaused = document.hidden;
+                });
             })();
 
             (function initClock() {
@@ -1092,16 +1100,19 @@
                 const bgOverlay = document.getElementById('bg-overlay');
 
                 let currentIndex = 0;
+                let bgActivated = false;
 
-                function setStatus(index) {
+                function setStatus(index, applyBg) {
                     const s = statusList[index % statusList.length];
                     emojiEl.textContent = s.emoji;
                     doingEl.textContent = s.text;
-                    const waterColor = watercolorMap[s.emoji] || 'rgba(74, 144, 226, 0.06)';
-                    if (bgOverlay) {
-                        bgOverlay.style.backgroundColor = waterColor;
+                    if (bgActivated || applyBg === true) {
+                        bgActivated = true;
+                        const waterColor = watercolorMap[s.emoji] || 'rgba(74, 144, 226, 0.06)';
+                        if (bgOverlay) {
+                            bgOverlay.style.backgroundColor = waterColor;
+                        }
                     }
-
                     const now = new Date();
                     const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
                     metaEl.textContent = '更新于 ' + timeStr;
@@ -1126,29 +1137,45 @@
                 } catch (_) {
                     currentIndex = Math.floor(Math.random() * statusList.length);
                 }
-                setStatus(currentIndex);
+                setStatus(currentIndex, false);
 
                 refreshBtn.addEventListener('click', function() {
                     currentIndex = (currentIndex + 1) % statusList.length;
-                    setStatus(currentIndex);
+                    setStatus(currentIndex, true);
                 });
             })();
 
             (function initQuotes() {
                 const container = document.getElementById('recentQuotes');
                 if (!container) return;
+                container.innerHTML = '';
 
                 const quotes = NOW_DATA.quotes || [];
                 if (!quotes.length) {
-                    container.innerHTML = '<div class="empty-placeholder">暂无摘录</div>';
+                    const empty = document.createElement('div');
+                    empty.className = 'empty-placeholder';
+                    empty.textContent = '暂无摘录';
+                    container.appendChild(empty);
                     return;
                 }
 
                 quotes.forEach(function(q) {
                     const div = document.createElement('div');
                     div.className = 'quote-item';
-                    div.innerHTML = '<span class="deco">❝</span>' + q.text +
-                        '<span class="attribution">— ' + q.attribution + '</span>';
+
+                    const deco = document.createElement('span');
+                    deco.className = 'deco';
+                    deco.textContent = '❝';
+
+                    const textSpan = document.createTextNode(q.text || '');
+
+                    const attrSpan = document.createElement('span');
+                    attrSpan.className = 'attribution';
+                    attrSpan.textContent = '— ' + (q.attribution || '匿名');
+
+                    div.appendChild(deco);
+                    div.appendChild(textSpan);
+                    div.appendChild(attrSpan);
                     container.appendChild(div);
                 });
             })();
@@ -1159,8 +1186,24 @@
 
                 function renderEntry(container, data) {
                     if (!container) return;
+                    container.innerHTML = '';
+
                     if (typeof data === 'string') {
-                        container.innerHTML = data || '<span class="empty-placeholder">暂无</span>';
+                        if (data.includes('<a ') && data.includes('</a>')) {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(data, 'text/html');
+                            const linkEl = doc.querySelector('a');
+                            if (linkEl) {
+                                const a = document.createElement('a');
+                                a.href = linkEl.getAttribute('href') || '#';
+                                a.target = linkEl.getAttribute('target') || '_blank';
+                                a.rel = 'noopener noreferrer';
+                                a.textContent = linkEl.textContent || data;
+                                container.appendChild(a);
+                                return;
+                            }
+                        }
+                        container.textContent = data || '暂无';
                         return;
                     }
                     if (data && typeof data === 'object') {
@@ -1168,19 +1211,36 @@
                         const author = data.author || '';
                         const url = data.url || null;
                         if (url) {
-                            container.innerHTML =
-                                `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>` +
-                                `<span style="color:#94a3b8;margin:0 4px;">–</span>` +
-                                `<span style="color:#1e293b;">${author}</span>`;
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.textContent = text;
+                            const sep = document.createTextNode(' – ');
+                            const authSpan = document.createElement('span');
+                            authSpan.style.color = '#1e293b';
+                            authSpan.textContent = author;
+                            container.appendChild(a);
+                            container.appendChild(sep);
+                            container.appendChild(authSpan);
                         } else {
-                            container.innerHTML =
-                                `<span style="color:#1e293b;">${text}</span>` +
-                                `<span style="color:#94a3b8;margin:0 4px;">–</span>` +
-                                `<span style="color:#1e293b;">${author}</span>`;
+                            const textSpan = document.createElement('span');
+                            textSpan.style.color = '#1e293b';
+                            textSpan.textContent = text;
+                            const sep = document.createTextNode(' – ');
+                            const authSpan = document.createElement('span');
+                            authSpan.style.color = '#1e293b';
+                            authSpan.textContent = author;
+                            container.appendChild(textSpan);
+                            container.appendChild(sep);
+                            container.appendChild(authSpan);
                         }
                         return;
                     }
-                    container.innerHTML = '<span class="empty-placeholder">暂无</span>';
+                    const empty = document.createElement('span');
+                    empty.className = 'empty-placeholder';
+                    empty.textContent = '暂无';
+                    container.appendChild(empty);
                 }
 
                 renderEntry(readingEl, NOW_DATA.reading);
@@ -1190,10 +1250,14 @@
             (function initWorks() {
                 const container = document.getElementById('worksList');
                 if (!container) return;
+                container.innerHTML = '';
 
                 const works = NOW_DATA.works || [];
                 if (!works.length) {
-                    container.innerHTML = '<div class="empty-placeholder">暂无作品</div>';
+                    const empty = document.createElement('div');
+                    empty.className = 'empty-placeholder';
+                    empty.textContent = '暂无作品';
+                    container.appendChild(empty);
                     return;
                 }
 
@@ -1202,8 +1266,14 @@
                     a.className = 'work-link';
                     a.href = w.url || '#';
                     a.target = '_blank';
-                    a.innerHTML = (w.name || '未命名') +
-                        (w.year ? '<span class="badge">' + w.year + '</span>' : '');
+                    const nameSpan = document.createTextNode(w.name || '未命名');
+                    a.appendChild(nameSpan);
+                    if (w.year) {
+                        const badge = document.createElement('span');
+                        badge.className = 'badge';
+                        badge.textContent = w.year;
+                        a.appendChild(badge);
+                    }
                     container.appendChild(a);
                 });
             })();
@@ -1214,7 +1284,11 @@
 
                 const milestones = NOW_DATA.milestones || [];
                 if (!milestones.length) {
-                    container.innerHTML = '<div class="empty-placeholder" style="padding:12px 0;">暂无里程碑</div>';
+                    const empty = document.createElement('div');
+                    empty.className = 'empty-placeholder';
+                    empty.style.padding = '12px 0';
+                    empty.textContent = '暂无里程碑';
+                    container.appendChild(empty);
                     return;
                 }
 
@@ -1239,10 +1313,17 @@
                         const m = sorted[i];
                         const item = document.createElement('div');
                         item.className = 'milestone-item';
-                        item.innerHTML =
-                            '<span class="milestone-dot"></span>' +
-                            '<span class="milestone-time">' + m.date + '</span>' +
-                            '<span class="milestone-desc">' + m.text + '</span>';
+                        const dot = document.createElement('span');
+                        dot.className = 'milestone-dot';
+                        const time = document.createElement('span');
+                        time.className = 'milestone-time';
+                        time.textContent = m.date;
+                        const desc = document.createElement('span');
+                        desc.className = 'milestone-desc';
+                        desc.textContent = m.text;
+                        item.appendChild(dot);
+                        item.appendChild(time);
+                        item.appendChild(desc);
                         pageDiv.appendChild(item);
                     }
                     container.appendChild(pageDiv);
@@ -1309,17 +1390,26 @@
                 } catch (_) {}
 
                 function renderMessages() {
+                    list.innerHTML = '';
                     if (!messages.length) {
-                        list.innerHTML = '<div style="color:#94a3b8;font-size:0.8rem;">还没有留印，来做第一个吧 ✦</div>';
+                        const empty = document.createElement('div');
+                        empty.style.cssText = 'color:#94a3b8;font-size:0.8rem;';
+                        empty.textContent = '还没有留印，来做第一个吧 ✦';
+                        list.appendChild(empty);
                         return;
                     }
                     const recent = messages.slice(-8).reverse();
-                    list.innerHTML = recent.map(function(msg) {
-                        return '<div class="guest-msg">' +
-                            msg.text +
-                            '<span class="g-time">' + msg.time + '</span>' +
-                            '</div>';
-                    }).join('');
+                    recent.forEach(function(msg) {
+                        const div = document.createElement('div');
+                        div.className = 'guest-msg';
+                        const textSpan = document.createTextNode(msg.text);
+                        const timeSpan = document.createElement('span');
+                        timeSpan.className = 'g-time';
+                        timeSpan.textContent = msg.time;
+                        div.appendChild(textSpan);
+                        div.appendChild(timeSpan);
+                        list.appendChild(div);
+                    });
                 }
                 renderMessages();
 
@@ -1351,6 +1441,7 @@
             (function loadFriends() {
                 const zone = document.getElementById('friendLinksZone');
                 if (!zone) return;
+                zone.innerHTML = '';
 
                 let links = [];
                 if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks) {
@@ -1360,11 +1451,20 @@
                 }
 
                 if (links.length) {
-                    let html = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
-                    html += links.map(function(l) {
-                        return `<a href="${l.jumpUrl}" target="_blank" class="friend-link-node">${l.siteName}</a>`;
-                    }).join('');
-                    zone.innerHTML = html;
+                    const prefix = document.createElement('span');
+                    prefix.style.cssText = 'color:#64748b; margin-right:4px;';
+                    prefix.textContent = '友情链接：';
+                    zone.appendChild(prefix);
+
+                    links.forEach(function(l) {
+                        const a = document.createElement('a');
+                        a.href = l.jumpUrl;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.className = 'friend-link-node';
+                        a.textContent = l.siteName;
+                        zone.appendChild(a);
+                    });
                     zone.style.display = 'flex';
                 } else {
                     zone.style.display = 'none';
@@ -1374,6 +1474,7 @@
             (function renderSocialLinks() {
                 const container = document.getElementById('socialRow');
                 if (!container) return;
+                container.innerHTML = '';
 
                 if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.socialLinks) {
                     container.style.display = 'none';
@@ -1389,7 +1490,6 @@
                     return;
                 }
 
-                container.innerHTML = '';
                 links.forEach(function(item) {
                     const a = document.createElement('a');
                     a.href = '#';
@@ -1406,12 +1506,8 @@
             function copyToClipboard(text) {
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(text)
-                        .then(function() {
-                            alert('✅ 已复制：' + text);
-                        })
-                        .catch(function() {
-                            fallbackCopy(text);
-                        });
+                        .then(function() { alert('✅ 已复制：' + text); })
+                        .catch(function() { fallbackCopy(text); });
                 } else {
                     fallbackCopy(text);
                 }
@@ -1434,7 +1530,6 @@
             document.addEventListener('click', function(e) {
                 const target = e.target.closest('.social-link-item');
                 if (!target) return;
-
                 e.preventDefault();
 
                 const action = target.dataset.action;
@@ -1447,7 +1542,7 @@
                 }
             });
 
-            console.log('Dream调试色彩渐变，收到请输出文本！');
+            console.log('Dream index（XSS防护 + 图片兜底 + 动画暂停）已加载');
         })();
     </script>
 </body>

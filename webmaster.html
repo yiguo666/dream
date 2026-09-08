@@ -796,7 +796,7 @@
         <div class="card">
             <div class="profile-section">
 
-                <img src="logo.png" alt="Dream" class="avatar" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%234A90E2%22 width=%22110%22 height=%22110%22/%3E%3Ctext x=%2255%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2244%22 font-family=%22sans-serif%22%3ED%3C/text%3E%3C/svg%3E'">
+                <img src="logo.png" alt="Dream" class="avatar" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22110%22 height=%22110%22%3E%3Crect fill=%22%234A90E2%22 width=%22110%22 height=%22110%22/%3E%3Ctext x=%2255%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2244%22 font-family=%22sans-serif%22%3ED%3C/text%3E%3C/svg%3E'">
 
                 <div class="name">Dream</div>
                 <div class="bio">全栈开发 · 独立创作者</div>
@@ -863,12 +863,15 @@
         (function() {
             'use strict';
 
+            // ---- 粒子背景（带暂停） ----
             (function initParticles() {
                 const canvas = document.getElementById('particle-bg');
                 const ctx = canvas.getContext('2d');
                 let w, h, particles = [];
                 const COUNT = 55;
                 const COLORS = ['#4A90E2', '#5BA0F5', '#7BB8F5', '#A0CDF5', '#C4DFF8'];
+                let animId = null;
+                let isPaused = false;
 
                 function resize() {
                     w = canvas.width = window.innerWidth;
@@ -924,24 +927,30 @@
                 }
 
                 function animate() {
+                    if (isPaused) { animId = requestAnimationFrame(animate); return; }
                     ctx.clearRect(0, 0, w, h);
                     particles.forEach(p => { p.update(); p.draw(); });
                     drawLines();
-                    requestAnimationFrame(animate);
+                    animId = requestAnimationFrame(animate);
                 }
                 animate();
+
+                document.addEventListener('visibilitychange', function() {
+                    isPaused = document.hidden;
+                });
             })();
 
-            (function initParticles() {
+            // ---- 微光粒子（带暂停） ----
+            (function initGlimmerParticles() {
                 const container = document.getElementById('glimmerParticles');
                 const wrapper = document.getElementById('glimmerWrapper');
                 if (!container || !wrapper) return;
 
                 const isMobile = window.innerWidth < 768;
                 const count = isMobile ? 8 : 16;
-
                 let particles = [];
                 let animId = null;
+                let isPaused = false;
 
                 function getBounds() {
                     const rect = wrapper.getBoundingClientRect();
@@ -984,6 +993,7 @@
                 }
 
                 function updateParticles() {
+                    if (isPaused) { animId = requestAnimationFrame(updateParticles); return; }
                     const bounds = getBounds();
                     if (bounds.w === 0 || bounds.h === 0) {
                         animId = requestAnimationFrame(updateParticles);
@@ -1006,14 +1016,10 @@
                         p.y += p.vy;
 
                         const margin = 10;
-                        if (p.x < -margin) { p.x = -margin;
-                            p.vx = Math.abs(p.vx); }
-                        if (p.x > bounds.w + margin) { p.x = bounds.w + margin;
-                            p.vx = -Math.abs(p.vx); }
-                        if (p.y < -margin) { p.y = -margin;
-                            p.vy = Math.abs(p.vy); }
-                        if (p.y > bounds.h + margin) { p.y = bounds.h + margin;
-                            p.vy = -Math.abs(p.vy); }
+                        if (p.x < -margin) { p.x = -margin; p.vx = Math.abs(p.vx); }
+                        if (p.x > bounds.w + margin) { p.x = bounds.w + margin; p.vx = -Math.abs(p.vx); }
+                        if (p.y < -margin) { p.y = -margin; p.vy = Math.abs(p.vy); }
+                        if (p.y > bounds.h + margin) { p.y = bounds.h + margin; p.vy = -Math.abs(p.vy); }
 
                         if (p.el) {
                             p.el.style.left = p.x + 'px';
@@ -1043,44 +1049,37 @@
                 initDOM();
                 updateParticles();
 
+                document.addEventListener('visibilitychange', function() {
+                    isPaused = document.hidden;
+                });
+
                 window.addEventListener('beforeunload', function() {
                     if (animId) cancelAnimationFrame(animId);
                 });
 
-                console.log('[光点] 自由飘动粒子已启动，共 ' + count + ' 个');
+                console.log('[光点] 自由飘动粒子已启动，共 ' + count + ' 个（带暂停）');
             })();
 
+            // ---- 微光碎片（保留原有逻辑） ----
             (function initGlimmer() {
                 const shards = [
                     { text: '月华夜影三点雪，<br>河畔寥寥几人烟。', year: '2015', date: '5.9' },
                     { text: '花落无语对愁言，<br>月挠枝头人未眠。', year: '2021', date: '10.1' },
-                    { text: '千家灯火万家辉，<br>清风送来又一岁。<br>愿君如月人长久，<br>万里共饮屠苏酒。', year: '2020', date: '1.24',
-                        title: '贺新春' },
+                    { text: '千家灯火万家辉，<br>清风送来又一岁。<br>愿君如月人长久，<br>万里共饮屠苏酒。', year: '2020', date: '1.24', title: '贺新春' },
                     { text: '花如雪，<br>随风摇曳，<br>抖落孤独的夜。', year: '2019', date: '11.15' },
                     { text: '以身为棋，胜天半子。<br>以心为剑，拨云见日。', year: '2019', date: '7.21' },
                     { text: '星与心相印，<br>雨与语相连。', year: '2019', date: '7.18' },
                     { text: '月落三分雁，<br>凤舞九重天。', year: '2019', date: '10.4' },
                     { text: '流水覆轻舟，醉饮三大白方休；<br>明月照高楼，冰轮难断相思愁。', year: '2019', date: '10.4' },
-                    { text: '此夜万事休，佳节又中秋。<br>月华凉似水，蟾宫嫦娥悔。<br>思君千万里，无声胜言语。<br>明月当头照，愿君今安好。',
-                        year: '2019', date: '9.13', title: '中秋' },
-                    { text: '未央夜初凉，凌风已入墙。<br>镜面寒似霜，伊人才红妆。<br>今闻庭前雨，夜半与君语。<br>杳杳杏花香，故人还故乡。',
-                        year: '2019', date: '9.1' },
+                    { text: '此夜万事休，佳节又中秋。<br>月华凉似水，蟾宫嫦娥悔。<br>思君千万里，无声胜言语。<br>明月当头照，愿君今安好。', year: '2019', date: '9.13', title: '中秋' },
+                    { text: '未央夜初凉，凌风已入墙。<br>镜面寒似霜，伊人才红妆。<br>今闻庭前雨，夜半与君语。<br>杳杳杏花香，故人还故乡。', year: '2019', date: '9.1' },
                     { text: '白云绕山径，<br>清风任我性。', year: '2019', date: '7.28' },
                 ];
 
                 const fortunes = [
-                    '✨ 静心 · 安然',
-                    '🌸 浮生若梦',
-                    '🌙 一期一会',
-                    '☀️ 行至水穷',
-                    '🍃 坐看云起',
-                    '🌊 此心安处',
-                    '🏔️ 清风徐来',
-                    '🌿 海纳百川',
-                    '🕊️ 光而不耀',
-                    '🌅 静水流深',
-                    '🍂 素履以往',
-                    '🌱 独行愿也',
+                    '✨ 静心 · 安然', '🌸 浮生若梦', '🌙 一期一会', '☀️ 行至水穷',
+                    '🍃 坐看云起', '🌊 此心安处', '🏔️ 清风徐来', '🌿 海纳百川',
+                    '🕊️ 光而不耀', '🌅 静水流深', '🍂 素履以往', '🌱 独行愿也'
                 ];
 
                 const glimmerText = document.getElementById('glimmerText');
@@ -1102,10 +1101,7 @@
                     }, 400);
                 };
 
-                let playlist = [],
-                    currentIndex = 0,
-                    lastShard = null,
-                    autoTimer = null;
+                let playlist = [], currentIndex = 0, lastShard = null, autoTimer = null;
 
                 const shuffle = (arr) => {
                     const a = [...arr];
@@ -1201,6 +1197,7 @@
                 console.log('[微光碎片] 已启动，共 ' + shards.length + ' 条诗句');
             })();
 
+            // ---- 控制台（手动彩蛋，移除自动红色告警，增加点击触发） ----
             (function initConsole() {
                 const terminal = document.getElementById('terminal');
                 const displayBox = document.getElementById('display-box');
@@ -1212,6 +1209,7 @@
                 let currentLineIndex = 0;
                 let warpParticles = [];
                 let warpAnimId = null;
+                let secretTriggered = false;
 
                 function typeLine(elements, callback) {
                     if (currentLineIndex >= elements.length) {
@@ -1259,6 +1257,7 @@
                     }
                 }
 
+                // 初始温和启动
                 const initialTexts = [
                     '> Initialize Identity... Done.',
                     '> OS Environment: Dream space 10 [x64]',
@@ -1272,130 +1271,162 @@
 
                 currentLineIndex = 0;
                 typeLine(initLines, function() {
-                    startSecretTimeline();
+                    setTimeout(() => {
+                        // 创建可点击的行：激活传送门
+                        const clickable = document.createElement('div');
+                        clickable.className = 'command-line clickable-portal';
+                        clickable.setAttribute('data-text', '> 点击此处激活隐秘传送门 >>>');
+                        clickable.style.cursor = 'pointer';
+                        clickable.style.color = '#58a6ff';
+                        clickable.style.textDecoration = 'underline';
+                        clickable.style.visibility = 'visible';
+                        clickable.innerText = '> 点击此处激活隐秘传送门 >>>';
+                        displayBox.appendChild(clickable);
+                        trimLines(8);
+
+                     
+                        clickable.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            if (secretTriggered) return;
+                            startPortalSequence(function() {
+                            });
+                        });
+
+                  
+                        const hint = document.createElement('div');
+                        hint.className = 'command-line';
+                        hint.style.visibility = 'visible';
+                        hint.style.color = '#94a3b8';
+                        hint.style.fontSize = '0.8rem';
+                        displayBox.appendChild(hint);
+                        trimLines(8);
+
+                    }, 500);
                 });
 
-                function startSecretTimeline() {
-                    setTimeout(function() {
-                        terminal.classList.add('warning-active');
-                        window.setRainColor('#ff3366');
+                function startPortalSequence(callback) {
+                    if (secretTriggered) {
+                        if (callback) callback();
+                        return;
+                    }
+                    secretTriggered = true;
 
-                        const alert1 = createDelayLine('> [CRITICAL] ANOMALOUS OVERFLOW DETECTED.', 'text-alert');
-                        const alert2 = createDelayLine('> [WARNING] SPATIAL LAYER BREACH...', 'text-alert');
+                    terminal.classList.add('warning-active');
+                    window.setRainColor('#ff3366');
 
-                        currentLineIndex = 0;
-                        typeLine([alert1, alert2], function() {
-                            setTimeout(function() {
-                                window.setRainColor('#00bcff');
-                                const canvas = document.getElementById('matrix-canvas');
-                                if (canvas) canvas.style.opacity = '0.35';
+                    const alert1 = createDelayLine('> [CRITICAL] ANOMALOUS OVERFLOW DETECTED.', 'text-alert');
+                    const alert2 = createDelayLine('> [WARNING] SPATIAL LAYER BREACH...', 'text-alert');
 
-                                displayBox.innerHTML = '';
+                    currentLineIndex = 0;
+                    typeLine([alert1, alert2], function() {
+                        setTimeout(function() {
+                            window.setRainColor('#00bcff');
+                            const canvas = document.getElementById('matrix-canvas');
+                            if (canvas) canvas.style.opacity = '0.35';
 
-                                const lines = [
-                                    '> Injecting: Sockets.Connect(Fourth_Dimension)...',
-                                    '> Compiling: NoteEngine.Sync.Optimize() -> 0%',
-                                    '> Buffer: Allocating portal stack [0x7FFF]',
-                                    '> Handshake: Gateway verification passed.',
-                                    '> Info: Initializing wormhole link...'
-                                ];
+                            displayBox.innerHTML = '';
 
-                                const lineElements = [];
-                                lines.forEach(text => {
-                                    const div = document.createElement('div');
-                                    div.className = 'command-line';
-                                    div.setAttribute('data-text', text);
-                                    displayBox.appendChild(div);
-                                    lineElements.push(div);
-                                });
+                            const lines = [
+                                '> Injecting: Sockets.Connect(Fourth_Dimension)...',
+                                '> Compiling: NoteEngine.Sync.Optimize() -> 0%',
+                                '> Buffer: Allocating portal stack [0x7FFF]',
+                                '> Handshake: Gateway verification passed.',
+                                '> Info: Initializing wormhole link...'
+                            ];
 
-                                function typeNext(index) {
-                                    if (index >= lineElements.length) {
-                                        afterAllLines();
-                                        return;
-                                    }
-                                    const line = lineElements[index];
-                                    const fullText = line.getAttribute('data-text');
-                                    line.style.visibility = 'visible';
-                                    line.classList.add('typing');
-                                    line.innerText = '';
-                                    let charIndex = 0;
-                                    const timer = setInterval(function() {
-                                        if (charIndex < fullText.length) {
-                                            line.innerText += fullText.charAt(charIndex);
-                                            charIndex++;
-                                        } else {
-                                            clearInterval(timer);
-                                            line.classList.remove('typing');
-                                            if (index === 1) {
-                                                startProgress(line);
-                                            } else {
-                                                setTimeout(() => typeNext(index + 1), 200);
-                                            }
-                                        }
-                                    }, 30);
+                            const lineElements = [];
+                            lines.forEach(text => {
+                                const div = document.createElement('div');
+                                div.className = 'command-line';
+                                div.setAttribute('data-text', text);
+                                displayBox.appendChild(div);
+                                lineElements.push(div);
+                            });
+
+                            function typeNext(index) {
+                                if (index >= lineElements.length) {
+                                    afterAllLines();
+                                    return;
                                 }
-
-                                function startProgress(lineElement) {
-                                    let progress = 0;
-                                    const maxProgress = 100;
-                                    const totalDuration = 2000 + Math.random() * 4000;
-                                    const startTime = Date.now();
-                                    const baseText = '> Compiling: NoteEngine.Sync.Optimize() -> ';
-
-                                    function updateProgress() {
-                                        const elapsed = Date.now() - startTime;
-                                        const ratio = Math.min(elapsed / totalDuration, 1);
-                                        progress = Math.floor(ratio * maxProgress);
-                                        lineElement.innerText = baseText + progress + '%';
-                                        if (progress < maxProgress) {
-                                            const nextDelay = 10 + Math.random() * 70;
-                                            setTimeout(updateProgress, nextDelay);
+                                const line = lineElements[index];
+                                const fullText = line.getAttribute('data-text');
+                                line.style.visibility = 'visible';
+                                line.classList.add('typing');
+                                line.innerText = '';
+                                let charIndex = 0;
+                                const timer = setInterval(function() {
+                                    if (charIndex < fullText.length) {
+                                        line.innerText += fullText.charAt(charIndex);
+                                        charIndex++;
+                                    } else {
+                                        clearInterval(timer);
+                                        line.classList.remove('typing');
+                                        if (index === 1) {
+                                            startProgress(line);
                                         } else {
-                                            lineElement.innerText = baseText + '100%';
-                                            setTimeout(() => typeNext(2), 300);
+                                            setTimeout(() => typeNext(index + 1), 200);
                                         }
                                     }
-                                    updateProgress();
+                                }, 30);
+                            }
+
+                            function startProgress(lineElement) {
+                                let progress = 0;
+                                const maxProgress = 100;
+                                const totalDuration = 2000 + Math.random() * 4000;
+                                const startTime = Date.now();
+                                const baseText = '> Compiling: NoteEngine.Sync.Optimize() -> ';
+
+                                function updateProgress() {
+                                    const elapsed = Date.now() - startTime;
+                                    const ratio = Math.min(elapsed / totalDuration, 1);
+                                    progress = Math.floor(ratio * maxProgress);
+                                    lineElement.innerText = baseText + progress + '%';
+                                    if (progress < maxProgress) {
+                                        const nextDelay = 10 + Math.random() * 70;
+                                        setTimeout(updateProgress, nextDelay);
+                                    } else {
+                                        lineElement.innerText = baseText + '100%';
+                                        setTimeout(() => typeNext(2), 300);
+                                    }
                                 }
+                                updateProgress();
+                            }
 
-                                function afterAllLines() {
-                                    setTimeout(function() {
-                                        window.setRainColor('#34d399');
-                                        const canvas2 = document.getElementById('matrix-canvas');
-                                        if (canvas2) canvas2.style.opacity = '0.05';
+                            function afterAllLines() {
+                                setTimeout(function() {
+                                    window.setRainColor('#34d399');
+                                    const canvas2 = document.getElementById('matrix-canvas');
+                                    if (canvas2) canvas2.style.opacity = '0.05';
 
-                                        let all = displayBox.querySelectorAll('.command-line');
-                                        while (all.length > 2) {
-                                            all[0].remove();
-                                            all = displayBox.querySelectorAll('.command-line');
-                                        }
+                                    let all = displayBox.querySelectorAll('.command-line');
+                                    while (all.length > 2) {
+                                        all[0].remove();
+                                        all = displayBox.querySelectorAll('.command-line');
+                                    }
 
-                                        const m1 = createDelayLine('> [MISSION]: 发现一条通往未知维度的奇点隧道。',
-                                            'text-mission');
-                                        const m2 = createDelayLine('> [ACTION]: 点击下方按钮返回主页世界。',
-                                            'text-mission');
+                                    const m1 = createDelayLine('> [MISSION]: 发现一条通往未知维度的奇点隧道。', 'text-mission');
+                                    const m2 = createDelayLine('> [ACTION]: 点击下方按钮返回主页世界。', 'text-mission');
 
-                                        currentLineIndex = 0;
-                                        typeLine([m1, m2], function() {
-                                            setTimeout(function() {
-                                                btnHome.classList.add('hidden');
-                                                btnPortal.classList.add('show');
-                                                const ready = createDelayLine(
-                                                    '> Status: Portal Gateway stabilized. Ready.'
-                                                    );
-                                                currentLineIndex = 0;
-                                                typeLine([ready], function() {});
-                                            }, 500);
-                                        });
-                                    }, 400);
-                                }
+                                    currentLineIndex = 0;
+                                    typeLine([m1, m2], function() {
+                                        setTimeout(function() {
+                                            btnHome.classList.add('hidden');
+                                            btnPortal.classList.add('show');
+                                            const ready = createDelayLine('> Status: Portal Gateway stabilized. Ready.');
+                                            currentLineIndex = 0;
+                                            typeLine([ready], function() {
+                                                if (callback) callback();
+                                            });
+                                        }, 500);
+                                    });
+                                }, 400);
+                            }
 
-                                typeNext(0);
+                            typeNext(0);
 
-                            }, 600);
-                        });
-                    }, 7000);
+                        }, 600);
+                    });
                 }
 
                 function goHomeSimple() {
@@ -1544,7 +1575,16 @@
                 }
 
                 btnHome.addEventListener('click', goHomeSimple);
-                btnPortal.addEventListener('click', goHomeWithWarp);
+
+                btnPortal.addEventListener('click', function() {
+                    if (btnPortal.classList.contains('show')) {
+                        goHomeWithWarp();
+                        return;
+                    }
+                    startPortalSequence(function() {           
+                    });
+                });
+
 
                 (function initMatrix() {
                     const canvas = document.getElementById('matrix-canvas');
@@ -1556,6 +1596,7 @@
                     const alphabet = '010101ABCDEFGHIJKLMNOPQRSTUVWXYZ<>//$$'.split('');
                     let currentRainColor = '#58a6ff';
                     let animId = null;
+                    let isPaused = false;
 
                     function resizeCanvas() {
                         const rect = canvas.parentElement.getBoundingClientRect();
@@ -1570,6 +1611,7 @@
                     }
 
                     function drawMatrix() {
+                        if (isPaused) { animId = requestAnimationFrame(drawMatrix); return; }
                         ctx.fillStyle = 'rgba(13, 17, 23, 0.08)';
                         ctx.fillRect(0, 0, width, height);
                         ctx.fillStyle = currentRainColor;
@@ -1600,6 +1642,10 @@
                         drops = Array(columns).fill(1);
                     });
 
+                    document.addEventListener('visibilitychange', function() {
+                        isPaused = document.hidden;
+                    });
+
                     if (document.readyState === 'complete') {
                         startMatrix();
                     } else {
@@ -1607,25 +1653,36 @@
                     }
                 })();
 
-                console.log('布灵布灵,这里是Dream的控制台，收到请输出文本！');
+                console.log('布灵布灵,这里是Dream的控制台（手动彩蛋模式，点击控制台文本触发）');
             })();
 
             (function loadFriends() {
                 const zone = document.getElementById('friendLinksZone');
                 if (!zone) return;
+                zone.innerHTML = '';
 
                 let links = [];
                 if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks) {
-                    links = ALL_SOFTWARES.friendLinks.filter(l => l.siteName && l.jumpUrl && l.jumpUrl !== 'http://' && l
-                        .jumpUrl !== '');
+                    links = ALL_SOFTWARES.friendLinks.filter(l =>
+                        l.siteName && l.jumpUrl && l.jumpUrl !== 'http://' && l.jumpUrl !== ''
+                    );
                 }
 
                 if (links.length) {
-                    let html = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
-                    html += links.map(l =>
-                        `<a href="${l.jumpUrl}" target="_blank" class="friend-link-node">${l.siteName}</a>`
-                    ).join('');
-                    zone.innerHTML = html;
+                    const prefix = document.createElement('span');
+                    prefix.style.cssText = 'color:#64748b; margin-right:4px;';
+                    prefix.textContent = '友情链接：';
+                    zone.appendChild(prefix);
+
+                    links.forEach(l => {
+                        const a = document.createElement('a');
+                        a.href = l.jumpUrl;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.className = 'friend-link-node';
+                        a.textContent = l.siteName;
+                        zone.appendChild(a);
+                    });
                     zone.style.display = 'flex';
                 } else {
                     zone.style.display = 'none';
@@ -1635,6 +1692,7 @@
             (function renderSocialLinks() {
                 const container = document.getElementById('socialRow');
                 if (!container) return;
+                container.innerHTML = '';
 
                 if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.socialLinks) {
                     container.style.display = 'none';
@@ -1650,7 +1708,6 @@
                     return;
                 }
 
-                container.innerHTML = '';
                 links.forEach(function(item) {
                     const a = document.createElement('a');
                     a.href = '#';
@@ -1667,12 +1724,8 @@
             function copyToClipboard(text) {
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(text)
-                        .then(function() {
-                            alert('✅ 已复制：' + text);
-                        })
-                        .catch(function() {
-                            fallbackCopy(text);
-                        });
+                        .then(function() { alert('✅ 已复制：' + text); })
+                        .catch(function() { fallbackCopy(text); });
                 } else {
                     fallbackCopy(text);
                 }
@@ -1695,7 +1748,6 @@
             document.addEventListener('click', function(e) {
                 const target = e.target.closest('.social-link-item');
                 if (!target) return;
-
                 e.preventDefault();
 
                 const action = target.dataset.action;

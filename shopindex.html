@@ -146,10 +146,12 @@
 
         .category-list {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
         .category-item {
             padding: 9px 12px;
-            margin-bottom: 3px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.88rem;
@@ -169,6 +171,10 @@
             color: #fff;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
+        }
+        .category-item.all-cat {
+            border-bottom: 1px solid rgba(74,144,226,0.1);
+            margin-bottom: 6px;
         }
 
         .sidebar-notice-panel {
@@ -214,9 +220,14 @@
             border-radius: 8px;
             border-left: 3px solid var(--brand-blue);
             word-break: break-word;
+            cursor: pointer;
+            transition: background 0.2s;
         }
         .notice-slide.active {
             display: block;
+        }
+        .notice-slide:hover {
+            background: rgba(74, 144, 226, 0.08);
         }
         @keyframes fadeSlide {
             0% { opacity: 0; transform: translateY(6px); }
@@ -523,7 +534,10 @@
             gap: 16px;
         }
 
-        .item {
+        .item-link-wrapper {
+            display: block;
+            text-decoration: none;
+            color: inherit;
             background: var(--glass-bg);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -532,13 +546,17 @@
             transition: all 0.4s var(--transition-smooth);
             border: 1px solid var(--glass-border);
             box-shadow: 0 4px 20px var(--shadow-blue);
-            display: flex;
-            flex-direction: column;
         }
-        .item:hover {
+        .item-link-wrapper:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 40px var(--shadow-hover);
             border-color: rgba(74, 144, 226, 0.2);
+        }
+
+        .item {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .item-image-wrapper {
@@ -561,6 +579,7 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+            flex: 1;
         }
         .item-title-row {
             display: flex;
@@ -584,23 +603,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             line-height: 1.4;
-        }
-        .item-link {
-            display: block;
-            text-align: center;
-            background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-bright));
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 0;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin-top: 4px;
-        }
-        .item-link:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
         }
 
         .skeleton-card {
@@ -868,6 +870,7 @@
                 gap: 8px;
                 padding: 4px 0 8px;
                 scrollbar-width: none;
+                flex-direction: row;
             }
             .category-list::-webkit-scrollbar {
                 display: none;
@@ -880,10 +883,15 @@
                 border-radius: 30px;
                 font-size: 0.82rem;
                 font-weight: 500;
+                white-space: nowrap;
             }
             .category-item.active {
                 background: var(--brand-blue);
                 color: #fff;
+            }
+            .category-item.all-cat {
+                border-bottom: none;
+                margin-bottom: 0;
             }
 
             .sidebar-notice-panel {
@@ -943,7 +951,7 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
-            .item {
+            .item-link-wrapper {
                 border-radius: 10px;
             }
             .item-content {
@@ -951,10 +959,6 @@
             }
             .item-title {
                 font-size: 0.78rem;
-            }
-            .item-link {
-                font-size: 0.65rem;
-                padding: 4px 0;
             }
 
             .control-bar {
@@ -1060,10 +1064,6 @@
             }
             .item-title {
                 font-size: 0.7rem;
-            }
-            .item-link {
-                font-size: 0.6rem;
-                padding: 3px 0;
             }
             .item-zodiac {
                 font-size: 0.6rem;
@@ -1224,563 +1224,592 @@
     </footer>
 
     <script>
-        let allProducts = [];
-        let categories = ["全部资源"];
-        let currentCategory = "全部资源";
-        let searchKeyword = "";
-        const PAGE_SIZE = 20;
-        let currentPage = 0;
-        const ZODIAC = ['🐭', '🐮', '🐯', '🐰', '🐲', '🐍', '🐴', '🐏', '🐵', '🐔', '🐶', '🐷'];
+        (function() {
+            'use strict';
+            let allProducts = [];
+            let categories = ["全部资源"];
+            let currentCategory = "全部资源";
+            let searchKeyword = "";
+            const PAGE_SIZE = 20;
+            let currentPage = 0;
+            const ZODIAC = ['🐭', '🐮', '🐯', '🐰', '🐲', '🐍', '🐴', '🐏', '🐵', '🐔', '🐶', '🐷'];
+            let searchTimer = null;
 
-        function updateUrlParams() {
-            const params = new URLSearchParams();
-            if (currentCategory && currentCategory !== "全部资源") {
-                params.set('category', currentCategory);
-            }
-            if (currentPage > 0) {
-                params.set('page', currentPage + 1);
-            }
-            if (searchKeyword) {
-                params.set('search', searchKeyword);
-            }
-            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-            history.pushState({ category: currentCategory, page: currentPage, search: searchKeyword }, '', newUrl);
-        }
+            const categoryUl = document.getElementById('categoryUl');
+            const productGrid = document.getElementById('productGrid');
+            const searchInput = document.getElementById('searchInput');
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+            const pageInfo = document.getElementById('pageInfo');
+            const pageJumpBtn = document.getElementById('pageJumpBtn');
+            const pageJumpInput = document.getElementById('pageJumpInput');
+            const currentCategoryTitle = document.getElementById('currentCategoryTitle');
 
-        function initNoticeBoard(config) {
-            const {
-                containerId,
-                carouselId,
-                dotsId,
-                prevId,
-                nextId,
-                interval = 5000
-            } = config;
-
-            const container = document.getElementById(containerId);
-            if (!container) return null;
-
-            const carousel = document.getElementById(carouselId);
-            const dotsContainer = document.getElementById(dotsId);
-            const prevBtn = document.getElementById(prevId);
-            const nextBtn = document.getElementById(nextId);
-
-            if (!carousel || !dotsContainer || !prevBtn || !nextBtn) return null;
-
-            let list = [];
-            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length >
-                0) {
-                list = ALL_SOFTWARES.announcements.filter(ann => ann.title && ann.title.trim() !== '');
+            function getStateFromUrl() {
+                const params = new URLSearchParams(window.location.search);
+                const cat = params.get('category') || "全部资源";
+                const page = parseInt(params.get('page'), 10) || 1;
+                const search = params.get('search') || "";
+                return { category: cat, page: page - 1, search: search };
             }
 
-            carousel.innerHTML = '';
-            dotsContainer.innerHTML = '';
-
-            if (list.length === 0) {
-                container.style.display = 'none';
-                return null;
-            }
-
-            let currentIndex = 0;
-            let timer = null;
-
-            list.forEach((ann, idx) => {
-                const slide = document.createElement('div');
-                slide.className = 'notice-slide' + (idx === 0 ? ' active' : '');
-                slide.textContent = ann.title;
-                slide.dataset.index = idx;
-                carousel.appendChild(slide);
-
-                const dot = document.createElement('button');
-                dot.className = 'notice-dot' + (idx === 0 ? ' active' : '');
-                dot.dataset.index = idx;
-                dot.setAttribute('aria-label', '切换到公告 ' + (idx + 1));
-                dotsContainer.appendChild(dot);
-            });
-
-            const controls = container.querySelector('.notice-controls');
-            if (controls) {
-                if (list.length <= 1) {
-                    controls.classList.add('hidden');
+            function updateUrlParams(pushState) {
+                const params = new URLSearchParams();
+                if (currentCategory && currentCategory !== "全部资源") {
+                    params.set('category', currentCategory);
+                }
+                if (currentPage > 0) {
+                    params.set('page', currentPage + 1);
+                }
+                if (searchKeyword) {
+                    params.set('search', searchKeyword);
+                }
+                const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                if (pushState !== false) {
+                    history.pushState({ category: currentCategory, page: currentPage, search: searchKeyword }, '', newUrl);
                 } else {
-                    controls.classList.remove('hidden');
+                    history.replaceState({ category: currentCategory, page: currentPage, search: searchKeyword }, '', newUrl);
                 }
             }
 
-            function goTo(index) {
-                if (list.length === 0) return;
-                if (index < 0) index = list.length - 1;
-                if (index >= list.length) index = 0;
-                if (index === currentIndex) return;
-                currentIndex = index;
-
-                const slides = carousel.querySelectorAll('.notice-slide');
-                const dots = dotsContainer.querySelectorAll('.notice-dot');
-                slides.forEach((s, i) => { s.classList.toggle('active', i === currentIndex); });
-                dots.forEach((d, i) => { d.classList.toggle('active', i === currentIndex); });
+            function loadStateFromUrl() {
+                const state = getStateFromUrl();
+                currentCategory = state.category;
+                currentPage = state.page;
+                searchKeyword = state.search;
+                searchInput.value = searchKeyword;
+                renderCategories();
+                updateCategoryUI(currentCategory);
+                renderProductGrid();
+                updateUrlParams(false); 
             }
 
-            function next() { goTo(currentIndex + 1); }
-
-            function prev() { goTo(currentIndex - 1); }
-
-            function startAuto() {
-                if (list.length <= 1) return;
-                if (timer) clearInterval(timer);
-                timer = setInterval(next, interval);
-            }
-
-            function stopAuto() {
-                if (timer) { clearInterval(timer);
-                    timer = null; }
-            }
-
-            function resetAuto() {
-                stopAuto();
-                startAuto();
-            }
-
-            prevBtn.addEventListener('click', () => { prev();
-                resetAuto(); });
-            nextBtn.addEventListener('click', () => { next();
-                resetAuto(); });
-
-            dotsContainer.querySelectorAll('.notice-dot').forEach(dot => {
-                dot.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.index, 10);
-                    if (!isNaN(idx) && idx !== currentIndex) {
-                        goTo(idx);
-                        resetAuto();
-                    }
-                });
+            window.addEventListener('popstate', function(e) {
+                if (e.state) {
+                    currentCategory = e.state.category || "全部资源";
+                    currentPage = e.state.page || 0;
+                    searchKeyword = e.state.search || "";
+                    searchInput.value = searchKeyword;
+                    renderCategories();
+                    updateCategoryUI(currentCategory);
+                    renderProductGrid();
+                } else {
+                    loadStateFromUrl();
+                }
             });
 
-            container.addEventListener('mouseenter', stopAuto);
-            container.addEventListener('mouseleave', startAuto);
-            container.addEventListener('touchstart', stopAuto, { passive: true });
-            container.addEventListener('touchend', startAuto, { passive: true });
+            function initNoticeBoard(config) {
+                const {
+                    containerId,
+                    carouselId,
+                    dotsId,
+                    prevId,
+                    nextId,
+                    interval = 5000
+                } = config;
 
-            startAuto();
+                const container = document.getElementById(containerId);
+                if (!container) return null;
 
-            return {
-                goTo,
-                next,
-                prev,
-                startAuto,
-                stopAuto,
-                resetAuto,
-                getCurrentIndex: () => currentIndex,
-                getList: () => list
-            };
-        }
+                const carousel = document.getElementById(carouselId);
+                const dotsContainer = document.getElementById(dotsId);
+                const prevBtn = document.getElementById(prevId);
+                const nextBtn = document.getElementById(nextId);
 
-        document.addEventListener('DOMContentLoaded', function() {
+                if (!carousel || !dotsContainer || !prevBtn || !nextBtn) return null;
 
-            if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
-                document.getElementById('productGrid').innerHTML =
-                    '<div style="grid-column:1/-1;text-align:center;color:#EF4444;padding:40px;">⚠️ 数据加载失败，请检查 softwares.js 文件。</div>';
-                return;
+                let list = [];
+                if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.announcements && ALL_SOFTWARES.announcements.length > 0) {
+                    list = ALL_SOFTWARES.announcements.filter(ann => ann.title && ann.title.trim() !== '');
+                }
+
+                carousel.innerHTML = '';
+                dotsContainer.innerHTML = '';
+
+                if (list.length === 0) {
+                    container.style.display = 'none';
+                    return null;
+                }
+
+                let currentIndex = 0;
+                let timer = null;
+
+                list.forEach((ann, idx) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'notice-slide' + (idx === 0 ? ' active' : '');
+                    slide.textContent = ann.title;
+                    slide.dataset.targetUrl = ann.targetUrl || '';
+                    slide.dataset.index = idx;
+                    slide.addEventListener('click', function(e) {
+                        const url = this.dataset.targetUrl;
+                        if (url && url.trim() !== '') {
+                            window.open(url, '_blank');
+                        }
+                    });
+                    carousel.appendChild(slide);
+
+                    const dot = document.createElement('button');
+                    dot.className = 'notice-dot' + (idx === 0 ? ' active' : '');
+                    dot.dataset.index = idx;
+                    dot.setAttribute('aria-label', '切换到公告 ' + (idx + 1));
+                    dotsContainer.appendChild(dot);
+                });
+
+                const controls = container.querySelector('.notice-controls');
+                if (controls) {
+                    if (list.length <= 1) {
+                        controls.classList.add('hidden');
+                    } else {
+                        controls.classList.remove('hidden');
+                    }
+                }
+
+                function goTo(index) {
+                    if (list.length === 0) return;
+                    if (index < 0) index = list.length - 1;
+                    if (index >= list.length) index = 0;
+                    if (index === currentIndex) return;
+                    currentIndex = index;
+
+                    const slides = carousel.querySelectorAll('.notice-slide');
+                    const dots = dotsContainer.querySelectorAll('.notice-dot');
+                    slides.forEach((s, i) => { s.classList.toggle('active', i === currentIndex); });
+                    dots.forEach((d, i) => { d.classList.toggle('active', i === currentIndex); });
+                }
+
+                function next() { goTo(currentIndex + 1); }
+                function prev() { goTo(currentIndex - 1); }
+
+                function startAuto() {
+                    if (list.length <= 1) return;
+                    if (timer) clearInterval(timer);
+                    timer = setInterval(next, interval);
+                }
+                function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+                function resetAuto() { stopAuto(); startAuto(); }
+
+                prevBtn.addEventListener('click', () => { prev(); resetAuto(); });
+                nextBtn.addEventListener('click', () => { next(); resetAuto(); });
+
+                dotsContainer.querySelectorAll('.notice-dot').forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index, 10);
+                        if (!isNaN(idx) && idx !== currentIndex) {
+                            goTo(idx);
+                            resetAuto();
+                        }
+                    });
+                });
+
+                container.addEventListener('mouseenter', stopAuto);
+                container.addEventListener('mouseleave', startAuto);
+                container.addEventListener('touchstart', stopAuto, { passive: true });
+                container.addEventListener('touchend', startAuto, { passive: true });
+
+                startAuto();
+
+                return { goTo, next, prev, startAuto, stopAuto, resetAuto, getCurrentIndex: () => currentIndex, getList: () => list };
             }
-            allProducts = ALL_SOFTWARES.products;
 
-            if (ALL_SOFTWARES.categories && Array.isArray(ALL_SOFTWARES.categories) && ALL_SOFTWARES.categories.length > 0) {
-                categories = ["全部资源", ...ALL_SOFTWARES.categories];
-            } else {
+            function renderCategories() {
+                categoryUl.innerHTML = '';
+                const allItem = document.createElement('li');
+                allItem.className = 'category-item all-cat' + (currentCategory === "全部资源" ? ' active' : '');
+                allItem.textContent = '🏠 全部资源';
+                allItem.dataset.cat = '全部资源';
+                allItem.addEventListener('click', function() {
+                    currentCategory = '全部资源';
+                    currentPage = 0;
+                    searchKeyword = '';
+                    searchInput.value = '';
+                    renderCategories();
+                    updateCategoryUI(currentCategory);
+                    renderProductGrid();
+                    updateUrlParams(true);
+                });
+                categoryUl.appendChild(allItem);
+                categories.forEach(function(cat) {
+                    if (cat === "全部资源") return;
+                    const li = document.createElement('li');
+                    li.className = 'category-item' + (cat === currentCategory ? ' active' : '');
+                    li.textContent = cat;
+                    li.dataset.cat = cat;
+                    li.addEventListener('click', function() {
+                        currentCategory = cat;
+                        currentPage = 0;
+                        searchKeyword = '';
+                        searchInput.value = '';
+                        renderCategories();
+                        updateCategoryUI(currentCategory);
+                        renderProductGrid();
+                        updateUrlParams(true);
+                    });
+                    categoryUl.appendChild(li);
+                });
+            }
+
+            function updateCategoryUI(cat) {
+                currentCategoryTitle.innerText = cat;
+                document.querySelectorAll('.category-item').forEach(function(item) {
+                    item.classList.toggle('active', item.dataset.cat === cat);
+                });
+            }
+
+            function loadData() {
+                if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
+                    productGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#EF4444;padding:40px;">⚠️ 数据加载失败，请检查 softwares.js 文件。</div>';
+                    return false;
+                }
+                allProducts = ALL_SOFTWARES.products;
+
                 const catSet = new Set();
                 allProducts.forEach(p => { if (p.category) catSet.add(p.category); });
                 categories = ["全部资源", ...Array.from(catSet)];
-            }
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const categoryParam = urlParams.get('category');
-            if (categoryParam && categories.includes(categoryParam)) {
-                currentCategory = categoryParam;
-            } else {
-                currentCategory = "全部资源";
-            }
-            const pageParam = parseInt(urlParams.get('page'), 10);
-            if (!isNaN(pageParam) && pageParam >= 1) {
-                currentPage = pageParam - 1;
-            } else {
-                currentPage = 0;
-            }
-            const searchParam = urlParams.get('search');
-            if (searchParam) {
-                searchKeyword = searchParam;
-                document.getElementById('searchInput').value = searchKeyword;
-            }
+                loadHotCarousel();
+                loadRecommendations();
+                loadFriendLinks();
 
-            renderCategories();
-            loadHotCarousel();
-            loadRecommendations();
-            loadFriendLinks();
-            updateCategoryUI(currentCategory);
-            renderProductGrid();
-            handleMobileRecommend();
-
-            initNoticeBoard({
-                containerId: 'noticePanel',
-                carouselId: 'noticeCarousel',
-                dotsId: 'noticeDots',
-                prevId: 'noticePrev',
-                nextId: 'noticeNext',
-                interval: 5000
-            });
-
-            initNoticeBoard({
-                containerId: 'noticePanelMobile',
-                carouselId: 'noticeCarouselMobile',
-                dotsId: 'noticeDotsMobile',
-                prevId: 'noticePrevMobile',
-                nextId: 'noticeNextMobile',
-                interval: 5000
-            });
-
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', function(e) {
-                searchKeyword = e.target.value.trim().toLowerCase();
-                currentPage = 0;
-                renderProductGrid();
-                updateUrlParams();
-            });
-
-            document.getElementById('prevPageBtn').addEventListener('click', function() {
-                if (currentPage > 0) { currentPage--;
-                    renderProductGrid();
-                    scrollToControlBar();
-                    updateUrlParams(); }
-            });
-            document.getElementById('nextPageBtn').addEventListener('click', function() {
-                const total = getFilteredCount();
-                const totalPages = Math.ceil(total / PAGE_SIZE);
-                if (currentPage < totalPages - 1) { currentPage++;
-                    renderProductGrid();
-                    scrollToControlBar();
-                    updateUrlParams(); }
-            });
-            document.getElementById('pageJumpBtn').addEventListener('click', function() {
-                const input = document.getElementById('pageJumpInput');
-                let val = parseInt(input.value.trim(), 10);
-                const total = getFilteredCount();
-                const totalPages = Math.ceil(total / PAGE_SIZE);
-                if (isNaN(val) || val < 1) val = 1;
-                if (val > totalPages) val = totalPages;
-                if (val >= 1 && val <= totalPages) {
-                    currentPage = val - 1;
-                    renderProductGrid();
-                    scrollToControlBar();
-                    updateUrlParams();
-                }
-                input.value = '';
-            });
-            document.getElementById('pageJumpInput').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') { document.getElementById('pageJumpBtn').click(); }
-            });
-
-            window.addEventListener('resize', handleMobileRecommend);
-
-            renderProductGrid();
-        });
-
-        function handleMobileRecommend() {
-            const isMobile = window.innerWidth <= 768;
-            const zone = document.getElementById('recommendZone');
-            const mobileZone = document.getElementById('mobileRecommend');
-            if (!zone || !mobileZone) return;
-
-            if (isMobile) {
-                zone.style.display = 'none';
-                mobileZone.style.display = 'block';
-                const sideList = document.getElementById('recommendList');
-                const mobileList = document.getElementById('mobileRecommendList');
-                if (sideList && mobileList) {
-                    mobileList.innerHTML = sideList.innerHTML;
-                }
-            } else {
-                zone.style.display = 'block';
-                mobileZone.style.display = 'none';
-            }
-        }
-
-        function loadHotCarousel() {
-            const container = document.getElementById('hotCarouselContainer');
-            const track = document.getElementById('hotTrack');
-            const indicators = document.getElementById('hotIndicators');
-            const prevBtn = document.getElementById('hotPrev');
-            const nextBtn = document.getElementById('hotNext');
-
-            let hotIds = [];
-            if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.hotRecommendIds) {
-                hotIds = ALL_SOFTWARES.hotRecommendIds;
-            }
-            const hotItems = allProducts.filter(p => hotIds.includes(p.id));
-
-            if (hotItems.length === 0) {
-                container.style.display = 'none';
-                return;
-            }
-            container.style.display = 'block';
-            track.innerHTML = '';
-            indicators.innerHTML = '';
-
-            hotItems.forEach((product, index) => {
-                const slide = document.createElement('a');
-                slide.className = 'hot-slide';
-                let detailUrl, targetAttr = '';
-                if (product.detailPageType === "自定义模板" && product.detailPagePath) {
-                    detailUrl = product.detailPagePath;
-                    targetAttr = '_blank';
-                } else {
-                    detailUrl = 'tail.html?id=' + product.id;
-                }
-                slide.href = detailUrl;
-                if (targetAttr) slide.target = targetAttr;
-
-                const img = document.createElement('img');
-                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
-                img.src = logo;
-                img.alt = product.name;
-                img.onerror = function() { this.src = 'logo/default.png'; };
-
-                const info = document.createElement('div');
-                info.className = 'info';
-                const title = document.createElement('h3');
-                title.textContent = product.name;
-                const desc = document.createElement('p');
-                const shortDesc = product.description ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) +
-                    '...' : '点击查看详情';
-                desc.textContent = shortDesc;
-
-                info.appendChild(title);
-                info.appendChild(desc);
-                slide.appendChild(img);
-                slide.appendChild(info);
-                track.appendChild(slide);
-
-                const dot = document.createElement('button');
-                dot.className = 'hot-dot' + (index === 0 ? ' active' : '');
-                dot.dataset.index = index;
-                indicators.appendChild(dot);
-            });
-
-            let currentIndex = 0;
-            const total = hotItems.length;
-            let autoTimer = null;
-
-            function goTo(index) {
-                if (index < 0) index = total - 1;
-                if (index >= total) index = 0;
-                currentIndex = index;
-                track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
-                document.querySelectorAll('.hot-dot').forEach(function(dot, i) {
-                    dot.classList.toggle('active', i === currentIndex);
+                initNoticeBoard({
+                    containerId: 'noticePanel',
+                    carouselId: 'noticeCarousel',
+                    dotsId: 'noticeDots',
+                    prevId: 'noticePrev',
+                    nextId: 'noticeNext',
+                    interval: 5000
                 });
-            }
-
-            function nextSlide() { goTo(currentIndex + 1); }
-
-            function prevSlide() { goTo(currentIndex - 1); }
-
-            prevBtn.addEventListener('click', function() { prevSlide();
-                resetAutoPlay(); });
-            nextBtn.addEventListener('click', function() { nextSlide();
-                resetAutoPlay(); });
-
-            document.querySelectorAll('.hot-dot').forEach(function(dot) {
-                dot.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.index, 10);
-                    if (!isNaN(idx)) { goTo(idx);
-                        resetAutoPlay(); }
+                initNoticeBoard({
+                    containerId: 'noticePanelMobile',
+                    carouselId: 'noticeCarouselMobile',
+                    dotsId: 'noticeDotsMobile',
+                    prevId: 'noticePrevMobile',
+                    nextId: 'noticeNextMobile',
+                    interval: 5000
                 });
-            });
 
-            function startAutoPlay() {
-                if (autoTimer) clearInterval(autoTimer);
-                autoTimer = setInterval(nextSlide, 5000);
+                return true;
             }
 
-            function resetAutoPlay() {
-                clearInterval(autoTimer);
-                startAutoPlay();
-            }
-            startAutoPlay();
+            function loadHotCarousel() {
+                const container = document.getElementById('hotCarouselContainer');
+                const track = document.getElementById('hotTrack');
+                const indicators = document.getElementById('hotIndicators');
+                const prevBtn = document.getElementById('hotPrev');
+                const nextBtn = document.getElementById('hotNext');
 
-            const wrapper = document.querySelector('.hot-wrapper');
-            wrapper.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
-            wrapper.addEventListener('mouseleave', startAutoPlay);
-            wrapper.addEventListener('touchstart', function() { clearInterval(autoTimer); }, { passive: true });
-            wrapper.addEventListener('touchend', startAutoPlay, { passive: true });
-        }
-
-        function loadRecommendations() {
-            const sideList = document.getElementById('recommendList');
-            const recommends = allProducts.filter(p => p.isRecommend === true);
-            if (recommends.length === 0) {
-                document.getElementById('recommendZone').style.display = 'none';
-                document.getElementById('mobileRecommend').style.display = 'none';
-                return;
-            }
-            document.getElementById('recommendZone').style.display = 'block';
-            let sideHtml = '';
-            recommends.forEach(function(rec) {
-                let detailUrl, targetAttr = '';
-                if (rec.detailPageType === "自定义模板" && rec.detailPagePath) {
-                    detailUrl = rec.detailPagePath;
-                    targetAttr = ' target="_blank"';
-                } else {
-                    detailUrl = 'tail.html?id=' + rec.id;
+                let hotIds = [];
+                if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.hotRecommendIds) {
+                    hotIds = ALL_SOFTWARES.hotRecommendIds;
                 }
-                sideHtml += '<li class="recommend-item">' +
-                    '<span>' + rec.name + '</span>' +
-                    '<a href="' + detailUrl + '"' + targetAttr + '>查看</a>' +
-                    '</li>';
-            });
-            sideList.innerHTML = sideHtml;
+                const hotItems = allProducts.filter(p => hotIds.includes(p.id));
 
-            const mobileList = document.getElementById('mobileRecommendList');
-            if (mobileList) mobileList.innerHTML = sideHtml;
-        }
-
-        function scrollToControlBar() {
-            const controlBar = document.getElementById('controlBar');
-            if (!controlBar) return;
-            const rect = controlBar.getBoundingClientRect();
-            const topOffset = 70;
-            const targetY = rect.top + window.pageYOffset - topOffset;
-            window.scrollTo({ top: targetY, behavior: 'smooth' });
-        }
-
-        function getFilteredCount() {
-            let filtered = allProducts.slice();
-            if (currentCategory !== "全部资源") {
-                filtered = filtered.filter(function(p) { return p.category === currentCategory; });
-            }
-            if (searchKeyword !== "") {
-                filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchKeyword); });
-            }
-            return filtered.length;
-        }
-
-        function renderProductGrid() {
-            let filtered = allProducts.slice();
-            if (currentCategory !== "全部资源") {
-                filtered = filtered.filter(function(p) { return p.category === currentCategory; });
-            }
-            if (searchKeyword !== "") {
-                filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchKeyword); });
-            }
-
-            const total = filtered.length;
-            const totalPages = Math.ceil(total / PAGE_SIZE);
-            if (currentPage >= totalPages && totalPages > 0) { currentPage = totalPages - 1; }
-            if (currentPage < 0) currentPage = 0;
-
-            const start = currentPage * PAGE_SIZE;
-            const end = Math.min(start + PAGE_SIZE, total);
-            const pageItems = filtered.slice(start, end);
-
-            const grid = document.getElementById('productGrid');
-            if (pageItems.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;padding:40px;">💡 未检索到符合条件的资源。</div>';
-                updatePagination(total, totalPages);
-                updateUrlParams();
-                return;
-            }
-
-            let html = '';
-            pageItems.forEach(function(product) {
-                const globalIndex = filtered.indexOf(product);
-                const zodiac = ZODIAC[globalIndex % 12];
-                const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage :
-                    'logo/default.png';
-                let detailUrl, targetAttr = '';
-                if (product.detailPageType === "自定义模板" && product.detailPagePath) {
-                    detailUrl = product.detailPagePath;
-                    targetAttr = ' target="_blank"';
-                } else {
-                    detailUrl = 'tail.html?id=' + product.id;
+                if (hotItems.length === 0) {
+                    container.style.display = 'none';
+                    return;
                 }
-                html += '<div class="item">' +
-                    '<div class="item-image-wrapper">' +
-                    '<img src="' + logo + '" alt="' + product.name + '" class="item-image" onerror="this.onerror=null; this.src=\'logo/default.png\';">' +
-                    '</div>' +
-                    '<div class="item-content">' +
-                    '<div class="item-title-row">' +
-                    '<span class="item-zodiac">' + zodiac + '</span>' +
-                    '<span class="item-title" title="' + product.name + '">' + product.name + '</span>' +
-                    '</div>' +
-                    '<a href="' + detailUrl + '"' + targetAttr + ' class="item-link">查看详情</a>' +
-                    '</div>' +
-                    '</div>';
-            });
-            grid.innerHTML = html;
-            updatePagination(total, totalPages);
-            updateUrlParams();
-        }
+                container.style.display = 'block';
+                track.innerHTML = '';
+                indicators.innerHTML = '';
 
-        function updatePagination(total, totalPages) {
-            const pageInfo = document.getElementById('pageInfo');
-            const prevBtn = document.getElementById('prevPageBtn');
-            const nextBtn = document.getElementById('nextPageBtn');
-            if (total === 0) {
-                pageInfo.textContent = '第 0 / 0 页';
-                prevBtn.disabled = true;
-                nextBtn.disabled = true;
-                return;
-            }
-            const currentDisplay = currentPage + 1;
-            pageInfo.textContent = '第 ' + currentDisplay + ' / ' + totalPages + ' 页';
-            prevBtn.disabled = (currentPage === 0);
-            nextBtn.disabled = (currentPage >= totalPages - 1);
-            const jumpInput = document.getElementById('pageJumpInput');
-            jumpInput.max = totalPages;
-            jumpInput.placeholder = '1-' + totalPages;
-        }
-
-        function renderCategories() {
-            const ul = document.getElementById('categoryUl');
-            ul.innerHTML = '';
-            categories.forEach(function(cat) {
-                if (cat === "全部资源") return;
-                const li = document.createElement('li');
-                li.className = 'category-item' + (cat === currentCategory ? ' active' : '');
-                li.textContent = cat;
-                li.setAttribute('data-cat', cat);
-                li.onclick = function() {
-                    window.location.href = 'shopindex.html?category=' + encodeURIComponent(cat);
-                };
-                ul.appendChild(li);
-            });
-        }
-
-        function updateCategoryUI(cat) {
-            document.getElementById('currentCategoryTitle').innerText = cat;
-            document.querySelectorAll('.category-item').forEach(function(item) {
-                item.classList.toggle('active', item.getAttribute('data-cat') === cat);
-            });
-        }
-
-        function loadFriendLinks() {
-            const zone = document.getElementById('friendLinksZone');
-            if (!zone) return;
-            if (ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
-                let linksHtml = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
-                ALL_SOFTWARES.friendLinks.forEach(function(link) {
-                    if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
-                        linksHtml += '<a href="' + link.jumpUrl + '" target="_blank" class="friend-link-node">' +
-                            link.siteName + '</a>';
+                hotItems.forEach((product, index) => {
+                    const slide = document.createElement('a');
+                    slide.className = 'hot-slide';
+                    let detailUrl, targetAttr = '';
+                    if (product.detailPageType === "自定义模板" && product.detailPagePath) {
+                        detailUrl = product.detailPagePath;
+                        targetAttr = '_blank';
+                    } else {
+                        detailUrl = 'tail.html?id=' + product.id;
                     }
+                    slide.href = detailUrl;
+                    if (targetAttr) slide.target = targetAttr;
+
+                    const img = document.createElement('img');
+                    const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
+                    img.src = logo;
+                    img.alt = product.name;
+                    img.onerror = function() { this.onerror = null; this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%234A90E2%22 width=%2296%22 height=%2296%22/%3E%3Ctext x=%2248%22 y=%2256%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22%3E?%3C/text%3E%3C/svg%3E'; };
+
+                    const info = document.createElement('div');
+                    info.className = 'info';
+                    const title = document.createElement('h3');
+                    title.textContent = product.name; // textContent防XSS
+                    const desc = document.createElement('p');
+                    const shortDesc = product.description ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) + '...' : '点击查看详情';
+                    desc.textContent = shortDesc;
+
+                    info.appendChild(title);
+                    info.appendChild(desc);
+                    slide.appendChild(img);
+                    slide.appendChild(info);
+                    track.appendChild(slide);
+
+                    const dot = document.createElement('button');
+                    dot.className = 'hot-dot' + (index === 0 ? ' active' : '');
+                    dot.dataset.index = index;
+                    indicators.appendChild(dot);
                 });
-                if (linksHtml) {
-                    zone.innerHTML = linksHtml;
-                    zone.style.display = 'flex';
+
+                let currentIndex = 0;
+                const total = hotItems.length;
+                let autoTimer = null;
+
+                function goTo(index) {
+                    if (index < 0) index = total - 1;
+                    if (index >= total) index = 0;
+                    currentIndex = index;
+                    track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+                    document.querySelectorAll('.hot-dot').forEach(function(dot, i) {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                }
+
+                function nextSlide() { goTo(currentIndex + 1); }
+                function prevSlide() { goTo(currentIndex - 1); }
+
+                prevBtn.addEventListener('click', function() { prevSlide(); resetAutoPlay(); });
+                nextBtn.addEventListener('click', function() { nextSlide(); resetAutoPlay(); });
+
+                document.querySelectorAll('.hot-dot').forEach(function(dot) {
+                    dot.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index, 10);
+                        if (!isNaN(idx)) { goTo(idx); resetAutoPlay(); }
+                    });
+                });
+
+                function startAutoPlay() {
+                    if (autoTimer) clearInterval(autoTimer);
+                    autoTimer = setInterval(nextSlide, 5000);
+                }
+                function resetAutoPlay() {
+                    clearInterval(autoTimer);
+                    startAutoPlay();
+                }
+                startAutoPlay();
+
+                const wrapper = document.querySelector('.hot-wrapper');
+                wrapper.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
+                wrapper.addEventListener('mouseleave', startAutoPlay);
+                wrapper.addEventListener('touchstart', function() { clearInterval(autoTimer); }, { passive: true });
+                wrapper.addEventListener('touchend', startAutoPlay, { passive: true });
+            }
+
+            function loadRecommendations() {
+                const sideList = document.getElementById('recommendList');
+                const recommends = allProducts.filter(p => p.isRecommend === true);
+                if (recommends.length === 0) {
+                    document.getElementById('recommendZone').style.display = 'none';
+                    document.getElementById('mobileRecommend').style.display = 'none';
+                    return;
+                }
+                document.getElementById('recommendZone').style.display = 'block';
+                let sideHtml = '';
+                recommends.forEach(function(rec) {
+                    let detailUrl, targetAttr = '';
+                    if (rec.detailPageType === "自定义模板" && rec.detailPagePath) {
+                        detailUrl = rec.detailPagePath;
+                        targetAttr = ' target="_blank"';
+                    } else {
+                        detailUrl = 'tail.html?id=' + rec.id;
+                    }
+                    sideHtml += '<li class="recommend-item">' +
+                        '<span>' + rec.name + '</span>' +
+                        '<a href="' + detailUrl + '"' + targetAttr + '>查看</a>' +
+                        '</li>';
+                });
+                sideList.innerHTML = sideHtml;
+
+                const mobileList = document.getElementById('mobileRecommendList');
+                if (mobileList) mobileList.innerHTML = sideHtml;
+            }
+
+            function loadFriendLinks() {
+                const zone = document.getElementById('friendLinksZone');
+                if (!zone) return;
+                if (ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
+                    let linksHtml = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
+                    ALL_SOFTWARES.friendLinks.forEach(function(link) {
+                        if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
+                            linksHtml += '<a href="' + link.jumpUrl + '" target="_blank" class="friend-link-node">' +
+                                link.siteName + '</a>';
+                        }
+                    });
+                    if (linksHtml) {
+                        zone.innerHTML = linksHtml;
+                        zone.style.display = 'flex';
+                    } else {
+                        zone.style.display = 'none';
+                    }
                 } else {
                     zone.style.display = 'none';
                 }
-            } else {
-                zone.style.display = 'none';
             }
-        }
+
+            function getFilteredCount() {
+                let filtered = allProducts.slice();
+                if (currentCategory !== "全部资源") {
+                    filtered = filtered.filter(function(p) { return p.category === currentCategory; });
+                }
+                if (searchKeyword !== "") {
+                    filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchKeyword); });
+                }
+                return filtered.length;
+            }
+
+            function renderProductGrid() {
+                let filtered = allProducts.slice();
+                if (currentCategory !== "全部资源") {
+                    filtered = filtered.filter(function(p) { return p.category === currentCategory; });
+                }
+                if (searchKeyword !== "") {
+                    filtered = filtered.filter(function(p) { return p.name.toLowerCase().includes(searchKeyword); });
+                }
+
+                const total = filtered.length;
+                const totalPages = Math.ceil(total / PAGE_SIZE);
+                if (currentPage >= totalPages && totalPages > 0) { currentPage = totalPages - 1; }
+                if (currentPage < 0) currentPage = 0;
+
+                const start = currentPage * PAGE_SIZE;
+                const end = Math.min(start + PAGE_SIZE, total);
+                const pageItems = filtered.slice(start, end);
+
+                const grid = document.getElementById('productGrid');
+                if (pageItems.length === 0) {
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94A3B8;padding:40px;">💡 未检索到符合条件的资源。</div>';
+                    updatePagination(total, totalPages);
+                    updateUrlParams(true);
+                    return;
+                }
+
+                let html = '';
+                pageItems.forEach(function(product) {
+                    const globalIndex = filtered.indexOf(product);
+                    const zodiac = ZODIAC[globalIndex % 12];
+                    const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
+                    let detailUrl, targetAttr = '';
+                    if (product.detailPageType === "自定义模板" && product.detailPagePath) {
+                        detailUrl = product.detailPagePath;
+                        targetAttr = ' target="_blank"';
+                    } else {
+                        detailUrl = 'tail.html?id=' + product.id;
+                    }
+                    html += '<a href="' + detailUrl + '"' + targetAttr + ' class="item-link-wrapper">' +
+                        '<div class="item">' +
+                        '<div class="item-image-wrapper">' +
+                        '<img src="' + logo + '" alt="' + product.name + '" class="item-image" onerror="this.onerror=null; this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22155%22 height=%22155%22%3E%3Crect fill=%22%234A90E2%22 width=%22155%22 height=%22155%22/%3E%3Ctext x=%2277.5%22 y=%2290%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2260%22 font-family=%22sans-serif%22%3E?%3C/text%3E%3C/svg%3E\';">' +
+                        '</div>' +
+                        '<div class="item-content">' +
+                        '<div class="item-title-row">' +
+                        '<span class="item-zodiac">' + zodiac + '</span>' +
+                        '<span class="item-title" title="' + product.name + '">' + product.name + '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</a>';
+                });
+                grid.innerHTML = html;
+                updatePagination(total, totalPages);
+                updateUrlParams(true);
+            }
+
+            function updatePagination(total, totalPages) {
+                if (total === 0) {
+                    pageInfo.textContent = '第 0 / 0 页';
+                    prevPageBtn.disabled = true;
+                    nextPageBtn.disabled = true;
+                    return;
+                }
+                const currentDisplay = currentPage + 1;
+                pageInfo.textContent = '第 ' + currentDisplay + ' / ' + totalPages + ' 页';
+                prevPageBtn.disabled = (currentPage === 0);
+                nextPageBtn.disabled = (currentPage >= totalPages - 1);
+                pageJumpInput.max = totalPages;
+                pageJumpInput.placeholder = '1-' + totalPages;
+            }
+
+            function handleSearchInput() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(function() {
+                    const val = searchInput.value.trim().toLowerCase();
+                    if (val !== searchKeyword) {
+                        searchKeyword = val;
+                        currentPage = 0;
+                        renderProductGrid();
+                    }
+                }, 300);
+            }
+
+            function scrollToControlBar() {
+                const controlBar = document.getElementById('controlBar');
+                if (!controlBar) return;
+                const rect = controlBar.getBoundingClientRect();
+                const topOffset = 70;
+                const targetY = rect.top + window.pageYOffset - topOffset;
+                window.scrollTo({ top: targetY, behavior: 'smooth' });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                if (!loadData()) return;
+
+                loadStateFromUrl();
+
+                searchInput.addEventListener('input', handleSearchInput);
+
+                prevPageBtn.addEventListener('click', function() {
+                    if (currentPage > 0) { currentPage--; renderProductGrid(); scrollToControlBar(); }
+                });
+                nextPageBtn.addEventListener('click', function() {
+                    const total = getFilteredCount();
+                    const totalPages = Math.ceil(total / PAGE_SIZE);
+                    if (currentPage < totalPages - 1) { currentPage++; renderProductGrid(); scrollToControlBar(); }
+                });
+                pageJumpBtn.addEventListener('click', function() {
+                    let val = parseInt(pageJumpInput.value.trim(), 10);
+                    const total = getFilteredCount();
+                    const totalPages = Math.ceil(total / PAGE_SIZE);
+                    if (isNaN(val) || val < 1) val = 1;
+                    if (val > totalPages) val = totalPages;
+                    if (val >= 1 && val <= totalPages) {
+                        currentPage = val - 1;
+                        renderProductGrid();
+                        scrollToControlBar();
+                    }
+                    pageJumpInput.value = '';
+                });
+                pageJumpInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') { pageJumpBtn.click(); }
+                });
+
+                window.addEventListener('resize', handleMobileRecommend);
+                handleMobileRecommend();
+
+                renderCategories();
+                updateCategoryUI(currentCategory);
+                renderProductGrid();
+            });
+
+            function handleMobileRecommend() {
+                const isMobile = window.innerWidth <= 768;
+                const zone = document.getElementById('recommendZone');
+                const mobileZone = document.getElementById('mobileRecommend');
+                if (!zone || !mobileZone) return;
+
+                if (isMobile) {
+                    zone.style.display = 'none';
+                    mobileZone.style.display = 'block';
+                    const sideList = document.getElementById('recommendList');
+                    const mobileList = document.getElementById('mobileRecommendList');
+                    if (sideList && mobileList) {
+                        mobileList.innerHTML = sideList.innerHTML;
+                    }
+                } else {
+                    zone.style.display = 'block';
+                    mobileZone.style.display = 'none';
+                }
+            }
+
+        })();
     </script>
 
 </body>
