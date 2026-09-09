@@ -1281,7 +1281,7 @@
                 renderCategories();
                 updateCategoryUI(currentCategory);
                 renderProductGrid();
-                updateUrlParams(false); 
+                updateUrlParams(false);
             }
 
             window.addEventListener('popstate', function(e) {
@@ -1462,9 +1462,13 @@
                 }
                 allProducts = ALL_SOFTWARES.products;
 
-                const catSet = new Set();
-                allProducts.forEach(p => { if (p.category) catSet.add(p.category); });
-                categories = ["全部资源", ...Array.from(catSet)];
+                if (ALL_SOFTWARES.categories && Array.isArray(ALL_SOFTWARES.categories) && ALL_SOFTWARES.categories.length > 0) {
+                    categories = ["全部资源", ...ALL_SOFTWARES.categories];
+                } else {
+                    const catSet = new Set();
+                    allProducts.forEach(p => { if (p.category) catSet.add(p.category); });
+                    categories = ["全部资源", ...Array.from(catSet)];
+                }
 
                 loadHotCarousel();
                 loadRecommendations();
@@ -1533,7 +1537,7 @@
                     const info = document.createElement('div');
                     info.className = 'info';
                     const title = document.createElement('h3');
-                    title.textContent = product.name; // textContent防XSS
+                    title.textContent = product.name;
                     const desc = document.createElement('p');
                     const shortDesc = product.description ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) + '...' : '点击查看详情';
                     desc.textContent = shortDesc;

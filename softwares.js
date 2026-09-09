@@ -518,8 +518,8 @@
   ],
   "categories": [
     "🎯 原创工具",
-    "🛠️ 实用工具",
-    "🎮 经典游戏"
+    "🎮 经典游戏",
+    "🛠️ 实用工具"
   ],
   "nowContent": {
     "reading": "<a href=\"https://book.douban.com/subject/1941558/\" target=\"_blank\">《设计中的设计》 – 原研哉</a>",
