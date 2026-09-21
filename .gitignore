@@ -1,0 +1,5 @@
+# CMS 自动备份 / 缓存产物：不进版本库，因此不会发布到线上
+# softwares.js.bak 由 Dreamcms 的 AtomicSaveToFile() 生成，含全部明文网盘链接
+*.bak
+*.tmp
+.last_bak_ts*
