@@ -1,0 +1,389 @@
+/* ==========================================================================
+   Dream 工坊 · 详情页共享样式
+   --------------------------------------------------------------------------
+   用途：tail.html（通用详情页）与 projects/*.html（原创产品单独页）共用
+   原则：同构不同色 —— 结构/组件/字体/导航全统一，只放开 --accent 一个令牌
+   约束：本文件只做"共享层"，不覆盖各页既有样式；各页的局部样式仍写在页内
+   依赖：必须先引入 assets/base.css
+         —— 令牌、基础重置、.dw-nav / .dw-container / .dw-section-* /
+            .dw-card / .dw-btn / .dw-badge / .dw-footer 都在 base.css 里，
+            本文件不再重复定义，避免双份漂移。
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 兼容别名
+   --------------------------------------------------------------------------
+   令牌已统一收敛到 assets/base.css，本文件不再重复定义。
+   仅补一个别名：--transition 是历史页面用的名字，base.css 里叫 --ease。
+   -------------------------------------------------------------------------- */
+:root {
+    --transition: var(--ease);
+}
+
+/* ⚠ sticky 兼容说明（不要删）：
+   position: sticky 要求所有祖先元素的 overflow 都是 visible，
+   否则吸顶失效。projects/lrcplayer.html 的 body 曾带 overflow-x: hidden
+   踩了这个坑 —— 该页已把横向溢出约束上移到 html 层解决，
+   共享层不重复处理，避免影响其他页。 */
+
+/* --------------------------------------------------------------------------
+   2. 详情页专属组件（base.css 里没有的）
+   -------------------------------------------------------------------------- */
+
+/* 功能卡片网格（对应产品数据的 features[] 字段） */
+.dw-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+/* 规格网格（对应 tail.html 的 specification-grid） */
+.dw-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.dw-spec-item {
+    background: var(--glass);
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+}
+
+.dw-spec-item dt {
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+}
+
+.dw-spec-item dd {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+    word-break: break-all;
+}
+
+/* 图片框 */
+.dw-shot {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--accent-line);
+    box-shadow: 0 10px 28px var(--shadow-soft);
+}
+
+.dw-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* 免责声明 */
+.dw-disclaimer {
+    margin-top: 48px;
+    padding: 20px;
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--accent-line);
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    line-height: 1.9;
+}
+
+.dw-disclaimer h3 {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+}
+
+/* --------------------------------------------------------------------------
+   2.5 迷你作品卡（origin / resource 两页共用）
+   --------------------------------------------------------------------------
+   定位：列表页的"一条作品"。两页数据源、筛选逻辑完全不同，
+        但读者看到的这一小块长得一样 —— 所以放进共享层。
+        页内只需各自写一个生成函数调用 .dw-mcard 结构即可。
+   -------------------------------------------------------------------------- */
+.mcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+.dw-mcard {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--glass-weak);
+    border: 1px solid var(--line-soft);
+    color: inherit;
+    overflow: hidden;
+    transition: transform var(--dur-base) var(--ease),
+                background var(--dur-base) var(--ease),
+                border-color var(--dur-base) var(--ease),
+                box-shadow var(--dur-base) var(--ease);
+}
+
+.dw-mcard:hover {
+    transform: translateY(-3px);
+    background: var(--glass);
+    border-color: var(--accent-line);
+    box-shadow: 0 8px 24px var(--shadow-hover);
+}
+
+/* 角标：只在"原创"时加 .is-flag */
+.dw-mcard__flag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1px 8px;
+    border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.dw-mcard__logo {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    object-fit: contain;
+    background: var(--accent-pale);
+    padding: 3px;
+}
+
+.dw-mcard__body {
+    min-width: 0;
+    flex: 1;
+}
+
+.dw-mcard__name {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dw-mcard__meta {
+    display: block;
+    font-size: var(--fs-xs);
+    color: var(--ink-ghost);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 卡脚上的"查看全部"：贴右不居中，避免和上方大入口按钮重复 */
+.dw-more-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-4);
+}
+
+.dw-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--accent);
+    transition: gap var(--dur-base) var(--ease), color var(--dur-base) var(--ease);
+}
+
+.dw-more-link::after {
+    content: '→';
+    transition: transform var(--dur-base) var(--ease);
+}
+
+.dw-more-link:hover {
+    color: var(--accent-dark);
+}
+
+.dw-more-link:hover::after {
+    transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   2.6 底部返回条（详情页通用）
+   --------------------------------------------------------------------------
+   定位：详情页读到底后，给一条"回上级"的出口。
+        不做面包屑、不做顶部导航改造 —— 就用最朴素的一个按钮。
+   用法：<div class="dw-backbar"><a href="../origin.html" class="dw-backbtn">← 返回原创工坊</a></div>
+        可选加 .dw-backbar__note 放当前页名，弱化显示在按钮右侧。
+   -------------------------------------------------------------------------- */
+.dw-backbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: var(--space-10);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--line-soft);
+}
+
+.dw-backbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 24px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--accent-line);
+    background: var(--accent-pale);
+    color: var(--accent);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    transition: background var(--dur-base) var(--ease),
+                border-color var(--dur-base) var(--ease),
+                transform var(--dur-fast) var(--ease);
+}
+
+.dw-backbtn:hover {
+    background: var(--accent-line);
+    border-color: var(--accent);
+    color: var(--accent-dark);
+    transform: translateY(-2px);
+}
+
+.dw-backbar__note {
+    font-size: var(--fs-xs);
+    color: var(--ink-ghost);
+}
+
+/* --------------------------------------------------------------------------
+   2.9 页面级封面（Page Cover）—— origin / resource / 详情页共用
+   --------------------------------------------------------------------------
+   用途：把"页名 + 一句说明"从居中的 hero 改成杂志式抬头：
+        小号大字字母眉标 → 巨型页名 → 一句备注（右对齐，被长横线推到页边）。
+   意义：全站所有内页共用同一种抬头，与首页（index）的杂志封面长成一家，
+        彻底消除"首页新、内页旧"的两代视觉。
+   命名：dg- 前缀（Dream General），一眼能与各页的局部类名区分开。
+   -------------------------------------------------------------------------- */
+.dg-head {
+    padding: var(--space-10) 0 var(--space-8);
+}
+
+/* 眉标：一行极小的大写字母 + 一条短横线 */
+.dg-head__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-ghost);
+    margin-bottom: var(--space-5);
+}
+
+.dg-head__eyebrow::before {
+    content: '';
+    width: 46px;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+
+.dg-head__eyebrow .yr {
+    color: var(--accent);
+    letter-spacing: 1px;
+}
+
+/* 页名：与首页同级的大字号，但不必上到 300px（内页主角是内容本身） */
+.dg-head__title {
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+    color: var(--ink-deep);
+    font-feature-settings: 'palt' 1;
+}
+
+.dg-head__title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 备注行：一条长横线把说明推到右侧页边 */
+.dg-head__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+    flex-wrap: wrap;
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line-base);
+}
+
+.dg-head__note {
+    font-size: var(--fs-sm);
+    color: var(--ink-mute);
+    max-width: 46ch;
+    line-height: 1.7;
+}
+
+.dg-head__stats {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-6);
+    margin-left: auto;
+}
+
+.dg-stat__num {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--ink-deep);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+}
+
+.dg-stat__label {
+    font-size: var(--fs-xs);
+    color: var(--ink-ghost);
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .dg-head { padding: var(--space-8) 0 var(--space-6); }
+    .dg-head__stats { margin-left: 0; gap: var(--space-5); }
+}
+
+@media (max-width: 480px) {
+    .dg-head__eyebrow { letter-spacing: 2px; }
+    .dg-head__eyebrow::before { width: 24px; }
+}
+
+/* --------------------------------------------------------------------------
+   3. 详情页专属响应式补充
+   --------------------------------------------------------------------------
+   导航/版心/标题的响应式已在 base.css 统一处理，这里只补专属栅格。
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .dw-feature-grid,
+    .dw-spec-grid {
+        grid-template-columns: 1fr;
+    }
+    .mcard-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .mcard-grid {
+        grid-template-columns: 1fr;
+    }
+}

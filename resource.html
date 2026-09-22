@@ -3,95 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>畅享创意工坊</title>
+    <title>资源大厅 · Dream</title>
+
+    <link rel="stylesheet" href="assets/base.css" />
+
+    <link rel="stylesheet" href="assets/detail.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
     <style>
+
         :root {
             --brand-blue: #4A90E2;
             --brand-blue-bright: #5BA0F5;
             --brand-blue-dark: #2D6BA8;
             --bg-start: #F8FAFF;
             --bg-end: #F0F5FF;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(74, 144, 226, 0.10);
-            --shadow-blue: rgba(74, 144, 226, 0.06);
-            --shadow-hover: rgba(74, 144, 226, 0.14);
+
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-bg-hover: rgba(255, 255, 255, 0.90);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --shadow-blue: rgba(31, 38, 135, 0.10);
+            --shadow-hover: rgba(31, 38, 135, 0.16);
             --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
             --radius: 20px;
             --radius-sm: 12px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-sans: 'Noto Sans SC', -apple-system, 'PingFang SC', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html {
+            scroll-behavior: smooth;
+
+            overflow-x: hidden;
+        }
+
         body {
-            font-family: -apple-system, 'Noto Sans SC', 'Segoe UI', Roboto, sans-serif;
+            font-family: var(--font-sans);
             background: linear-gradient(145deg, var(--bg-start) 0%, var(--bg-end) 100%);
             color: #1A2A4A;
-            overflow-x: hidden;
             scroll-behavior: smooth;
             line-height: 1.6;
             min-height: 100vh;
-        }
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            background: rgba(255, 255, 255, 0.72);
-            border-bottom: 1px solid rgba(74, 144, 226, 0.08);
-            padding: 10px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            gap: 10px 24px;
-        }
-
-        .navbar .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-bright));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-            flex-shrink: 0;
-        }
-
-        .navbar .logo small {
-            font-size: 0.8rem;
-            font-weight: 400;
-            -webkit-text-fill-color: #5A6A8A;
-            color: #5A6A8A;
-            background: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: #4A5A7A;
-            text-decoration: none;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--brand-blue);
-            background: rgba(74, 144, 226, 0.06);
-        }
-
-        .nav-links a.active {
-            color: var(--brand-blue);
-            background: rgba(74, 144, 226, 0.08);
         }
 
         .main-container {
@@ -338,137 +295,6 @@
             min-width: 0;
         }
 
-        #hotCarouselContainer {
-            display: none;
-        }
-        .hot-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .hot-header .icon {
-            font-size: 1.4rem;
-        }
-        .hot-header .title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #1A2A4A;
-        }
-
-        .hot-wrapper {
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--radius-sm);
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 24px var(--shadow-blue);
-            padding: 0;
-        }
-        .hot-track {
-            display: flex;
-            transition: transform 0.5s ease;
-            will-change: transform;
-        }
-
-        .hot-slide {
-            flex: 0 0 100%;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
-            padding: 20px 24px;
-            min-height: 150px;
-            background: transparent;
-            transition: background 0.3s;
-            cursor: pointer;
-        }
-        .hot-slide:hover {
-            background: rgba(74, 144, 226, 0.03);
-        }
-        .hot-slide img {
-            width: 96px;
-            height: 96px;
-            object-fit: cover;
-            border-radius: 14px;
-            margin-right: 24px;
-            flex-shrink: 0;
-            background: #f1f5f9;
-        }
-        .hot-slide .info {
-            flex: 1;
-        }
-        .hot-slide .info h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #1A2A4A;
-            margin-bottom: 4px;
-        }
-        .hot-slide .info p {
-            font-size: 0.92rem;
-            color: #64748b;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.5;
-        }
-
-        .hot-indicators {
-            position: absolute;
-            bottom: 14px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 2;
-        }
-        .hot-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(74, 144, 226, 0.2);
-            cursor: pointer;
-            border: none;
-            padding: 0;
-            transition: background 0.3s;
-        }
-        .hot-dot.active {
-            background: var(--brand-blue);
-        }
-
-        .hot-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(74, 144, 226, 0.1);
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            font-size: 1.3rem;
-            cursor: pointer;
-            z-index: 3;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #4A5A7A;
-            transition: background 0.2s;
-            line-height: 1;
-        }
-        .hot-btn:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-        .hot-btn.prev {
-            left: 8px;
-        }
-        .hot-btn.next {
-            right: 8px;
-        }
-
         .control-bar {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -603,6 +429,15 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             line-height: 1.4;
+        }
+
+        .item-meta-line {
+            display: flex;
+            align-items: center;
+            font-size: 0.68rem;
+            color: #8A9AA8;
+            line-height: 1.3;
+            min-width: 0;
         }
 
         .skeleton-card {
@@ -748,39 +583,6 @@
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
         }
 
-        .site-footer {
-            text-align: center;
-            padding: 24px 20px 20px;
-            color: #8A9AB0;
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(74, 144, 226, 0.06);
-            margin-top: 10px;
-        }
-        .site-footer a {
-            color: var(--brand-blue);
-            text-decoration: none;
-        }
-        .site-footer a:hover {
-            color: var(--brand-blue-dark);
-        }
-
-        .friend-links-zone {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            padding: 0 0 10px;
-            font-size: 0.78rem;
-            color: #64748b;
-        }
-        .friend-link-node {
-            color: #64748b;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .friend-link-node:hover {
-            color: var(--brand-blue);
-        }
 
         .mobile-recommend {
             display: none;
@@ -831,18 +633,6 @@
         }
 
         @media (max-width: 768px) {
-            .navbar {
-                padding: 8px 16px;
-                gap: 6px 16px;
-            }
-            .navbar .logo {
-                font-size: 1.2rem;
-            }
-            .nav-links a {
-                padding: 4px 10px;
-                font-size: 0.75rem;
-            }
-
             .main-container {
                 flex-direction: column;
                 padding: 12px 12px 30px;
@@ -1012,47 +802,6 @@
                 padding: 3px 10px;
             }
 
-            .hot-slide {
-                padding: 16px 16px 44px;
-                min-height: 130px;
-            }
-            .hot-slide img {
-                width: 76px;
-                height: 76px;
-                margin-right: 16px;
-                border-radius: 12px;
-            }
-            .hot-slide .info h3 {
-                font-size: 1rem;
-            }
-            .hot-slide .info p {
-                font-size: 0.82rem;
-            }
-            .hot-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 1.1rem;
-            }
-            .hot-btn.prev {
-                left: 4px;
-            }
-            .hot-btn.next {
-                right: 4px;
-            }
-            .hot-indicators {
-                bottom: 10px;
-                gap: 6px;
-            }
-            .hot-dot {
-                width: 8px;
-                height: 8px;
-            }
-            .hot-header .icon {
-                font-size: 1.2rem;
-            }
-            .hot-header .title {
-                font-size: 1rem;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1089,27 +838,6 @@
                 padding: 2px 6px;
             }
 
-            .hot-slide {
-                padding: 12px 12px 38px;
-                min-height: 110px;
-            }
-            .hot-slide img {
-                width: 60px;
-                height: 60px;
-                margin-right: 12px;
-                border-radius: 10px;
-            }
-            .hot-slide .info h3 {
-                font-size: 0.88rem;
-            }
-            .hot-slide .info p {
-                font-size: 0.75rem;
-            }
-            .hot-btn {
-                width: 26px;
-                height: 26px;
-                font-size: 0.95rem;
-            }
             .sidebar-wrapper>.sidebar {
                 padding: 10px 12px 6px;
             }
@@ -1118,36 +846,117 @@
                 font-size: 0.76rem;
             }
         }
+
+        .main-container {
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .dg-rail {
+            padding: var(--space-6) 0 var(--space-8);
+            margin-bottom: 4px;
+            border-bottom: 1px solid rgba(74, 144, 226, 0.13);
+        }
+
+        .dg-rail__head {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3) var(--space-5);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-4);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 24px var(--shadow-blue);
+        }
+
+        .dg-rail .category-list {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 6px 2px;
+        }
+
+        .dg-rail .category-item {
+            padding: 5px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 0.84rem;
+            color: #5A6A8A;
+            background: transparent;
+            transition: background 0.25s, color 0.25s;
+        }
+
+        .dg-rail .category-item:hover {
+            background: rgba(74, 144, 226, 0.06);
+            color: var(--brand-blue);
+        }
+
+        .dg-rail .category-item.active {
+            background: var(--brand-blue);
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .dg-rail .category-item.all-cat {
+            border-bottom: none;
+            margin-bottom: 0;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .dg-rail {
+                padding: var(--space-5) 0 var(--space-6);
+            }
+            .dg-rail .category-list {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+        }
     </style>
     <script src="softwares.js"></script>
 </head>
-<body>
+<body class="product-theme" data-accent="blue">
 
-    <nav class="navbar">
-        <a href="#" class="logo" onclick="location.reload(); return false;">Dream <small>主页世界</small></a>
-        <div class="nav-links">
-            <a href="index.html">首页</a>
-            <a href="webmaster.html">关于我</a>
-            <a href="shopindex.html" class="active">畅享</a>
+    <nav class="dw-nav">
+        <a href="index.html" class="dw-nav__brand">Dream <small>主页世界</small></a>
+        <div class="dw-nav__links">
+            <a href="index.html">名片</a>
+            <a href="origin.html">原创工坊</a>
+            <a href="resource.html" class="active">资源大厅</a>
         </div>
     </nav>
+
+    <div class="dw-container dw-container--wide">
+
+        <header class="dg-head">
+            <div class="dg-head__eyebrow">
+                <span class="yr">DREAM</span>
+                <span>资源大厅 · ARCHIVE</span>
+            </div>
+            <h1 class="dg-head__title">值得留下的<em>小工具</em></h1>
+        </header>
+
+        <section class="dg-rail">
+            <div class="dg-rail__head">
+                <ul class="category-list" id="categoryUl"></ul>
+            </div>
+        </section>
+
+    </div>
 
     <div class="main-container">
 
         <div class="sidebar-wrapper">
 
-            <div class="sidebar">
-                <div class="sidebar-title">📂 资源类别</div>
-                <ul class="category-list" id="categoryUl"></ul>
-            </div>
-
-            <div class="sidebar-notice-panel" id="noticePanel">
-                <div class="notice-sub-title">📢 工坊动态</div>
-                <div class="notice-carousel" id="noticeCarousel"></div>
-                <div class="notice-controls" id="noticeControls">
-                    <button class="notice-arrow" id="noticePrev">◀</button>
-                    <span class="notice-dots" id="noticeDots"></span>
-                    <button class="notice-arrow" id="noticeNext">▶</button>
+            <div class="sidebar-notice-panel" id="noticePanelDesktop">
+                <div class="notice-sub-title">📢 大厅动态</div>
+                <div class="notice-carousel" id="noticeCarouselDesktop"></div>
+                <div class="notice-controls" id="noticeControlsDesktop">
+                    <button class="notice-arrow" id="noticePrevDesktop">◀</button>
+                    <span class="notice-dots" id="noticeDotsDesktop"></span>
+                    <button class="notice-arrow" id="noticeNextDesktop">▶</button>
                 </div>
             </div>
 
@@ -1158,19 +967,6 @@
         </div>
 
         <div class="content-panel">
-
-            <div id="hotCarouselContainer">
-                <div class="hot-header">
-                    <span class="icon">🔥</span>
-                    <span class="title">热门推荐</span>
-                </div>
-                <div class="hot-wrapper">
-                    <div class="hot-track" id="hotTrack"></div>
-                    <div class="hot-indicators" id="hotIndicators"></div>
-                    <button class="hot-btn prev" id="hotPrev">‹</button>
-                    <button class="hot-btn next" id="hotNext">›</button>
-                </div>
-            </div>
 
             <div class="control-bar" id="controlBar">
                 <h2>当前视图：<span id="currentCategoryTitle">🏠 全部资源</span></h2>
@@ -1200,7 +996,7 @@
             </div>
 
             <div class="content-notice-panel" id="noticePanelMobile">
-                <div class="notice-sub-title">📢 工坊动态</div>
+                <div class="notice-sub-title">📢 大厅动态</div>
                 <div class="notice-carousel" id="noticeCarouselMobile"></div>
                 <div class="notice-controls" id="noticeControlsMobile">
                     <button class="notice-arrow" id="noticePrevMobile">◀</button>
@@ -1218,9 +1014,9 @@
 
     </div>
 
-    <footer class="site-footer">
-        <div id="friendLinksZone" class="friend-links-zone"></div>
-        <p>© 2026 Designed by <strong>Dream</strong>. All Rights Reserved.</p>
+    <footer class="dw-footer">
+        <div class="friends" id="friendLinks"><span class="friends__label">友情链接</span></div>
+        <p class="dw-footer__cr">&copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved. &nbsp;|&nbsp; <a href="#">回到顶部</a></p>
     </footer>
 
     <script>
@@ -1460,26 +1256,29 @@
                     productGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#EF4444;padding:40px;">⚠️ 数据加载失败，请检查 softwares.js 文件。</div>';
                     return false;
                 }
-                allProducts = ALL_SOFTWARES.products;
+                allProducts = ALL_SOFTWARES.products.filter(function (p) {
+                    return p.category !== '🎯 原创工具';
+                });
 
                 if (ALL_SOFTWARES.categories && Array.isArray(ALL_SOFTWARES.categories) && ALL_SOFTWARES.categories.length > 0) {
-                    categories = ["全部资源", ...ALL_SOFTWARES.categories];
+                    categories = ['全部资源'].concat(ALL_SOFTWARES.categories.filter(function (c) {
+                        return c !== '🎯 原创工具';
+                    }));
                 } else {
                     const catSet = new Set();
                     allProducts.forEach(p => { if (p.category) catSet.add(p.category); });
-                    categories = ["全部资源", ...Array.from(catSet)];
+                    categories = ['全部资源'].concat(Array.from(catSet));
                 }
 
-                loadHotCarousel();
                 loadRecommendations();
                 loadFriendLinks();
 
                 initNoticeBoard({
-                    containerId: 'noticePanel',
-                    carouselId: 'noticeCarousel',
-                    dotsId: 'noticeDots',
-                    prevId: 'noticePrev',
-                    nextId: 'noticeNext',
+                    containerId: 'noticePanelDesktop',
+                    carouselId: 'noticeCarouselDesktop',
+                    dotsId: 'noticeDotsDesktop',
+                    prevId: 'noticePrevDesktop',
+                    nextId: 'noticeNextDesktop',
                     interval: 5000
                 });
                 initNoticeBoard({
@@ -1494,113 +1293,11 @@
                 return true;
             }
 
-            function loadHotCarousel() {
-                const container = document.getElementById('hotCarouselContainer');
-                const track = document.getElementById('hotTrack');
-                const indicators = document.getElementById('hotIndicators');
-                const prevBtn = document.getElementById('hotPrev');
-                const nextBtn = document.getElementById('hotNext');
-
-                let hotIds = [];
-                if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.hotRecommendIds) {
-                    hotIds = ALL_SOFTWARES.hotRecommendIds;
-                }
-                const hotItems = allProducts.filter(p => hotIds.includes(p.id));
-
-                if (hotItems.length === 0) {
-                    container.style.display = 'none';
-                    return;
-                }
-                container.style.display = 'block';
-                track.innerHTML = '';
-                indicators.innerHTML = '';
-
-                hotItems.forEach((product, index) => {
-                    const slide = document.createElement('a');
-                    slide.className = 'hot-slide';
-                    let detailUrl, targetAttr = '';
-                    if (product.detailPageType === "自定义模板" && product.detailPagePath) {
-                        detailUrl = product.detailPagePath;
-                        targetAttr = '_blank';
-                    } else {
-                        detailUrl = 'tail.html?id=' + product.id;
-                    }
-                    slide.href = detailUrl;
-                    if (targetAttr) slide.target = targetAttr;
-
-                    const img = document.createElement('img');
-                    const logo = product.mainImage && product.mainImage.trim() !== '' ? product.mainImage : 'logo/default.png';
-                    img.src = logo;
-                    img.alt = product.name;
-                    img.onerror = function() { this.onerror = null; this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%234A90E2%22 width=%2296%22 height=%2296%22/%3E%3Ctext x=%2248%22 y=%2256%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22%3E?%3C/text%3E%3C/svg%3E'; };
-
-                    const info = document.createElement('div');
-                    info.className = 'info';
-                    const title = document.createElement('h3');
-                    title.textContent = product.name;
-                    const desc = document.createElement('p');
-                    const shortDesc = product.description ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) + '...' : '点击查看详情';
-                    desc.textContent = shortDesc;
-
-                    info.appendChild(title);
-                    info.appendChild(desc);
-                    slide.appendChild(img);
-                    slide.appendChild(info);
-                    track.appendChild(slide);
-
-                    const dot = document.createElement('button');
-                    dot.className = 'hot-dot' + (index === 0 ? ' active' : '');
-                    dot.dataset.index = index;
-                    indicators.appendChild(dot);
-                });
-
-                let currentIndex = 0;
-                const total = hotItems.length;
-                let autoTimer = null;
-
-                function goTo(index) {
-                    if (index < 0) index = total - 1;
-                    if (index >= total) index = 0;
-                    currentIndex = index;
-                    track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
-                    document.querySelectorAll('.hot-dot').forEach(function(dot, i) {
-                        dot.classList.toggle('active', i === currentIndex);
-                    });
-                }
-
-                function nextSlide() { goTo(currentIndex + 1); }
-                function prevSlide() { goTo(currentIndex - 1); }
-
-                prevBtn.addEventListener('click', function() { prevSlide(); resetAutoPlay(); });
-                nextBtn.addEventListener('click', function() { nextSlide(); resetAutoPlay(); });
-
-                document.querySelectorAll('.hot-dot').forEach(function(dot) {
-                    dot.addEventListener('click', function() {
-                        const idx = parseInt(this.dataset.index, 10);
-                        if (!isNaN(idx)) { goTo(idx); resetAutoPlay(); }
-                    });
-                });
-
-                function startAutoPlay() {
-                    if (autoTimer) clearInterval(autoTimer);
-                    autoTimer = setInterval(nextSlide, 5000);
-                }
-                function resetAutoPlay() {
-                    clearInterval(autoTimer);
-                    startAutoPlay();
-                }
-                startAutoPlay();
-
-                const wrapper = document.querySelector('.hot-wrapper');
-                wrapper.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
-                wrapper.addEventListener('mouseleave', startAutoPlay);
-                wrapper.addEventListener('touchstart', function() { clearInterval(autoTimer); }, { passive: true });
-                wrapper.addEventListener('touchend', startAutoPlay, { passive: true });
-            }
-
             function loadRecommendations() {
                 const sideList = document.getElementById('recommendList');
-                const recommends = allProducts.filter(p => p.isRecommend === true);
+
+                // 精品推荐只收资源大厅商品：原创工具（🎯 原创工具）有自己的工坊热榜，不进精品橱窗
+                const recommends = ALL_SOFTWARES.products.filter(p => p.isRecommend === true && p.category !== '🎯 原创工具');
                 if (recommends.length === 0) {
                     document.getElementById('recommendZone').style.display = 'none';
                     document.getElementById('mobileRecommend').style.display = 'none';
@@ -1627,26 +1324,20 @@
                 if (mobileList) mobileList.innerHTML = sideHtml;
             }
 
+            /* 友情链接：读 softwares.js 的 friendLinks 动态填充（与首页同一套） */
             function loadFriendLinks() {
-                const zone = document.getElementById('friendLinksZone');
-                if (!zone) return;
-                if (ALL_SOFTWARES.friendLinks && ALL_SOFTWARES.friendLinks.length > 0) {
-                    let linksHtml = '<span style="color:#64748b; margin-right:4px;">友情链接：</span>';
-                    ALL_SOFTWARES.friendLinks.forEach(function(link) {
-                        if (link.siteName && link.jumpUrl && link.jumpUrl !== 'http://') {
-                            linksHtml += '<a href="' + link.jumpUrl + '" target="_blank" class="friend-link-node">' +
-                                link.siteName + '</a>';
-                        }
-                    });
-                    if (linksHtml) {
-                        zone.innerHTML = linksHtml;
-                        zone.style.display = 'flex';
-                    } else {
-                        zone.style.display = 'none';
-                    }
-                } else {
-                    zone.style.display = 'none';
-                }
+                const box = document.getElementById('friendLinks');
+                if (!box) { return; }
+                const list = (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks)
+                    ? ALL_SOFTWARES.friendLinks.filter(function (f) {
+                        return f.siteName && f.jumpUrl
+                            && f.jumpUrl.trim() !== '' && f.jumpUrl !== 'http://';
+                    }) : [];
+                if (!list.length) { box.style.display = 'none'; return; }
+                box.insertAdjacentHTML('beforeend', list.map(function (f) {
+                    return '<a href="' + f.jumpUrl + '" target="_blank" rel="noopener">'
+                         + (f.siteName || '友链') + '</a>';
+                }).join(''));
             }
 
             function getFilteredCount() {
@@ -1707,6 +1398,9 @@
                         '<div class="item-title-row">' +
                         '<span class="item-zodiac">' + zodiac + '</span>' +
                         '<span class="item-title" title="' + product.name + '">' + product.name + '</span>' +
+                        '</div>' +
+                        '<div class="item-meta-line">' +
+                        '<span class="m-size">📦 ' + (product.size ? product.size : '—') + '</span>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原创工坊 · Dream</title>
+    <meta name="description" content="Dream 自研项目：PVZ Player、歌词跳转音乐播放器、IcoX 图标转换器等原创桌面工具。" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/base.css" />
+    <link rel="stylesheet" href="assets/detail.css" />
+    <style>
+
+        body {
+            font-family: var(--font-sans);
+        }
+
+        .og-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+
+        .og-work {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            padding: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--line-base);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 24px var(--shadow-soft);
+            transition: box-shadow var(--dur-base) var(--ease),
+                        border-color var(--dur-base) var(--ease),
+                        transform var(--dur-base) var(--ease);
+        }
+
+        .og-work:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-line);
+            box-shadow: 0 12px 40px var(--shadow-hover);
+        }
+
+        .og-work__visual {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--accent-pale), rgba(255,255,255,0.4));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 16px;
+        }
+
+        .og-work__visual img {
+            max-width: 100%;
+            max-height: 160px;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.10));
+            transition: transform var(--dur-slow) var(--ease);
+        }
+
+        .og-work:hover .og-work__visual img {
+            transform: scale(1.05);
+        }
+
+        .og-work__flag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 2px 10px;
+            border-radius: var(--radius-pill);
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 10px var(--accent-line);
+        }
+
+        .og-work__body {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .og-work__head {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .og-work__name {
+            font-size: 1.22rem;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1.3;
+        }
+
+        .og-work__version {
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--accent-pale);
+            padding: 1px 8px;
+            border-radius: var(--radius-xs);
+        }
+
+        .og-work__desc {
+            font-size: 0.86rem;
+            color: var(--ink-soft);
+            line-height: 1.85;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .og-work__points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 18px;
+            margin-bottom: 16px;
+        }
+
+        .og-work__point {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: var(--fs-sm);
+            color: var(--ink-mute);
+            line-height: 1.6;
+        }
+
+        .og-work__point i {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .og-work__foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding-top: 14px;
+            border-top: 1px dashed var(--line-base);
+        }
+
+        .og-work__meta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: var(--fs-xs);
+            color: var(--ink-ghost);
+        }
+
+        .og-work__meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .og-work__actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .og-work__actions .dw-btn {
+            padding: 8px 20px;
+            font-size: var(--fs-sm);
+        }
+
+        .og-empty {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--ink-ghost);
+            font-size: var(--fs-base);
+        }
+
+        .og-hot { margin: 2px 0 24px; }
+        .og-hot .hot-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+        }
+        .og-hot .hot-header .icon { font-size: 1.4rem; }
+        .og-hot .hot-header .title {
+            font-weight: 700; font-size: 1.1rem; color: var(--ink);
+        }
+
+        .hot-wrapper {
+            position: relative; overflow: hidden;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 24px rgba(31, 38, 135, 0.10);
+        }
+        .hot-track {
+            display: flex; transition: transform 0.5s ease; will-change: transform;
+        }
+        .hot-slide {
+            flex: 0 0 100%; display: flex; align-items: center;
+            text-decoration: none; color: inherit;
+            padding: 20px 24px; min-height: 150px;
+            transition: background 0.3s; cursor: pointer;
+        }
+        .hot-slide:hover { background: var(--accent-pale); }
+        .hot-slide img {
+            width: 96px; height: 96px; object-fit: cover;
+            border-radius: 14px; margin-right: 24px; flex-shrink: 0;
+            background: #f1f5f9;
+        }
+        .hot-slide .info { flex: 1; min-width: 0; }
+        .hot-slide .info h3 {
+            font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+        }
+        .hot-slide .info p {
+            font-size: 0.92rem; color: var(--ink-soft);
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; line-height: 1.5;
+        }
+        .hot-indicators {
+            position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; z-index: 2;
+        }
+        .hot-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(74, 144, 226, 0.2); cursor: pointer;
+            border: none; padding: 0; transition: background 0.3s;
+        }
+        .hot-dot.active { background: var(--accent); }
+        .hot-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px);
+            border: 1px solid var(--accent-line); border-radius: 50%;
+            width: 36px; height: 36px; font-size: 1.3rem; cursor: pointer; z-index: 3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--ink-soft); transition: background 0.2s; line-height: 1;
+        }
+        .hot-btn:hover { background: rgba(255, 255, 255, 0.9); }
+        .hot-btn.prev { left: 8px; }
+        .hot-btn.next { right: 8px; }
+
+        @media (max-width: 640px) {
+            .hot-slide { padding: 16px 16px 44px; min-height: 130px; }
+            .hot-slide img { width: 76px; height: 76px; margin-right: 16px; }
+            .hot-slide .info h3 { font-size: 1rem; }
+            .hot-slide .info p { font-size: 0.82rem; }
+            .hot-btn { width: 30px; height: 30px; font-size: 1.1rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hot-track { transition: none; }
+        }
+
+        @media (max-width: 820px) {
+            .og-work {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .og-work__visual {
+                min-height: 140px;
+            }
+            .og-work__visual img {
+                max-height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .og-work { padding: 16px; }
+            .og-work__name { font-size: 1.05rem; }
+            .og-work__foot { flex-direction: column; align-items: stretch; }
+            .og-work__actions .dw-btn { flex: 1; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="product-theme" data-accent="blue">
+
+    <nav class="dw-nav">
+        <a href="index.html" class="dw-nav__brand">Dream <small>主页世界</small></a>
+        <div class="dw-nav__links">
+            <a href="index.html">名片</a>
+            <a href="origin.html" class="active">原创工坊</a>
+            <a href="resource.html">资源大厅</a>
+        </div>
+    </nav>
+
+    <div class="dw-container">
+
+        <header class="dg-head">
+            <div class="dg-head__eyebrow">
+                <span class="yr">DREAM</span>
+                <span>原创工坊 · ORIGINALS</span>
+            </div>
+            <h1 class="dg-head__title">我设计的<em>每一部作品</em></h1>
+            <div class="dg-head__meta">
+                <p class="dg-head__note">
+                    每个工具都始于一句“要是能这样就好了”。念头在脑子里产生了，就动手让它在屏幕上跑起来。
+                </p>
+                <div class="dg-head__stats">
+                    <div>
+                        <div class="dg-stat__num" id="statCount">-</div>
+                        <div class="dg-stat__label">在架作品</div>
+                    </div>
+                    <div>
+                        <div class="dg-stat__num" id="statSize">-</div>
+                        <div class="dg-stat__label">累计体积</div>
+                    </div>
+                    <div>
+                        <div class="dg-stat__num">100%</div>
+                        <div class="dg-stat__label">原创独立</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="og-hot" id="hotCarouselContainer">
+            <div class="hot-header">
+                <span class="icon" aria-hidden="true">🔥</span>
+                <span class="title">本期热门</span>
+            </div>
+            <div class="hot-wrapper">
+                <div class="hot-track" id="hotTrack"></div>
+                <div class="hot-indicators" id="hotIndicators"></div>
+                <button class="hot-btn prev" id="hotPrev" type="button" aria-label="上一个">‹</button>
+                <button class="hot-btn next" id="hotNext" type="button" aria-label="下一个">›</button>
+            </div>
+        </section>
+
+        <main class="og-list" id="workList">
+            <div class="og-empty">正在加载作品…</div>
+        </main>
+
+    </div>
+
+    <footer class="dw-footer">
+        <div class="friends" id="friendLinks"><span class="friends__label">友情链接</span></div>
+        <p class="dw-footer__cr">&copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved. &nbsp;|&nbsp; <a href="#">回到顶部</a></p>
+    </footer>
+
+    <script src="softwares.js"></script>
+    <script>
+        (function () {
+            'use strict';
+
+            var ORIGIN_CAT = '🎯 原创工具';
+
+            function esc(s) {
+                return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+                });
+            }
+
+            function detailHref(p) {
+                if (p.detailPageType === '自定义模板' && p.customPagePath) {
+                    return encodeURI(p.customPagePath);
+                }
+                return 'tail.html?id=' + encodeURIComponent(p.id);
+            }
+
+            function extractPoints(desc) {
+                if (!desc) return [];
+                var lines = desc.split(/\r?\n/).map(function (s) { return s.trim(); });
+                var out = [];
+                for (var i = 0; i < lines.length; i++) {
+                    var l = lines[i];
+                    if (!l || l.length > 44) continue;
+                    if (/^(p\.s\.|关于|如果|注意)/.test(l)) continue;
+                    if (/https?:\/\//.test(l)) continue;
+                    if (l.indexOf('Windows 7 特别提示') >= 0) continue;
+                    out.push(l);
+                    if (out.length >= 4) break;
+                }
+                return out;
+            }
+
+            function sizeToMB(s) {
+                if (!s) return 0;
+                var m = String(s).match(/([\d.]+)\s*(KB|MB|GB|kb|mb|gb)?/);
+                if (!m) return 0;
+                var n = parseFloat(m[1]);
+                var u = (m[2] || 'MB').toUpperCase();
+                if (u === 'KB') return n / 1024;
+                if (u === 'GB') return n * 1024;
+                return n;
+            }
+
+            function render() {
+                var listEl = document.getElementById('workList');
+                if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
+                    listEl.innerHTML = '<div class="og-empty">未检测到数据底座 softwares.js</div>';
+                    return;
+                }
+
+                var works = ALL_SOFTWARES.products.filter(function (p) {
+                    return p.category === ORIGIN_CAT;
+                });
+
+                if (!works.length) {
+                    listEl.innerHTML = '<div class="og-empty">暂无原创作品</div>';
+                    return;
+                }
+
+                var totalMB = works.reduce(function (acc, p) {
+                    return acc + sizeToMB(p.size);
+                }, 0);
+                document.getElementById('statCount').textContent = works.length;
+                document.getElementById('statSize').textContent =
+                    totalMB >= 1024 ? (totalMB / 1024).toFixed(1) + ' GB'
+                                    : (totalMB >= 10 ? Math.round(totalMB) + ' MB'
+                                                     : totalMB.toFixed(1) + ' MB');
+
+                listEl.innerHTML = works.map(function (p) {
+                    var points = extractPoints(p.description);
+                    var href = detailHref(p);
+
+                    var pointsHtml = points.length
+                        ? '<div class="og-work__points">'
+                          + points.map(function (t) {
+                                return '<span class="og-work__point"><i>✓</i>' + esc(t) + '</span>';
+                            }).join('')
+                          + '</div>'
+                        : '';
+
+                    var metaHtml = '<div class="og-work__meta">'
+                        + (p.size ? '<span>📦 ' + esc(p.size) + '</span>' : '')
+                        + (p.environment ? '<span>🖥 ' + esc(p.environment) + '</span>' : '')
+                        + (p.weight ? '<span>' + esc(p.weight.replace(/\s*原创\s*$/, '')) + '</span>' : '')
+                        + '</div>';
+
+                    return '<article class="og-work">'
+                        + '<div class="og-work__visual">'
+                        +   '<span class="og-work__flag">原创</span>'
+                        +   (p.mainImage
+                                ? '<img src="' + esc(p.mainImage) + '" alt="' + esc(p.name) + '" loading="lazy">'
+                                : '')
+                        + '</div>'
+                        + '<div class="og-work__body">'
+                        +   '<div class="og-work__head">'
+                        +     '<h2 class="og-work__name">' + esc(p.name) + '</h2>'
+                        +     (p.version ? '<span class="og-work__version">v' + esc(p.version) + '</span>' : '')
+                        +   '</div>'
+                        +   '<p class="og-work__desc">'
+                        +     esc((p.description || '').split(/\r?\n/)[0] || '')
+                        +   '</p>'
+                        +   pointsHtml
+                        +   '<div class="og-work__foot">'
+                        +     metaHtml
+                        +     '<div class="og-work__actions">'
+                        +       '<a class="dw-btn" href="' + href + '">查看详情</a>'
+                        +     '</div>'
+                        +   '</div>'
+                        + '</div>'
+                        + '</article>';
+                }).join('');
+
+                document.title = '原创工坊 · ' + works.length + ' 件作品 · Dream';
+            }
+
+            function loadHotCarousel() {
+                var container = document.getElementById('hotCarouselContainer');
+                if (!container) return;
+                var track = document.getElementById('hotTrack');
+                var indicators = document.getElementById('hotIndicators');
+                var prevBtn = document.getElementById('hotPrev');
+                var nextBtn = document.getElementById('hotNext');
+                if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
+                    container.style.display = 'none';
+                    return;
+                }
+
+                var pool = ALL_SOFTWARES.products.filter(function (p) {
+                    return p.category === ORIGIN_CAT;
+                });
+                var hotIds = ALL_SOFTWARES.hotRecommendIds || [];
+                var hotItems = pool.filter(function (p) { return hotIds.indexOf(p.id) >= 0; });
+                if (!hotItems.length) hotItems = pool.filter(function (p) { return p.isRecommend === true; });
+                if (!hotItems.length) hotItems = pool.slice(0, 3);
+                if (!hotItems.length) { container.style.display = 'none'; return; }
+                container.style.display = 'block';
+                track.innerHTML = '';
+                indicators.innerHTML = '';
+
+                hotItems.forEach(function (product, index) {
+                    var slide = document.createElement('a');
+                    slide.className = 'hot-slide';
+                    slide.href = detailHref(product);
+                    if (detailHref(product).indexOf('http') === 0) slide.target = '_blank';
+
+                    var img = document.createElement('img');
+                    img.src = (product.mainImage && product.mainImage.trim() !== '') ? product.mainImage : 'logo/default.png';
+                    img.alt = product.name;
+                    img.onerror = function () {
+                        this.onerror = null;
+                        this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%234A90E2%22 width=%2296%22 height=%2296%22/%3E%3Ctext x=%2248%22 y=%2256%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22%3E?%3C/text%3E%3C/svg%3E';
+                    };
+
+                    var info = document.createElement('div');
+                    info.className = 'info';
+                    var title = document.createElement('h3');
+                    title.textContent = product.name;
+                    var desc = document.createElement('p');
+                    desc.textContent = product.description
+                        ? product.description.replace(/\r?\n/g, ' ').substring(0, 60) + '...'
+                        : '点击查看详情';
+                    info.appendChild(title);
+                    info.appendChild(desc);
+                    slide.appendChild(img);
+                    slide.appendChild(info);
+                    track.appendChild(slide);
+
+                    var dot = document.createElement('button');
+                    dot.className = 'hot-dot' + (index === 0 ? ' active' : '');
+                    dot.dataset.index = index;
+                    indicators.appendChild(dot);
+                });
+
+                var currentIndex = 0;
+                var total = hotItems.length;
+                var autoTimer = null;
+
+                function goTo(index) {
+                    if (index < 0) index = total - 1;
+                    if (index >= total) index = 0;
+                    currentIndex = index;
+                    track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+                    Array.prototype.forEach.call(indicators.querySelectorAll('.hot-dot'), function (dot, i) {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                }
+                function nextSlide() { goTo(currentIndex + 1); }
+                function prevSlide() { goTo(currentIndex - 1); }
+                function startAutoPlay() {
+                    if (autoTimer) clearInterval(autoTimer);
+                    autoTimer = setInterval(nextSlide, 5000);
+                }
+                function resetAutoPlay() {
+                    clearInterval(autoTimer);
+                    startAutoPlay();
+                }
+
+                prevBtn.addEventListener('click', function () { prevSlide(); resetAutoPlay(); });
+                nextBtn.addEventListener('click', function () { nextSlide(); resetAutoPlay(); });
+                Array.prototype.forEach.call(indicators.querySelectorAll('.hot-dot'), function (dot) {
+                    dot.addEventListener('click', function () {
+                        var idx = parseInt(this.dataset.index, 10);
+                        if (!isNaN(idx)) { goTo(idx); resetAutoPlay(); }
+                    });
+                });
+                startAutoPlay();
+
+                var wrapper = container.querySelector('.hot-wrapper');
+                wrapper.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+                wrapper.addEventListener('mouseleave', startAutoPlay);
+                wrapper.addEventListener('touchstart', function () { clearInterval(autoTimer); }, { passive: true });
+                wrapper.addEventListener('touchend', startAutoPlay, { passive: true });
+            }
+
+            function boot() { render(); loadHotCarousel(); }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', boot);
+            } else {
+                boot();
+            }
+
+            console.log('Dream 原创工坊已加载');
+
+            /* 友情链接：读 softwares.js 的 friendLinks 动态填充（与首页同一套） */
+            function loadFriendLinks() {
+                const box = document.getElementById('friendLinks');
+                if (!box) { return; }
+                const list = (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks)
+                    ? ALL_SOFTWARES.friendLinks.filter(function (f) {
+                        return f.siteName && f.jumpUrl
+                            && f.jumpUrl.trim() !== '' && f.jumpUrl !== 'http://';
+                    }) : [];
+                if (!list.length) { box.style.display = 'none'; return; }
+                box.insertAdjacentHTML('beforeend', list.map(function (f) {
+                    return '<a href="' + f.jumpUrl + '" target="_blank" rel="noopener">'
+                         + (f.siteName || '友链') + '</a>';
+                }).join(''));
+            }
+
+            loadFriendLinks();
+        })();
+    </script>
+</body>
+</html>

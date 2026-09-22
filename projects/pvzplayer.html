@@ -1,0 +1,1291 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+    <title>PvZ Player - 植物大战僵尸最佳体验工具</title>
+    <meta name="description" content="PvZ Player 是植物大战僵尸的增强体验工具，支持阵营工坊、传送带控制、禅境花园管家、无限阳光，全 Windows 系统兼容。">
+    <meta name="keywords" content="植物大战僵尸,PvZ,PVZ Player,修改器,辅助,塔防">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --pvz-green: #43A047;
+            --pvz-green-dark: #2E7D32;
+            --pvz-green-light: #66BB6A;
+            --pvz-green-pale: #E8F5E9;
+            --pvz-brown: #6D4C41;
+            --pvz-sun: #FFB300;
+            --pvz-sun-light: #FFCA28;
+            --pvz-sun-pale: #FFF8E1;
+            --pvz-zombie: #8BC34A;
+            --pvz-bg-start: #F1F8F1;
+            --pvz-bg-end: #E3F2E3;
+            --pvz-bg-card: rgba(255, 255, 255, 0.82);
+            --pvz-bg-card-hover: rgba(255, 255, 255, 0.95);
+            --pvz-border: rgba(67, 160, 71, 0.15);
+            --pvz-border-hover: rgba(67, 160, 71, 0.35);
+            --pvz-text: #1B3A1D;
+            --pvz-text-secondary: #4A6B4C;
+            --pvz-text-dim: #7A9A7C;
+            --shadow-soft: rgba(67, 160, 71, 0.08);
+            --shadow-hover: rgba(67, 160, 71, 0.18);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            /* 横向溢出约束必须放 html：body 上写 overflow-x:hidden 会让 sticky 导航失效 */
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, 'Noto Sans SC', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(160deg, var(--pvz-bg-start) 0%, var(--pvz-bg-end) 100%);
+            color: var(--pvz-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(67, 160, 71, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(255, 179, 0, 0.06) 0%, transparent 45%),
+                repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(67, 160, 71, 0.025) 60px, rgba(67, 160, 71, 0.025) 61px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.75);
+            border-bottom: 1px solid var(--pvz-border);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            /* 导航与品牌同排靠左，跟全站 dw-nav 方向统一 */
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            box-shadow: 0 2px 12px var(--shadow-soft);
+        }
+
+        .navbar .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--pvz-green-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar .logo .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--pvz-green), var(--pvz-sun));
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(67, 160, 71, 0.25);
+        }
+
+        .navbar .logo small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--pvz-text-dim);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--pvz-text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--pvz-green-dark);
+            background: rgba(67, 160, 71, 0.08);
+        }
+
+        .nav-links a.active {
+            color: var(--pvz-green-dark);
+            background: rgba(255, 179, 0, 0.15);
+        }
+
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            background: rgba(67, 160, 71, 0.1);
+            border: 1px solid rgba(67, 160, 71, 0.25);
+            color: var(--pvz-green-dark);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s var(--transition) both;
+        }
+
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--pvz-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s var(--transition) 0.1s both;
+            color: var(--pvz-text);
+        }
+
+        .hero h1 .hl-green {
+            background: linear-gradient(135deg, var(--pvz-green-dark), var(--pvz-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .hl-sun {
+            background: linear-gradient(135deg, var(--pvz-sun), var(--pvz-sun-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--pvz-text-secondary);
+            max-width: 640px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.6s var(--transition) 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s var(--transition) 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pvz-green), var(--pvz-green-dark));
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(67, 160, 71, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(67, 160, 71, 0.45);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--pvz-green-dark);
+            border: 1px solid var(--pvz-border);
+            box-shadow: 0 2px 8px var(--shadow-soft);
+        }
+
+        .btn-secondary:hover {
+            background: #fff;
+            border-color: var(--pvz-green);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow-hover);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            padding: 32px 24px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s var(--transition) 0.4s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--pvz-green-dark);
+            display: block;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--pvz-text-dim);
+            margin-top: 4px;
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 12px;
+            color: var(--pvz-text);
+        }
+
+        .section-desc {
+            text-align: center;
+            color: var(--pvz-text-secondary);
+            margin-bottom: 48px;
+            font-size: 0.95rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--pvz-bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--pvz-border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            transition: all 0.4s var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px var(--shadow-soft);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pvz-green), var(--pvz-sun));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--pvz-border-hover);
+            box-shadow: 0 12px 40px var(--shadow-hover);
+            background: var(--pvz-bg-card-hover);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--pvz-green-pale), var(--pvz-sun-pale));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            border: 1px solid rgba(67, 160, 71, 0.12);
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--pvz-text);
+        }
+
+        .feature-card p {
+            font-size: 0.85rem;
+            color: var(--pvz-text-secondary);
+            line-height: 1.7;
+        }
+
+        .preview-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .preview-window {
+            background: var(--pvz-bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--pvz-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(67, 160, 71, 0.12);
+        }
+
+        .preview-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(67, 160, 71, 0.06);
+            border-bottom: 1px solid var(--pvz-border);
+        }
+
+        .preview-titlebar .traffic-light {
+            display: flex;
+            gap: 6px;
+        }
+
+        .preview-titlebar .traffic-light span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .preview-titlebar .traffic-light span:nth-child(1) { background: #FF5F57; }
+        .preview-titlebar .traffic-light span:nth-child(2) { background: #FFBD2E; }
+        .preview-titlebar .traffic-light span:nth-child(3) { background: #28CA42; }
+
+        .preview-titlebar .title {
+            font-size: 0.8rem;
+            color: var(--pvz-text-dim);
+            margin-left: 8px;
+        }
+
+        /* ===== 主视觉：大图 + 缩略图切换 ===== */
+        /* 高度策略：min-height 兜底（空态/极扁图），max-height 兜顶（不让窄图撑出屏）。
+           浏览器按图片原始宽高比自动算出高度，无需固定 clamp，宽窄图都能完整显示。 */
+        .viewer-stage {
+            position: relative; display: flex; align-items: center; justify-content: center;
+            min-height: 340px; max-height: min(70vh, 620px);
+            padding: 24px 64px; overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 35%, rgba(67, 160, 71, 0.08) 0%, transparent 65%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(232, 245, 233, 0.35));
+        }
+        .viewer-img-box {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; max-width: 100%; max-height: 100%;
+        }
+        .viewer-img-box img {
+            display: block; border-radius: 12px; background: #fff; cursor: zoom-in;
+            box-shadow: 0 12px 40px rgba(27, 58, 29, 0.20);
+            animation: viewerIn 0.45s var(--transition) both;
+            /* 关键：让浏览器按图片原始比例分配空间，
+               max-width/max-height 约束保证不超出 viewer-stage */
+            width: auto; height: auto;
+            max-width: 100%; max-height: 100%;
+            object-fit: contain;
+        }
+        @keyframes viewerIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+        .viewer-nav {
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+            width: 42px; height: 42px; border-radius: 50%; flex: none; cursor: pointer;
+            border: 1px solid var(--pvz-border); background: rgba(255, 255, 255, 0.92);
+            color: var(--pvz-green-dark); font-size: 1.5rem; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px var(--shadow-soft); transition: all 0.3s var(--transition);
+        }
+        .viewer-nav:hover { background: #fff; border-color: var(--pvz-green); box-shadow: 0 8px 24px var(--shadow-hover); }
+        .viewer-nav.prev { left: 12px; }
+        .viewer-nav.next { right: 12px; }
+        .viewer-nav[disabled] { opacity: 0.25; cursor: default; }
+
+        .viewer-counter {
+            position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px;
+            padding: 3px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+            background: rgba(255, 255, 255, 0.9); color: var(--pvz-text-secondary);
+            border: 1px solid var(--pvz-border);
+        }
+        .viewer-tip {
+            position: absolute; top: 12px; right: 14px; pointer-events: none;
+            font-size: 0.7rem; color: var(--pvz-text-dim); padding: 3px 10px;
+            background: rgba(255, 255, 255, 0.78); border-radius: 20px;
+        }
+
+        .viewer-thumbs {
+            display: flex; gap: 10px; padding: 14px 16px; overflow-x: auto;
+            border-top: 1px solid var(--pvz-border); background: rgba(255, 255, 255, 0.55);
+            scrollbar-width: thin;
+        }
+        .viewer-thumbs::-webkit-scrollbar { height: 6px; }
+        .viewer-thumbs::-webkit-scrollbar-thumb { background: rgba(67, 160, 71, 0.28); border-radius: 3px; }
+        .viewer-thumb {
+            flex: none; width: 132px; padding: 0; cursor: pointer;
+            border: 2px solid transparent; border-radius: 8px; overflow: hidden;
+            background: #fff; opacity: 0.65; transition: all 0.25s var(--transition);
+            box-shadow: 0 2px 8px rgba(27, 58, 29, 0.06);
+        }
+        /* 缩略图按原图比例展示：容器高度由图片撑开，避免被强制裁切丢内容。
+           限定最大高度保证窄屏不至于过高破坏视觉节奏。 */
+        .viewer-thumb img {
+            display: block; width: 100%; height: 76px;
+            object-fit: cover; object-position: center top;
+        }
+        .viewer-thumb:hover { opacity: 1; }
+        .viewer-thumb.active { opacity: 1; border-color: var(--pvz-green); box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.14); }
+
+        .viewer-empty { text-align: center; color: var(--pvz-text-dim); padding: 24px; }
+        .viewer-empty .big-emoji { font-size: 3.2rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* ===== 图片容器通用：骨架屏 / 失败兜底 ===== */
+        .shot-frame { position: relative; overflow: hidden; background: #fff;
+            display: flex; align-items: center; justify-content: center; }
+        .shot-frame > img { display: block; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.4s var(--transition), transform 0.5s var(--transition); }
+        .shot-frame.loading > img { opacity: 0; }
+        .shot-frame.loading::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(90deg, rgba(67, 160, 71, 0.04) 25%, rgba(67, 160, 71, 0.13) 37%, rgba(67, 160, 71, 0.04) 63%);
+            background-size: 400% 100%; animation: shimmer 1.4s linear infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+        .shot-broken {
+            min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; padding: 20px; text-align: center; color: var(--pvz-text-dim);
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(67, 160, 71, 0.05) 10px, rgba(67, 160, 71, 0.05) 11px);
+        }
+        .shot-broken span { font-size: 1.8rem; }
+        .shot-broken b { font-size: 0.82rem; color: var(--pvz-text-secondary); }
+        .shot-broken small { font-size: 0.7rem; opacity: 0.75; max-width: 260px; word-break: break-all; }
+
+        /* 更新日志：数据来自 products[].description，为空时整区隐藏 */
+        .release-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .release-card {
+            background: var(--pvz-bg-card); border: 1px solid var(--pvz-border);
+            border-radius: var(--radius); box-shadow: 0 4px 16px var(--shadow-soft);
+            padding: 26px 30px;
+        }
+
+        .release-head {
+            display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px;
+            padding-bottom: 14px; margin-bottom: 14px;
+            border-bottom: 1px solid var(--pvz-border);
+        }
+
+        .release-ver { font-size: 1.2rem; font-weight: 700; color: var(--pvz-green-dark); }
+        .release-date { font-size: 0.82rem; color: var(--pvz-text-dim); }
+        .release-list { margin: 0; padding-left: 20px; }
+        .release-list li { font-size: 0.92rem; line-height: 1.95; color: var(--pvz-text-secondary); }
+
+        .download-section {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .download-card {
+            background: linear-gradient(145deg, rgba(67, 160, 71, 0.1), rgba(255, 179, 0, 0.08));
+            border: 1px solid rgba(67, 160, 71, 0.2);
+            border-radius: var(--radius);
+            padding: 48px 32px;
+            box-shadow: 0 8px 32px var(--shadow-soft);
+        }
+
+        .download-card h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--pvz-text);
+        }
+
+        .download-card p {
+            color: var(--pvz-text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .download-note {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: var(--pvz-text-dim);
+            opacity: 0.85;
+        }
+
+        /* ===== 大图查看器 ===== */
+        .image-modal {
+            display: none; position: fixed; inset: 0; background: rgba(9, 26, 11, 0.84);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            z-index: 9999; align-items: center; justify-content: center;
+        }
+        .image-modal.active { display: flex; }
+        .lb-stage { position: relative; width: 92vw; height: 80vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .lb-stage img {
+            max-width: 100%; max-height: 100%; object-fit: contain; display: block;
+            border-radius: 10px; background: #fff; box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+            cursor: zoom-in; user-select: none; -webkit-user-drag: none; touch-action: none;
+            transform-origin: center center; will-change: transform;
+        }
+        .lb-stage img.is-actual { max-width: none; max-height: none; }
+        .lb-stage img.is-drag { cursor: grabbing; }
+
+        .lb-close, .lb-nav {
+            position: absolute; z-index: 5; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.26); background: rgba(255, 255, 255, 0.12); color: #fff;
+            border-radius: 50%; backdrop-filter: blur(8px); transition: all 0.3s var(--transition);
+        }
+        .lb-close:hover, .lb-nav:hover { background: rgba(255, 255, 255, 0.26); }
+        .lb-close { top: 20px; right: 22px; width: 42px; height: 42px; font-size: 1.3rem; }
+        .lb-close:hover { transform: rotate(90deg); }
+        .lb-nav { top: 50%; transform: translateY(-50%); width: 50px; height: 50px; font-size: 1.9rem; line-height: 1; }
+        .lb-nav.prev { left: 18px; }
+        .lb-nav.next { right: 18px; }
+        .lb-nav[hidden] { display: none; }
+
+        .lb-bar {
+            position: absolute; left: 0; right: 0; bottom: 18px; z-index: 5;
+            display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+            padding: 0 16px; color: rgba(255, 255, 255, 0.86); font-size: 0.78rem;
+        }
+        .lb-bar .lb-count { font-weight: 700; color: #fff; }
+        .lb-bar .lb-hint { opacity: 0.6; }
+        .lb-btn {
+            padding: 5px 13px; border-radius: 20px; cursor: pointer; font-size: 0.76rem; color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.24); background: rgba(255, 255, 255, 0.12);
+            transition: all 0.25s var(--transition);
+        }
+        .lb-btn:hover { background: rgba(255, 255, 255, 0.26); }
+        body.lb-open { overflow: hidden; }
+
+        /* ===== 免责声明弹窗 ===== */
+        .disclaimer-modal {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: rgba(9, 26, 11, 0.45); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            justify-content: center; align-items: center; padding: 24px;
+        }
+        .disclaimer-modal.active { display: flex; }
+        .disclaimer-box {
+            max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto;
+            background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 40px 44px; position: relative;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.20); border: 1px solid var(--pvz-border);
+            animation: disclaimerFade 0.3s ease;
+        }
+        @keyframes disclaimerFade { from { opacity: 0; transform: scale(0.96) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .disclaimer-box .close-btn {
+            position: sticky; top: 0; float: right; font-size: 2rem; font-weight: 300; line-height: 1;
+            color: var(--pvz-text-dim); background: none; border: none; cursor: pointer; transition: 0.2s; padding: 0 8px;
+        }
+        .disclaimer-box .close-btn:hover { color: var(--pvz-green-dark); transform: rotate(90deg); }
+        .disclaimer-box h2 {
+            font-size: 1.7rem; font-weight: 800; margin-bottom: 8px; color: var(--pvz-green-dark);
+        }
+        .disclaimer-box .subtitle {
+            color: var(--pvz-text-dim); font-size: 0.92rem;
+            border-bottom: 2px solid var(--pvz-border); padding-bottom: 16px; margin-bottom: 20px;
+        }
+        .disclaimer-box .clause { margin-bottom: 14px; padding-left: 16px; border-left: 3px solid var(--pvz-green); }
+        .disclaimer-box .clause strong { color: var(--pvz-text); display: inline-block; min-width: 24px; }
+        .disclaimer-box .clause p { color: var(--pvz-text-secondary); line-height: 1.7; font-size: 0.96rem; }
+        .disclaimer-box .contact { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--pvz-border); color: var(--pvz-text-secondary); }
+        .disclaimer-box .contact a { color: var(--pvz-green-dark); text-decoration: none; font-weight: 600; }
+        .disclaimer-box .contact a:hover { color: var(--pvz-sun); }
+        @media (max-width: 480px) { .disclaimer-box { padding: 28px 20px; } }
+
+        .footer {
+            text-align: center;
+            padding: 40px 24px 32px;
+            color: var(--pvz-text-dim);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--pvz-border);
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: var(--pvz-green-dark);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: var(--pvz-sun);
+        }
+
+        .footer .footer-sub {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer .footer-sub a {
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* 底部返回主页按钮（顶栏只留本页锚点，回主页收口在这里） */
+        .footer .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 18px;
+            padding: 10px 28px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--pvz-green-dark);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--pvz-border);
+            border-radius: 30px;
+            box-shadow: 0 2px 10px var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+        .footer .back-home:hover {
+            color: #fff;
+            background: linear-gradient(135deg, var(--pvz-green), var(--pvz-green-dark));
+            border-color: transparent;
+            box-shadow: 0 8px 24px rgba(67, 160, 71, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero { padding: 60px 16px 40px; }
+            .stats-bar { gap: 28px; }
+            .stat-item .num { font-size: 1.4rem; }
+            .nav-links a { padding: 6px 12px; font-size: 0.78rem; }
+            .section { padding: 40px 16px; }
+            .section-title { font-size: 1.4rem; }
+            .preview-section { padding: 40px 16px; }
+            .release-section { padding: 40px 16px; }
+            .download-card { padding: 32px 20px; }
+
+            .viewer-stage { min-height: 240px; max-height: min(56vh, 420px); padding: 14px 50px; }
+            .viewer-nav { width: 34px; height: 34px; font-size: 1.2rem; }
+            .viewer-nav.prev { left: 6px; }
+            .viewer-nav.next { right: 6px; }
+            .viewer-thumb { width: 104px; }
+            .viewer-thumb img { height: 60px; }
+            .viewer-tip { display: none; }
+            .lb-stage { width: 96vw; height: 72vh; }
+            .lb-nav { width: 40px; height: 40px; font-size: 1.5rem; }
+            .lb-nav.prev { left: 6px; }
+            .lb-nav.next { right: 6px; }
+            .lb-close { top: 12px; right: 12px; width: 38px; height: 38px; }
+            .lb-bar .lb-hint { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero .subtitle { font-size: 0.92rem; }
+            .btn { padding: 12px 24px; font-size: 0.85rem; }
+            .stats-bar { gap: 20px; }
+            .stat-item .num { font-size: 1.2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .viewer-stage { min-height: 200px; max-height: min(48vh, 340px); padding: 10px 42px; }
+            .viewer-thumb { width: 88px; }
+            .viewer-thumb img { height: 54px; }
+        }
+    </style>
+    <!-- 全站基线样式（令牌 + 通用组件，必须最先引入） -->
+    <link rel="stylesheet" href="../assets/base.css" />
+    <!-- 详情页共享样式（结构与组件统一，强调色由 data-accent 控制） -->
+    <link rel="stylesheet" href="../assets/detail.css" />
+</head>
+<body class="product-theme" data-accent="green">
+
+    <nav class="dw-nav">
+        <a href="../index.html" class="dw-nav__brand">
+            <span class="logo-icon">🌻</span>
+            PvZ Player <small>官方主页</small>
+        </a>
+        <div class="dw-nav__links">
+            <a href="#features">功能</a>
+            <a href="#preview">预览</a>
+            <a href="#download">下载</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            全 Windows 系统兼容 · 完全免费
+        </div>
+        <h1>
+            让经典<span class="hl-green">植物大战僵尸</span><br>
+            焕发<span class="hl-sun">全新生命力</span>
+        </h1>
+        <p class="subtitle" id="heroDesc">
+            PvZ Player 是专为植物大战僵尸打造的增强体验工具。阵营工坊、传送带控制、禅境花园管家——所有你想要的，一个工具全搞定。
+        </p>
+        <div class="hero-buttons">
+            <a href="#download" class="btn btn-primary">
+                ⬇ 立即下载
+            </a>
+            <a href="#features" class="btn btn-secondary">
+                ✨ 了解功能
+            </a>
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="num">全 Windows</span>
+            <span class="label">系统兼容</span>
+        </div>
+        <div class="stat-item">
+            <span class="num" id="statVersion">v1.0.0</span>
+            <span class="label">当前版本</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">50+</span>
+            <span class="label">支持关卡</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">0 广告</span>
+            <span class="label">纯净体验</span>
+        </div>
+    </div>
+
+    <section class="release-section" id="release">
+        <h2 class="section-title">更新日志</h2>
+        <p class="section-desc" style="margin-bottom:32px;">最近一次更新的内容</p>
+        <div class="release-card" id="releaseCard"></div>
+    </section>
+
+    <section class="section" id="features">
+        <h2 class="section-title">核心功能</h2>
+        <p class="section-desc">每一项都为了让你的 PvZ 体验更顺畅</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">☀️</div>
+                <h3>无限阳光</h3>
+                <p>阳光自动满值，再也不用疯狂点击向日葵。想种什么种什么，策略不再被资源限制。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>无冷却种植</h3>
+                <p>所有植物卡片瞬间就绪，连续种植不等待。面对僵尸潮也能从容应对。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🎮</div>
+                <h3>阵营工坊</h3>
+                <p>随机生成或自定义编辑你的植物阵容，打造专属开局配置。想用哪套阵容，由你说了算。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🧟</div>
+                <h3>僵尸秒杀</h3>
+                <p>让它们尝尝戴夫的愤怒。一键秒杀僵尸，体验割草般的快感，无尽模式也能轻松冲波。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🚚</div>
+                <h3>传送带控制</h3>
+                <p>特殊关卡定制专属控制台，随心编排传送带上的植物卡片，把难关变成你的主场。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🌻</div>
+                <h3>禅境花园管家</h3>
+                <p>你的后花园定制管理，一键打理植物、锁定稀有品种，禅意满满的一天。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="preview-section" id="preview">
+        <h2 class="section-title">游戏预览</h2>
+        <p class="section-desc" style="margin-bottom:32px;">经典草坪，全新体验</p>
+        <div class="preview-window">
+            <div class="preview-titlebar">
+                <div class="traffic-light">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="title" id="previewTitle">PvZ Player - 阵营工坊</span>
+            </div>
+        <div class="viewer-stage" id="viewerStage">
+            <button class="viewer-nav prev" id="viewerPrev" type="button" aria-label="上一张">‹</button>
+            <div class="viewer-img-box" id="viewerImgBox"></div>
+            <button class="viewer-nav next" id="viewerNext" type="button" aria-label="下一张">›</button>
+            <span class="viewer-tip">🔍 点击图片看大图</span>
+            <span class="viewer-counter" id="viewerCounter">0 / 0</span>
+        </div>
+            <div class="viewer-thumbs" id="viewerThumbs"></div>
+        </div>
+    </section>
+
+    <section class="download-section" id="download">
+        <div class="download-card">
+            <h2>🚀 立即开始</h2>
+            <p id="downloadDesc">下载 PvZ Player，重新体验经典塔防的乐趣</p>
+            <div class="download-buttons" id="downloadGroup"></div>
+            <p class="download-note" id="downloadNote">
+                支持全部 Windows 系统 · 需要已安装植物大战僵尸原版 · 完全免费
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <a class="back-home" href="../index.html">← 返回主页</a>
+        <p>© 2026 All Projects Made by Dream &nbsp;|&nbsp; 全部功能独立原创自研</p>
+        <p class="footer-sub">
+            <a href="javascript:void(0)" id="disclaimerLink">免责声明</a>
+            <a href="mailto:1771232219@qq.com">反馈联系</a>
+        </p>
+    </footer>
+
+    <div class="disclaimer-modal" id="disclaimerModal">
+        <div class="disclaimer-box">
+            <button class="close-btn" id="modalCloseBtn">✕</button>
+            <h2>📄 免责声明</h2>
+            <div class="subtitle">使用 PvZ Player 即表示您已阅读、理解并同意以下条款</div>
+            <div class="clause"><p><strong>1.</strong> 本软件为 <strong>免费个人版</strong>，仅供学习、研究及私人娱乐使用。禁止用于任何商业目的或非法盈利活动。</p></div>
+            <div class="clause"><p><strong>2.</strong> 本软件按“<strong>现状</strong>”提供，不附带任何明示或默示的担保。用户应自行承担使用本软件的全部风险，因使用本软件产生的任何直接或间接损失，作者概不负责。</p></div>
+            <div class="clause"><p><strong>3.</strong> 用户须遵守所在国家/地区的法律法规，不得利用本软件从事任何违法或侵犯他人权益的行为。</p></div>
+            <div class="clause"><p><strong>4.</strong> 本软件的著作权、商标权及其他知识产权归作者所有。未经授权，不得对软件进行修改、反编译、分发或转售。</p></div>
+            <div class="clause"><p><strong>5.</strong> 如您认为本软件或其展示内容侵犯了您的合法权益，请通过下方联系方式提供详细说明，我们将在核实后依法处理。</p></div>
+            <div class="clause"><p><strong>6.</strong> 作者保留随时修订本免责声明的权利，修订内容将在本页面公布，恕不单独通知。</p></div>
+            <div class="clause"><p><strong>7.</strong> 本免责声明的 <strong>最终解释权</strong> 归作者所有。</p></div>
+            <div class="contact">📧 电子邮箱：<a href="mailto:1771232219@qq.com">1771232219@qq.com</a> &nbsp;&nbsp;|&nbsp;&nbsp; 如有异议，欢迎联系。</div>
+        </div>
+    </div>
+
+    <div class="image-modal" id="imageModal">
+        <button class="lb-close" id="closeImageBtn" type="button" aria-label="关闭">✕</button>
+        <button class="lb-nav prev" id="lbPrev" type="button" aria-label="上一张">‹</button>
+        <button class="lb-nav next" id="lbNext" type="button" aria-label="下一张">›</button>
+        <div class="lb-stage" id="lbStage">
+            <img id="modalImage" src="" alt="放大预览" />
+        </div>
+        <div class="lb-bar">
+            <span class="lb-count" id="lbCounter">1 / 1</span>
+            <span class="lb-hint">点击图片 ⇄ 原尺寸 · 滚轮缩放 · 拖拽移动 · ← → 翻页 · Esc 关闭</span>
+            <button class="lb-btn" id="lbZoomOut" type="button">－</button>
+            <button class="lb-btn" id="lbZoomIn" type="button">＋</button>
+            <button class="lb-btn" id="lbReset" type="button">还原</button>
+        </div>
+    </div>
+
+        <script src="../softwares.js"></script>
+    <script>
+        (function() {
+            'use strict';
+
+            var PRODUCT_ID = 'P733';
+            var IMAGES = [];
+            var PRODUCT = null;
+
+            function ensureAbsolutePath(src) {
+                if (!src) return '';
+                if (src.indexOf('http://') === 0 || src.indexOf('https://') === 0 || src.indexOf('/') === 0) return src;
+                return '../' + src;
+            }
+
+            function shortName(src) {
+                var s = String(src);
+                var i = s.lastIndexOf('/');
+                return i >= 0 ? s.substring(i + 1) : s;
+            }
+
+            /* ---------- 通用图片容器：骨架屏 + 失败兜底 ---------- */
+            function buildFrame(src, alt, opt) {
+                opt = opt || {};
+                var frame = document.createElement('div');
+                frame.className = 'shot-frame loading';
+
+                var img = new Image();
+                img.alt = alt || '';
+                img.decoding = 'async';
+                if (opt.lazy !== false) img.loading = 'lazy';
+                if (opt.style) img.setAttribute('style', opt.style);
+
+                img.addEventListener('load', function() {
+                    frame.classList.remove('loading');
+                    if (opt.onload) opt.onload(img);
+                });
+                img.addEventListener('error', function() {
+                    frame.classList.remove('loading');
+                    frame.innerHTML = '';
+                    var box = document.createElement('div');
+                    box.className = 'shot-broken';
+                    var icon = document.createElement('span');
+                    icon.textContent = '\ud83d\uddbc\ufe0f';
+                    var title = document.createElement('b');
+                    title.textContent = '图片加载失败';
+                    var name = document.createElement('small');
+                    name.textContent = shortName(src);
+                    box.appendChild(icon); box.appendChild(title); box.appendChild(name);
+                    frame.appendChild(box);
+                });
+
+                img.src = src;
+                frame.appendChild(img);
+                return { frame: frame, img: img };
+            }
+
+            function altOf(i) {
+                return (PRODUCT && PRODUCT.name ? PRODUCT.name : 'PvZ Player') + ' 界面展示 ' + (i + 1);
+            }
+
+            /* ---------- 主视觉：大图 + 缩略图 ---------- */
+            var viewerIdx = 0;
+
+            function renderViewer() {
+                var box = document.getElementById('viewerImgBox');
+                var thumbs = document.getElementById('viewerThumbs');
+                var counter = document.getElementById('viewerCounter');
+                var prev = document.getElementById('viewerPrev');
+                var next = document.getElementById('viewerNext');
+                if (!box || !thumbs) return;
+
+                thumbs.innerHTML = '';
+                if (!IMAGES.length) {
+                    box.innerHTML = '<div class="viewer-empty"><div class="big-emoji">\ud83c\udf3b\ud83e\udddf\u200d\u2642\ufe0f\ud83c\udf3b</div>' +
+                                    '<p>还没有配置详情图集</p></div>';
+                    counter.textContent = '0 / 0';
+                    prev.disabled = true; next.disabled = true;
+                    return;
+                }
+                prev.disabled = next.disabled = IMAGES.length < 2;
+
+                thumbs.innerHTML = '';
+                IMAGES.forEach(function(src, i) {
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'viewer-thumb' + (i === viewerIdx ? ' active' : '');
+                    btn.setAttribute('aria-label', '查看第 ' + (i + 1) + ' 张');
+                    var t = new Image();
+                    t.src = src;
+                    t.alt = '';
+                    t.loading = 'lazy';
+                    btn.appendChild(t);
+                    btn.addEventListener('click', function() { setViewer(i); });
+                    thumbs.appendChild(btn);
+                });
+
+                setViewer(0);
+            }
+
+            function setViewer(i) {
+                if (!IMAGES.length) return;
+                viewerIdx = (i + IMAGES.length) % IMAGES.length;
+                var box = document.getElementById('viewerImgBox');
+                box.innerHTML = '';
+                var built = buildFrame(IMAGES[viewerIdx], altOf(viewerIdx), {
+                    lazy: false,
+                    style: 'max-width:100%;max-height:100%;width:auto;height:auto;cursor:zoom-in;'
+                });
+                built.img.addEventListener('click', function() { openImageModal(viewerIdx); });
+                box.appendChild(built.frame);
+
+                document.getElementById('viewerCounter').textContent = (viewerIdx + 1) + ' / ' + IMAGES.length;
+                var thumbs = document.querySelectorAll('.viewer-thumb');
+                for (var t = 0; t < thumbs.length; t++) {
+                    thumbs[t].classList.toggle('active', t === viewerIdx);
+                }
+            }
+
+            /* ---------- 大图查看器 ---------- */
+            var imageModal = document.getElementById('imageModal');
+            var modalImage = document.getElementById('modalImage');
+            var lbStage = document.getElementById('lbStage');
+            var lbCounter = document.getElementById('lbCounter');
+            var lbPrev = document.getElementById('lbPrev');
+            var lbNext = document.getElementById('lbNext');
+
+            var view = { zoom: 1, tx: 0, ty: 0, actual: false, dragging: false, moved: 0, sx: 0, sy: 0, baseX: 0, baseY: 0 };
+
+            function applyView() {
+                modalImage.style.transform = 'translate(' + view.tx + 'px, ' + view.ty + 'px) scale(' + view.zoom + ')';
+            }
+            function resetView() {
+                view.zoom = 1; view.tx = 0; view.ty = 0; applyView();
+            }
+            function clampZoom(z) { return Math.min(8, Math.max(0.3, z)); }
+            function setZoom(z) { view.zoom = clampZoom(z); applyView(); }
+
+            function showAt(i) {
+                if (!IMAGES.length) return;
+                viewerIdx = (i + IMAGES.length) % IMAGES.length;
+                view.actual = false;
+                modalImage.classList.remove('is-actual');
+                modalImage.src = IMAGES[viewerIdx];
+                modalImage.alt = altOf(viewerIdx);
+                resetView();
+                lbCounter.textContent = (viewerIdx + 1) + ' / ' + IMAGES.length;
+                lbPrev.hidden = lbNext.hidden = IMAGES.length < 2;
+            }
+
+            function openImageModal(i) {
+                imageModal.classList.add('active');
+                document.body.classList.add('lb-open');
+                showAt(typeof i === 'number' ? i : viewerIdx);
+            }
+
+            function closeImageModal() {
+                imageModal.classList.remove('active');
+                document.body.classList.remove('lb-open');
+                resetView();
+                setTimeout(function() { modalImage.removeAttribute('src'); }, 250);
+            }
+
+            document.getElementById('closeImageBtn').addEventListener('click', closeImageModal);
+            lbPrev.addEventListener('click', function() { showAt(viewerIdx - 1); });
+            lbNext.addEventListener('click', function() { showAt(viewerIdx + 1); });
+            document.getElementById('lbZoomIn').addEventListener('click', function() { setZoom(view.zoom * 1.25); });
+            document.getElementById('lbZoomOut').addEventListener('click', function() { setZoom(view.zoom / 1.25); });
+            document.getElementById('lbReset').addEventListener('click', function() {
+                view.actual = false; modalImage.classList.remove('is-actual'); resetView();
+            });
+
+            // 点击图片：在「适应窗口」与「原尺寸」之间切换；拖拽后不触发
+            modalImage.addEventListener('click', function() {
+                if (view.moved > 6) return;
+                view.actual = !view.actual;
+                modalImage.classList.toggle('is-actual', view.actual);
+                resetView();
+            });
+
+            lbStage.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                setZoom(view.zoom * (e.deltaY < 0 ? 1.12 : 1 / 1.12));
+            }, { passive: false });
+
+            modalImage.addEventListener('pointerdown', function(e) {
+                view.dragging = true; view.moved = 0;
+                view.sx = e.clientX; view.sy = e.clientY;
+                view.baseX = view.tx; view.baseY = view.ty;
+                modalImage.classList.add('is-drag');
+                if (modalImage.setPointerCapture) modalImage.setPointerCapture(e.pointerId);
+            });
+            modalImage.addEventListener('pointermove', function(e) {
+                if (!view.dragging) return;
+                var dx = e.clientX - view.sx, dy = e.clientY - view.sy;
+                view.moved = Math.max(view.moved, Math.abs(dx) + Math.abs(dy));
+                view.tx = view.baseX + dx; view.ty = view.baseY + dy;
+                applyView();
+            });
+            function endDrag() {
+                if (!view.dragging) return;
+                view.dragging = false;
+                modalImage.classList.remove('is-drag');
+            }
+            modalImage.addEventListener('pointerup', endDrag);
+            modalImage.addEventListener('pointercancel', endDrag);
+            modalImage.addEventListener('pointerleave', endDrag);
+
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === this) closeImageModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (!imageModal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeImageModal();
+                else if (e.key === 'ArrowLeft') showAt(viewerIdx - 1);
+                else if (e.key === 'ArrowRight') showAt(viewerIdx + 1);
+            });
+
+            document.getElementById('viewerPrev').addEventListener('click', function() { setViewer(viewerIdx - 1); });
+            document.getElementById('viewerNext').addEventListener('click', function() { setViewer(viewerIdx + 1); });
+
+            /* ---------- 数据渲染 ---------- */
+            /* ---------- 更新日志：正文直接取「商品描述」description（CMS 写一次，通用/定制页通用）
+                 空则隐藏整区 ---------- */
+            function renderRelease() {
+                var sec = document.getElementById('release');
+                var card = document.getElementById('releaseCard');
+                if (!sec || !card) return;
+
+                var log = (PRODUCT.description || '').trim();
+                if (!log) { sec.style.display = 'none'; return; }
+
+                sec.style.display = '';
+                card.innerHTML = '';
+
+                var head = document.createElement('div');
+                head.className = 'release-head';
+                var ver = document.createElement('span');
+                ver.className = 'release-ver';
+                ver.textContent = PRODUCT.version
+                    ? 'v' + String(PRODUCT.version).replace(/^v/i, '')
+                    : '最新版本';
+                head.appendChild(ver);
+                card.appendChild(head);
+
+                if (log) {
+                    var ul = document.createElement('ul');
+                    ul.className = 'release-list';
+                    log.split(/\r?\n/).forEach(function(line) {
+                        var t = line.replace(/^\s*[-·]\s*/, '').trim();
+                        if (!t) return;
+                        var li = document.createElement('li');
+                        li.textContent = t;
+                        ul.appendChild(li);
+                    });
+                    if (ul.children.length) card.appendChild(ul);
+                }
+            }
+
+            function renderProduct() {
+                if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
+                    console.error('[PvZ Player] ALL_SOFTWARES 未定义');
+                    renderViewer();
+                    return;
+                }
+
+                PRODUCT = null;
+                for (var i = 0; i < ALL_SOFTWARES.products.length; i++) {
+                    if (ALL_SOFTWARES.products[i].id === PRODUCT_ID) { PRODUCT = ALL_SOFTWARES.products[i]; break; }
+                }
+                if (!PRODUCT) {
+                    console.error('[PvZ Player] 未找到 id 为 ' + PRODUCT_ID + ' 的产品');
+                    renderViewer();
+                    return;
+                }
+
+                document.getElementById('statVersion').textContent = PRODUCT.version || 'v1.0.0';
+
+                /* 副标题取商品描述第一行 */
+                var heroText = (PRODUCT.description || '').split('\n')[0].trim();
+                if (heroText) document.getElementById('heroDesc').textContent = heroText;
+
+                var raw = PRODUCT.detailImages || '';
+                IMAGES = raw.split(/[,，]/).map(function(s) { return s.trim(); })
+                             .filter(function(s) { return s !== ''; })
+                             .map(ensureAbsolutePath);
+
+                document.getElementById('previewTitle').textContent =
+                    (PRODUCT.name || 'PvZ Player') + ' - 界面展示（' + IMAGES.length + ' 张）';
+
+                renderViewer();
+                renderRelease();
+
+                // 下载按钮
+                var urls = [];
+                if (PRODUCT.resourcePath) {
+                    urls = PRODUCT.resourcePath.split(/[;,]\s*|\n/).map(function(s) { return s.trim(); })
+                                               .filter(function(s) { return s !== ''; });
+                }
+                var dg = document.getElementById('downloadGroup');
+                dg.innerHTML = '';
+                if (!urls.length) {
+                    var ph = document.createElement('a');
+                    ph.className = 'btn btn-secondary'; ph.textContent = '暂无下载链接'; ph.href = '#';
+                    ph.style.cursor = 'default'; ph.style.opacity = '0.5';
+                    dg.appendChild(ph);
+                } else {
+                    urls.forEach(function(url, index) {
+                        var a = document.createElement('a');
+                        a.className = 'btn ' + (index === 0 ? 'btn-primary' : 'btn-secondary');
+                        a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+                        if (urls.length === 1) a.textContent = '⬇ 下载最新版';
+                        else {
+                            var labels = ['⬇ 推荐通道', '📥 通道二', '📥 通道三', '📥 通道四', '📥 通道五'];
+                            a.textContent = labels[index] || ('📥 通道 ' + (index + 1));
+                        }
+                        dg.appendChild(a);
+                    });
+                }
+
+                if (PRODUCT.size) {
+                    document.getElementById('downloadNote').textContent =
+                        '安装包大小：' + PRODUCT.size + ' · 支持全部 Windows 系统 · 完全免费';
+                }
+                /* 下载引导语取商品描述最后一行 */
+                var dlines = (PRODUCT.description || '').split('\n').filter(function(p) { return p.trim() !== ''; });
+                var dlText = dlines.length > 1 ? dlines[dlines.length - 1].trim() : '';
+                if (dlText) document.getElementById('downloadDesc').textContent = dlText;
+
+                console.log('[PvZ Player] 加载成功，版本：' + (PRODUCT.version || '?') + '，详情图 ' + IMAGES.length + ' 张');
+            }
+
+            /* ============ 免责声明弹窗 ============ */
+            (function() {
+                var dModal = document.getElementById('disclaimerModal');
+                var dOpen = document.getElementById('disclaimerLink');
+                var dClose = document.getElementById('modalCloseBtn');
+                if (!dModal || !dOpen) return;
+                function dOpenModal() { dModal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+                function dCloseModal() { dModal.classList.remove('active'); document.body.style.overflow = ''; }
+                dOpen.addEventListener('click', dOpenModal);
+                if (dClose) dClose.addEventListener('click', dCloseModal);
+                dModal.addEventListener('click', function(e) { if (e.target === dModal) dCloseModal(); });
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && dModal.classList.contains('active')) dCloseModal();
+                });
+            })();
+
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderProduct);
+            else renderProduct();
+        })();
+    </script>
+</body>
+</html>

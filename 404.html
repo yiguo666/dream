@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迷路了 · Dream</title>
+    <meta name="robots" content="noindex" />
+
+    <link rel="stylesheet" href="/assets/base.css" />
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .lost-wrap {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ---------- 主视觉 ---------- */
+        .lost-code {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+            user-select: none;
+        }
+
+        .lost-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .lost-sub {
+            font-size: 0.88rem;
+            color: var(--ink-ghost);
+            margin-bottom: 24px;
+        }
+
+        /* ---------- 随机诗句（来自「微光碎片」） ---------- */
+        .lost-quote {
+            min-height: 76px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+            border-radius: var(--radius);
+            background: var(--glass);
+            border: 1px solid var(--line-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: opacity 0.5s var(--ease);
+        }
+        .lost-quote .q-text {
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            line-height: 1.9;
+            color: var(--ink);
+        }
+        .lost-quote .q-attr {
+            font-size: 0.72rem;
+            color: var(--ink-ghost);
+            margin-top: 8px;
+        }
+
+        /* ---------- 按钮组 ---------- */
+        .lost-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ---------- 隐秘角落 ---------- */
+        .secret-hint {
+            margin-top: 40px;
+            font-size: 0.68rem;
+            color: #cbd5e1;
+            cursor: default;
+            transition: color 0.4s ease;
+            user-select: none;
+        }
+        .secret-hint:hover {
+            color: var(--brand-blue);
+        }
+
+        @media (max-width: 480px) {
+            .lost-code { font-size: 3.6rem; }
+            .lost-actions .dw-btn { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lost-wrap">
+
+        <div class="lost-code">404</div>
+        <div class="lost-title">这里什么都没有</div>
+        <div class="lost-sub">你要找的页面，可能在另一个维度里</div>
+
+        <div class="lost-quote" id="lostQuote">
+            <div class="q-text">月华夜影三点雪，</div>
+            <div class="q-attr">— 随笔 · 2015</div>
+        </div>
+
+        <div class="lost-actions">
+            <a href="/index.html" class="dw-btn dw-btn--ghost">← 回到名片</a>
+            <a href="/resource.html" class="dw-btn">去资源大厅</a>
+        </div>
+
+        <div class="secret-hint" id="secretHint">✦</div>
+
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            /* ==============================================================
+               微光碎片 —— 原 webmaster.html 的诗句池
+               每次误入 404，随机展示一句。这些文字来自旧版「微光碎片」，
+               现在它们有了新的栖身之处。
+               ============================================================== */
+            var FRAGMENTS = [
+                { text: '月华夜影三点雪，<br>河畔寥寥几人烟。', attr: '随笔 · 2015 · 5.9' },
+                { text: '设计不是一种技能，<br>而是捕捉事物本质的感觉能力。', attr: '原研哉' },
+                { text: '好的工具应该像空气一样自然存在，<br>让人专注于创造本身。', attr: 'Dream' },
+                { text: '我们塑造工具，<br>然后工具塑造我们。', attr: '麦克卢汉' },
+                { text: '简洁是终极的精致。', attr: '达·芬奇' },
+                { text: '迷路也是旅程的一部分，<br>至少你路过了这里。', attr: 'Dream' }
+            ];
+
+            var box = document.getElementById('lostQuote');
+            var pick = FRAGMENTS[Math.floor(Math.random() * FRAGMENTS.length)];
+
+            /* 淡出 → 换文 → 淡入 */
+            box.style.opacity = '0';
+            setTimeout(function () {
+                box.innerHTML = '<div class="q-text">' + pick.text + '</div>'
+                    + '<div class="q-attr">— ' + pick.attr + '</div>';
+                box.style.opacity = '1';
+            }, 250);
+
+            /* ==============================================================
+               隐秘角落：连点 ✦ 五次 → 提示彩蛋线索
+               （WARP 传送门本体待少主定稿后接入，这里先放线索入口）
+               ============================================================== */
+            var hint = document.getElementById('secretHint');
+            var clicks = 0;
+            var timer = null;
+
+            hint.addEventListener('click', function () {
+                clicks++;
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(function () { clicks = 0; }, 1600);
+
+                if (clicks === 3) {
+                    hint.textContent = '✦✦✦';
+                }
+                if (clicks >= 5) {
+                    clicks = 0;
+                    hint.textContent = '↑↑↓↓←→←→BA';
+                    hint.style.color = 'var(--brand-blue)';
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>
