@@ -29,7 +29,7 @@
       "version": "1.5.0",
       "size": "473KB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及部分二创的修改版，同时也适配Win 7 | Win 8 | Win 10 | Win 11 系统。\r\n关于启动报错“缺少 .NET Runtime”的解决方案，如果遇到启动失败或弹窗提示“You must install .NET Desktop Runtime”，说明你的系统缺少该组件或版本较低，请直接点击弹窗中的“Download it now”链接，根据提示下载安装即可解决。\r\n为了兼顾不同用户，这里提供了两个版本：\r\n通道一（推荐）：体积较小，适合绝大多数用户，双击即可运行。如遇启动失败，请尝试通道二。\r\n通道二（兼容版）：体积较大，内置自适应运行环境，当通道一无法正常使用时，请下载此版本。\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。",
+      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及少部分二创的修改版，同时也适配Win 7 | Win 8 | Win 10 | Win 11 系统。\r\n关于启动报错“缺少 .NET Runtime”的解决方案，如果遇到启动失败或弹窗提示“You must install .NET Desktop Runtime”，说明你的系统缺少该组件或版本较低，请直接点击弹窗中的“Download it now”链接，根据提示下载安装即可解决。\r\n\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。",
       "detailPageType": "自定义模板",
       "detailPagePath": "projects/pvzplayer.html",
       "customPagePath": "projects/pvzplayer.html"
