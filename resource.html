@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>资源大厅 · Dream</title>
+    <title>Dream · 资源大厅</title>
 
     <link rel="stylesheet" href="assets/base.css" />
 
@@ -582,7 +582,6 @@
             transform: scale(1.02);
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
         }
-
 
         .mobile-recommend {
             display: none;
@@ -1296,7 +1295,6 @@
             function loadRecommendations() {
                 const sideList = document.getElementById('recommendList');
 
-                // 精品推荐只收资源大厅商品：原创工具（🎯 原创工具）有自己的工坊热榜，不进精品橱窗
                 const recommends = ALL_SOFTWARES.products.filter(p => p.isRecommend === true && p.category !== '🎯 原创工具');
                 if (recommends.length === 0) {
                     document.getElementById('recommendZone').style.display = 'none';
@@ -1324,7 +1322,6 @@
                 if (mobileList) mobileList.innerHTML = sideHtml;
             }
 
-            /* 友情链接：读 softwares.js 的 friendLinks 动态填充（与首页同一套） */
             function loadFriendLinks() {
                 const box = document.getElementById('friendLinks');
                 if (!box) { return; }

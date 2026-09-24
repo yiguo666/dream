@@ -24,12 +24,12 @@
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260629192807188.png",
       "detailImages": "logo/logo_20260914194832444.png, logo/logo_20260914194835842.png, logo/logo_20260914194838002.png,",
-      "resourcePath": "https://pan.quark.cn/s/904f998a05a4;https://pan.quark.cn/s/e8b759572c37",
+      "resourcePath": "https://pan.quark.cn/s/41881feb5ec4",
       "isRecommend": false,
       "version": "1.5.0",
       "size": "473KB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "本工具支持市面上绝大部分植物大战僵尸官方版本及少部分二创的修改版，同时也适配Win 7 | Win 8 | Win 10 | Win 11 系统。\r\n关于启动报错“缺少 .NET Runtime”的解决方案，如果遇到启动失败或弹窗提示“You must install .NET Desktop Runtime”，说明你的系统缺少该组件或版本较低，请直接点击弹窗中的“Download it now”链接，根据提示下载安装即可解决。\r\n\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。",
+      "description": "更新更新：\r\n1.阵营工坊优化部分细节、新增布局保存格子\r\n2.特殊关卡传送带新增坚果保龄球模式下的两张特殊新植物卡片\r\n3.禅境花园新增智能养护，新增一键修复错误花盆\r\n4.上线娱乐玩法，植物禁令\r\n5.新增推车开关和推车补充\r\n\r\np.s.本工具支持市面上1.0.0.1051为基底的植物大战僵尸官方版本及少部分二创的修改版，同时也适配Win 7 | Win 8 | Win 10 | Win 11 系统。\r\n\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。",
       "detailPageType": "自定义模板",
       "detailPagePath": "projects/pvzplayer.html",
       "customPagePath": "projects/pvzplayer.html"
@@ -582,6 +582,10 @@
       }
     ],
     "milestones": [
+      {
+        "date": "2026-09-23",
+        "text": "歌词跳转播放器上线扭蛋机玩法"
+      },
       {
         "date": "2026-09-21",
         "text": "网站第三次重构布局"

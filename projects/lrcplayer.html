@@ -33,7 +33,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ===== 极光动态背景 ===== */
         .bg-aurora {
             position: fixed;
             inset: 0;
@@ -74,7 +73,6 @@
             pointer-events: none; z-index: 2; transition: 0.06s ease;
         }
 
-        /* ===== 导航 ===== */
         header {
             position: sticky; top: 0; z-index: 99;
             backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
@@ -93,7 +91,7 @@
             text-shadow: 0 0 30px rgba(110, 70, 255, 0.18); white-space: nowrap; text-decoration: none;
         }
         .nav-logo small { font-size: 0.95rem; font-weight: 400; color: var(--ink-faint); background: none; -webkit-background-clip: unset; background-clip: unset; margin-left: 6px; }
-        /* emoji 徽标不吃渐变裁切，保持本色（同 small 的复位套路） */
+
         .nav-ico { background: none; -webkit-background-clip: unset; background-clip: unset; -webkit-text-fill-color: initial; margin-right: 8px; }
         .nav-menu ul { display: flex; gap: 30px; list-style: none; }
         .nav-menu a {
@@ -119,7 +117,6 @@
         .container { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         #banner, #feature, #lyricdemo, #screenshot, #download { scroll-margin-top: 78px; }
 
-        /* ===== 滚动揭示 ===== */
         .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.8s cubic-bezier(.2,.7,.2,1), transform 0.8s cubic-bezier(.2,.7,.2,1); }
         .reveal.in { opacity: 1; transform: none; }
         .reveal.d1 { transition-delay: .08s; }
@@ -127,7 +124,6 @@
         .reveal.d3 { transition-delay: .24s; }
         .reveal.d4 { transition-delay: .32s; }
 
-        /* ===== Hero ===== */
         .banner-section {
             min-height: 88vh; display: flex; align-items: center; padding: 56px 0 64px;
             gap: 48px; flex-wrap: wrap; justify-content: center;
@@ -178,7 +174,6 @@
         .download-btn::before { content: '✨'; }
         .download-btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 16px 44px rgba(255, 75, 157, 0.4); }
 
-        /* Hero 右侧设备 */
         .banner-img { flex: 1; min-width: 280px; display: flex; justify-content: center; position: relative; }
         .device {
             position: relative; width: 100%; max-width: 460px; border-radius: 28px;
@@ -210,13 +205,11 @@
         .banner-img .floating-emoji:nth-child(3) { bottom: 10%; right: -3%; animation-delay: 1.1s; }
         @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-18px) rotate(10deg); } 100% { transform: translateY(0) rotate(0deg); } }
 
-        /* ===== 通用区块标题 ===== */
         .feature-section, .lyricdemo-section, .screenshot-section, .download-section { padding: 30px 0 84px; text-align: center; }
         .block-title { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-bottom: 6px; color: var(--ink); font-weight: 800; letter-spacing: 2px; }
         .block-title i { font-style: normal; display: inline-block; animation: float-star 2.4s ease-in-out infinite alternate; }
         .block-sub { color: var(--ink-faint); font-size: 1.02rem; margin-bottom: 8px; letter-spacing: 1px; }
 
-        /* ===== 功能卡片 ===== */
         .feature-group { display: flex; gap: 26px; flex-wrap: wrap; justify-content: center; margin-top: 44px; }
         .feature-item {
             width: 250px; padding: 30px 20px 32px; background: var(--glass); backdrop-filter: blur(10px);
@@ -240,7 +233,6 @@
         .feature-item h4 { font-size: 1.25rem; margin: 10px 0 8px; color: var(--ink); }
         .feature-item p { color: var(--ink-soft); line-height: 1.75; font-size: 0.94rem; text-align: left; }
 
-        /* ===== 歌词跳转互动演示 ===== */
         .lyricdemo-wrap {
             margin-top: 42px; display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; align-items: stretch;
         }
@@ -290,7 +282,7 @@
             white-space: nowrap; max-width: 92%; overflow: hidden; text-overflow: ellipsis; pointer-events: none;
             z-index: 2;
         }
- min-height: 196px; background: rgba(110,70,255,0.04); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; margin-bottom: 12px; }
+        .jump-stage { min-height: 196px; background: rgba(110,70,255,0.04); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; margin-bottom: 12px; }
         .jump-now { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; min-height: 46px; }
         .jn-song { font-size: 0.8rem; color: var(--violet); font-weight: 700; letter-spacing: 0.5px; }
         .jn-line { font-size: 1.12rem; font-weight: 700; color: var(--ink); }
@@ -311,7 +303,6 @@
         .jump-counter { font-size: 0.9rem; color: var(--ink-soft); }
         .jump-counter b { color: var(--pink); font-size: 1.1rem; }
 
-        /* ===== 截图（仿窗口框） ===== */
         .screenshot-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; margin-top: 42px; align-items: stretch; }
         .screenshot-item {
             flex: 1 1 280px; max-width: 380px; background: var(--glass); backdrop-filter: blur(8px);
@@ -350,7 +341,6 @@
         }
         .screenshot-item:hover .zoom-hint { opacity: 1; transform: translateY(0); }
 
-        /* ===== 下载 ===== */
         .version-info {
             color: var(--ink-soft); margin: 16px 0 38px; font-size: 1.05rem; background: rgba(110, 70, 255, 0.06);
             display: inline-block; padding: 8px 26px; border-radius: 40px; border: 1px solid var(--line);
@@ -372,7 +362,7 @@
         }
         footer a { color: var(--violet); text-decoration: none; margin: 0 10px; font-weight: 600; cursor: pointer; }
         footer a:hover { color: var(--pink); }
-        /* 底部返回主页按钮（顶栏只留本页锚点，回主页收口在这里） */
+
         .back-home {
             display: inline-flex; align-items: center; gap: 6px;
             margin-bottom: 16px; padding: 10px 28px;
@@ -389,7 +379,6 @@
             transform: translateY(-2px);
         }
 
-        /* ===== 弹窗 ===== */
         .modal-overlay {
             display: none; position: fixed; inset: 0; background: rgba(20, 12, 40, 0.4); backdrop-filter: blur(8px);
             z-index: 999; justify-content: center; align-items: center; padding: 24px;
@@ -462,9 +451,9 @@
             .image-modal { padding: 12px; }
         }
     </style>
-    <!-- 全站基线样式（令牌 + 通用组件，必须最先引入） -->
+
     <link rel="stylesheet" href="../assets/base.css" />
-    <!-- 详情页共享样式（结构与组件统一，强调色由 data-accent 控制） -->
+
     <link rel="stylesheet" href="../assets/detail.css" />
 </head>
 <body class="product-theme" data-accent="violet">
@@ -646,7 +635,6 @@
         (function() {
             'use strict';
 
-            /* ============ 核心：鼠标光晕 + 粒子背景（保留原逻辑） ============ */
             var light = document.querySelector('.mouse-light');
             window.addEventListener('mousemove', function(e) {
                 light.style.left = e.clientX + 'px';
@@ -704,7 +692,6 @@
             }
             render();
 
-            /* ============ 核心：免责声明弹窗 ============ */
             var modal = document.getElementById('disclaimerModal');
             var openBtn = document.getElementById('disclaimerLink');
             var closeBtn = document.getElementById('modalCloseBtn');
@@ -724,7 +711,6 @@
                 if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
             });
 
-            /* ============ 核心：图片放大弹窗 ============ */
             var imageModal = document.getElementById('imageModal');
             var modalImage = document.getElementById('modalImage');
             var closeImageBtn = document.getElementById('closeImageBtn');
@@ -745,7 +731,6 @@
                 if (e.key === 'Escape' && imageModal.classList.contains('active')) closeImageModal();
             });
 
-            /* ============ 核心：读取 softwares.js 渲染产品（逻辑原样保留） ============ */
             function ensureAbsolutePath(src) {
                 if (!src) return '';
                 if (src.indexOf('http://') === 0 || src.indexOf('https://') === 0 || src.indexOf('/') === 0) return src;
@@ -933,7 +918,6 @@
                 renderProduct();
             }
 
-            /* ============ 增强：滚动揭示 / 移动端菜单 / 歌词跳转演示 ============ */
             var resizeTimer = null;
             window.addEventListener('resize', function() {
                 clearTimeout(resizeTimer);
@@ -943,7 +927,6 @@
                 }, 300);
             });
 
-            // 滚动揭示
             var revealEls = document.querySelectorAll('.reveal');
             if ('IntersectionObserver' in window) {
                 var io = new IntersectionObserver(function(entries) {
@@ -956,7 +939,6 @@
                 revealEls.forEach(function(el) { el.classList.add('in'); });
             }
 
-            // 移动端导航
             var mobileToggle = document.getElementById('mobileToggle');
             var navMenu = document.getElementById('navMenu');
             if (mobileToggle && navMenu) {
@@ -964,7 +946,6 @@
                 navMenu.addEventListener('click', function(e) { if (e.target.tagName === 'A') navMenu.classList.remove('open'); });
             }
 
-                                    // 特效歌词演示：直接展示 LyricsEffectWindow 源码真实渲染图（4 种代表）
             (function effectStage() {
                 var img = document.getElementById('effectImg');
                 var curEl = document.getElementById('effectCurrent');
@@ -993,13 +974,10 @@
                     });
                 });
 
-                // 预加载其余图片，避免切换闪烁
                 scenes.slice(1).forEach(function (s) {
                     var t = new Image(); t.src = s.file;
                 });
             })();
-
-            // 关键词彩蛋跳转演示（对应 PlayMode.LyricJump：LRC 歌名关键词 → 自动跳转 → 累计达标触发彩蛋）
 
             (function jumpDemo() {
                 var now = document.getElementById('jumpNow');

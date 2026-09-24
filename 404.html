@@ -22,7 +22,6 @@
             text-align: center;
         }
 
-        /* ---------- 主视觉 ---------- */
         .lost-code {
             font-size: 5rem;
             font-weight: 800;
@@ -49,7 +48,6 @@
             margin-bottom: 24px;
         }
 
-        /* ---------- 随机诗句（来自「微光碎片」） ---------- */
         .lost-quote {
             min-height: 76px;
             padding: 18px 20px;
@@ -74,7 +72,6 @@
             margin-top: 8px;
         }
 
-        /* ---------- 按钮组 ---------- */
         .lost-actions {
             display: flex;
             gap: 10px;
@@ -82,7 +79,6 @@
             flex-wrap: wrap;
         }
 
-        /* ---------- 隐秘角落 ---------- */
         .secret-hint {
             margin-top: 40px;
             font-size: 0.68rem;
@@ -127,11 +123,6 @@
         (function () {
             'use strict';
 
-            /* ==============================================================
-               微光碎片 —— 原 webmaster.html 的诗句池
-               每次误入 404，随机展示一句。这些文字来自旧版「微光碎片」，
-               现在它们有了新的栖身之处。
-               ============================================================== */
             var FRAGMENTS = [
                 { text: '月华夜影三点雪，<br>河畔寥寥几人烟。', attr: '随笔 · 2015 · 5.9' },
                 { text: '设计不是一种技能，<br>而是捕捉事物本质的感觉能力。', attr: '原研哉' },
@@ -144,7 +135,6 @@
             var box = document.getElementById('lostQuote');
             var pick = FRAGMENTS[Math.floor(Math.random() * FRAGMENTS.length)];
 
-            /* 淡出 → 换文 → 淡入 */
             box.style.opacity = '0';
             setTimeout(function () {
                 box.innerHTML = '<div class="q-text">' + pick.text + '</div>'
@@ -152,10 +142,6 @@
                 box.style.opacity = '1';
             }, 250);
 
-            /* ==============================================================
-               隐秘角落：连点 ✦ 五次 → 提示彩蛋线索
-               （WARP 传送门本体待少主定稿后接入，这里先放线索入口）
-               ============================================================== */
             var hint = document.getElementById('secretHint');
             var clicks = 0;
             var timer = null;

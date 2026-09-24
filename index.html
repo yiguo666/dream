@@ -441,6 +441,7 @@ html[data-frame="5"] .hero__ava { animation: floaty 6s ease-in-out infinite; }
 }
 
 .hero {
+    min-height: calc(var(--vh, 1vh) * 100 - var(--nav-h, 0px));
     padding: var(--space-12) 0 var(--space-10);
     display: grid;
     grid-template-columns: auto 1fr 300px;
@@ -1181,7 +1182,6 @@ html[data-theme="dark"] .hero__social a.done {
                     <i class="fx-spark"></i>
                 </div>
 
-
                 <img src="logo/dlam.png" alt="Dream" class="hero__ava" id="heroAva"
                      title="点我换换心情" onerror="this.onerror=null;this.src='logo/default.png'">
             </div>
@@ -1195,9 +1195,9 @@ html[data-theme="dark"] .hero__social a.done {
             <p class="hero__intro">想象力是创造奇迹的钥匙，哆啦A梦用口袋让梦成真，我则把梦造出来 —— 长大了也不会忘记，竹蜻蜓和任意门还收在我的百宝箱里。</p>
         </div>
 
-        <aside class="ms-panel folded" id="msPanel">
+        <aside class="ms-panel" id="msPanel">
             <button class="ms-panel__h" id="msToggle" type="button"
-                    aria-expanded="false" aria-controls="msBody" title="点击展开 / 收起">
+                    aria-expanded="true" aria-controls="msBody" title="点击展开 / 收起">
                 <span class="ms-seal" aria-hidden="true">纪</span>
                 <span class="ms-panel__t">项目里程碑</span>
                 <span class="ms-panel__n" id="msPageInfo"></span>
@@ -1297,9 +1297,6 @@ function imgTag(p) {
 }
 function pad2(n) { return n < 10 ? '0' + n : '' + n; }
 
-/* 详情入口：带定制详情页的作品直接跳它自己的页面，其余才走通用模板 tail.html。
-   判定与 CMS 写入的约定一致（detailPageType === '自定义模板'）；
-   customPagePath / detailPagePath 二者取其一兜底，防历史脏数据只有单侧有值。 */
 function detailHref(p) {
     if (p && p.detailPageType === '自定义模板') {
         var custom = p.customPagePath || p.detailPagePath;
@@ -1533,10 +1530,14 @@ renderWall('resourceWall', RESOURCE, { cat: true });
             el.classList.add('in');
         });
     }
-    tog.addEventListener('click', function () {
-        var folded = panel.classList.toggle('folded');
+    function setFolded(folded) {
+        panel.classList.toggle('folded', folded);
         tog.setAttribute('aria-expanded', folded ? 'false' : 'true');
         if (!folded) revealMilestones();
+    }
+    setFolded(window.innerWidth <= 820);
+    tog.addEventListener('click', function () {
+        setFolded(!panel.classList.contains('folded'));
     });
 })();
 
@@ -1627,7 +1628,7 @@ var curFrame = '1';
 function setFrame(k) {
     var ok = false;
     for (var i = 0; i < FRAMES.length; i++) { if (FRAMES[i].k === k) { ok = true; break; } }
-    if (!ok) k = '1';           /* 已下架的框号（如曾存在的 f7）回落到 f1，避免头像无框 */
+    if (!ok) k = '1';
     curFrame = k;
     root.setAttribute('data-frame', k);
 }
@@ -1991,6 +1992,22 @@ try {
             }
         });
     }
+})();
+</script>
+
+<script>
+(function () {
+    var de = document.documentElement;
+    function syncVH() {
+        de.style.setProperty('--vh', (window.innerHeight / 100) + 'px');
+        var nav = document.querySelector('.dw-nav');
+        de.style.setProperty('--nav-h', (nav ? nav.offsetHeight : 0) + 'px');
+    }
+    syncVH();
+    addEventListener('resize', syncVH);
+    addEventListener('orientationchange', syncVH);
+    if (document.readyState !== 'loading') syncVH();
+    else addEventListener('DOMContentLoaded', syncVH);
 })();
 </script>
 
