@@ -1195,9 +1195,9 @@ html[data-theme="dark"] .hero__social a.done {
             <p class="hero__intro">想象力是创造奇迹的钥匙，哆啦A梦用口袋让梦成真，我则把梦造出来 —— 长大了也不会忘记，竹蜻蜓和任意门还收在我的百宝箱里。</p>
         </div>
 
-        <aside class="ms-panel folded" id="msPanel">
+        <aside class="ms-panel" id="msPanel">
             <button class="ms-panel__h" id="msToggle" type="button"
-                    aria-expanded="false" aria-controls="msBody" title="点击展开 / 收起">
+                    aria-expanded="true" aria-controls="msBody" title="点击展开 / 收起">
                 <span class="ms-seal" aria-hidden="true">纪</span>
                 <span class="ms-panel__t">项目里程碑</span>
                 <span class="ms-panel__n" id="msPageInfo"></span>
@@ -1535,7 +1535,7 @@ renderWall('resourceWall', RESOURCE, { cat: true });
         tog.setAttribute('aria-expanded', folded ? 'false' : 'true');
         if (!folded) revealMilestones();
     }
-    setFolded(true);
+    setFolded(window.innerWidth <= 820);
     tog.addEventListener('click', function () {
         setFolded(!panel.classList.contains('folded'));
     });

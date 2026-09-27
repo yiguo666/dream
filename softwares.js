@@ -12,7 +12,7 @@
       "version": "1.0.0.1051",
       "size": "52.50MB",
       "environment": "Win 7 | Win 10 | Win 11",
-      "description": "植物大战僵尸的经典作品，必玩塔防游戏。\r\n极富策略性的小游戏，集成了即时战略、塔防战斗和卡片收集等要素。\r\n在游戏中，玩家通过栽种植物，武装自己的家园，把僵尸阻挡在入侵的道路上，不同的敌人，不同的玩法构成五种不同的游戏模式，加之黑夜、浓雾以及泳池之类的障碍增加了游戏挑战性。\r\n（p.s.当前版本已经完成了汉化设置和对应版本兼容的性能优化，下载解压即可畅玩，无需安装注册表。）",
+      "description": "植物大战僵尸的经典作品，必玩塔防游戏。\r\n极富策略性的小游戏，集成了即时战略、塔防战斗和卡片收集等要素。\r\n在游戏中，玩家通过栽种植物，武装自己的家园，把僵尸阻挡在入侵的道路上，不同的敌人，不同的玩法构成五种不同的游戏模式，加之黑夜、浓雾以及泳池之类的障碍增加了游戏挑战性。\r\n\r\n（p.s.当前版本已经完成了汉化设置和对应版本兼容的性能优化，下载解压即可畅玩，无需安装注册表。建议配合隔壁的PVZ Player食用更香。）",
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
@@ -526,6 +526,74 @@
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
+    },
+    {
+      "id": "470964",
+      "name": "愤怒的小鸟",
+      "category": "🎮 经典游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260926111725040.png",
+      "detailImages": "logo/logo_20260926111731080.png",
+      "resourcePath": "https://pan.quark.cn/s/c636a8adc56a",
+      "isRecommend": false,
+      "version": "1.5.3",
+      "size": "21.2MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "人生就像愤怒的小鸟，当你失败时，总有几只^(*￣(oo)￣)^在笑。\r\n\r\n由Rovio公司开发的休闲益智游戏，在太平洋的一个热带小岛上，游戏以小鸟报复偷走鸟蛋的肥猪为背景，玩家需要击败所有肥猪，才能取得胜利。\r\n\r\n（p.s.全屏缩放视角用鼠标滚轮切换。）",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "386384",
+      "name": "黄金矿工",
+      "category": "🎮 经典游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260926113418475.png",
+      "detailImages": "logo/logo_20260926114154435.png",
+      "resourcePath": "https://pan.quark.cn/s/9f9e78ef7adf",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "10.1MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "经典的超人气休闲游戏，通过操控铁钩抓取金矿和钻石来达成关卡目标。\r\n\r\n操作是 ↓放钩子 ↑丢炸药",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "92382",
+      "name": "龙拳2",
+      "category": "🎮 经典游戏",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260926115347830.png",
+      "detailImages": "logo/logo_20260927201102075.png, logo/logo_20260927201104285.png, logo/logo_20260927201106277.png",
+      "resourcePath": "https://pan.quark.cn/s/f70978ab796f",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "22.4MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "天下所有的武林高手齐聚，围绕争夺传说中的武器“龙之刃”展开。\r\n游戏提供14名可选角色和11种武器，每位角色拥有专属特殊技能。\r\n操纵方法：\r\nP1：AD控制人物的左右移动，W跳跃，S防御，T拳，Y腿，U使用武器。\r\nP2：方向键 ← → 控制人物的左右移动，方向键↑跳跃，方向键↓防御，小键盘4拳，5腿，6使用武器。\r\n组合技包括跳跃（向上+左/右）、防御（下）、长击（T+向前键）、双击（T+向下键）。特殊技能为拳+踢，需等待屏幕上方的能量槽蓄满才可使用。狠踢为踢+后键。",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "193443",
+      "name": "Cheat Engine 6.8.1",
+      "category": "🛠️ 实用工具",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260927203526244.png",
+      "detailImages": "logo/logo_20260927202830684.png",
+      "resourcePath": "https://pan.quark.cn/s/a53f83775b2d",
+      "isRecommend": false,
+      "version": "6.8.1",
+      "size": "13.5MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "Cheat Engine6.8.1（已汉化）是老司机专用的内存分析调试工具。\r\n\r\n快速修改游戏内存数据，可自定义参数，连接进程，逐轮筛选数值地址，并提供内存查看、指令调试、指针扫描和调试表管理能力。",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
     }
   ],
   "announcements": [
@@ -551,8 +619,8 @@
     }
   ],
   "categories": [
-    "🎯 原创工具",
     "🎮 经典游戏",
+    "🎯 原创工具",
     "🛠️ 实用工具"
   ],
   "nowContent": {
