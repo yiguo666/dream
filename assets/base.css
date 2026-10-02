@@ -224,18 +224,92 @@ button {
 
 .dw-nav__brand {
     display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
+    align-items: baseline;
     font-size: 1.4rem;
     font-weight: 800;
     color: var(--accent-dark);
     flex-shrink: 0;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    font-feature-settings: "kern" 1, "liga" 1;
+    animation: dw-brand-in .55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* D 方块 = Dream 首字母 D 的"图标化"版本，与 ream 同字号同基线 */
+.dw-nav__brand .mark {
+    width: 1em;
+    height: 1em;
+    display: block;
+    flex-shrink: 0;
+    margin-right: 0.06em;                                  /* 1.5px 呼吸：让 D 与 r 各占自己空间 */
+    border-radius: 0.18em 0.26em 0.18em 0.18em;            /* 不对称圆角：右边更大，"软"地指向 ream */
+    transform: translateY(0.16em);                          /* 基线微调：D 方块底部与 ream 底部齐平 */
+    transition: transform .4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow .4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 2px 6px rgba(74, 144, 226, .18);
+}
+
+.dw-nav__brand .text {
+    background: linear-gradient(180deg, var(--accent-dark) 0%, var(--accent-dark) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: filter .35s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: dw-brand-in .6s cubic-bezier(0.22, 1, 0.36, 1) .08s both;
 }
 
 .dw-nav__brand small {
     font-size: 0.75rem;
     font-weight: 400;
     color: var(--ink-mute);
+    margin-left: 0.4em;
+    animation: dw-brand-in .65s cubic-bezier(0.22, 1, 0.36, 1) .16s both;
+}
+
+/* hover / 键盘 focus 时 D 方块与 ream 联动 */
+.dw-nav__brand:hover .mark,
+.dw-nav__brand:focus-visible .mark {
+    transform: translateY(0.16em) translateX(2px) rotate(-3deg) scale(1.06);
+    box-shadow:
+        0 4px 14px rgba(74, 144, 226, .32),
+        6px 0 14px -2px rgba(74, 144, 226, .45);           /* 右侧"色彩桥"：D 色域渗到 ream 区域 */
+}
+
+.dw-nav__brand:hover .text,
+.dw-nav__brand:focus-visible .text {
+    filter: brightness(1.1) saturate(1.05);
+}
+
+/* 首次进入：水平轻滑入（错峰） */
+@keyframes dw-brand-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* 减动效用户：进入动画 + 交互过渡全部关掉，但保留基线 translateY */
+@media (prefers-reduced-motion: reduce) {
+    .dw-nav__brand,
+    .dw-nav__brand .text,
+    .dw-nav__brand small {
+        animation: none;
+    }
+    .dw-nav__brand .mark,
+    .dw-nav__brand .text,
+    .dw-nav__brand:hover .mark,
+    .dw-nav__brand:focus-visible .mark,
+    .dw-nav__brand:hover .text,
+    .dw-nav__brand:focus-visible .text {
+        transition: none;
+    }
+    .dw-nav__brand:hover .mark,
+    .dw-nav__brand:focus-visible .mark {
+        transform: translateY(0.16em);
+    }
+    .dw-nav__brand:hover .text,
+    .dw-nav__brand:focus-visible .text {
+        filter: none;
+    }
 }
 
 .dw-nav__links {

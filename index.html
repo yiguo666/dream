@@ -1112,12 +1112,46 @@ html[data-theme="dark"] .hero__social a.done {
     transition: color .25s, border-color .25s, background .25s;
 }
 .dw-nav__mode:hover { color: var(--accent); border-color: var(--accent-line); }
+/* ---------- 回到顶部：玻璃按钮 + 半透明蓝色进度环（透明度驱动） ---------- */
+.to-top{
+  position:fixed;right:22px;bottom:22px;z-index:150;
+  width:48px;height:48px;border-radius:50%;
+  border:1px solid var(--line-base);cursor:pointer;
+  background:var(--glass-strong);color:var(--ink-deep);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+          backdrop-filter:blur(14px) saturate(160%);
+  display:grid;place-items:center;
+  opacity:0;transform:translateY(14px);pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease),
+             box-shadow .35s var(--ease),border-color .25s;
+  box-shadow:0 6px 22px rgba(40,60,110,.12);
+}
+.to-top.show{opacity:1;transform:none;pointer-events:auto;}
+.to-top::before{
+  content:"";position:absolute;inset:-4px;border-radius:50%;
+  background:conic-gradient(
+    rgba(74,144,226,calc(.25 + var(--p,0) * .0075)) calc(var(--p,0) * 1%),
+    rgba(74,144,226,.18) 0
+  );
+  -webkit-mask:radial-gradient(closest-side,transparent 64%,#000 66%);
+          mask:radial-gradient(closest-side,transparent 64%,#000 66%);
+  z-index:-1;
+  transition:background .12s linear;
+}
+.to-top svg{position:relative;width:18px;height:18px;}
+.to-top:hover{
+  transform:translateY(-3px);box-shadow:0 10px 28px rgba(40,60,110,.16);
+  border-color:var(--accent-line);
+}
+@media (max-width:480px){.to-top{right:14px;bottom:14px;width:42px;height:42px;}}
+@media (prefers-reduced-motion:reduce){.to-top,.to-top::before{transition:none;}}
+
 </style>
 </head>
 <body>
 
 <nav class="dw-nav">
-    <a href="index.html" class="dw-nav__brand">Dream <small>主页世界</small></a>
+    <a href="index.html" class="dw-nav__brand" aria-label="Dream 主页世界"><img class="mark" src="logo/dream-mark-original.png" alt="D"><span class="text">ream</span><small>主页世界</small></a>
     <div class="dw-nav__links">
         <a href="index.html" class="active">名片</a>
         <a href="origin.html">原创工坊</a>
@@ -1266,7 +1300,7 @@ html[data-theme="dark"] .hero__social a.done {
 
     <footer class="dw-footer">
         <div class="friends" id="friendLinks"><span class="friends__label">友情链接</span></div>
-        <p class="dw-footer__cr">&copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved. &nbsp;|&nbsp; <a href="#">回到顶部</a></p>
+        <p class="dw-footer__cr">&copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.</p>
     </footer>
 </div>
 
@@ -2008,6 +2042,30 @@ try {
     addEventListener('orientationchange', syncVH);
     if (document.readyState !== 'loading') syncVH();
     else addEventListener('DOMContentLoaded', syncVH);
+})();
+</script>
+
+<button class="to-top" id="toTop" type="button" title="回到顶部" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function () {
+    var btn = document.getElementById('toTop');
+    if (!btn) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function onScroll() {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        var p = max > 0 ? (h.scrollTop / max) : 0;
+        btn.style.setProperty('--p', (p * 100).toFixed(1));
+        btn.classList.toggle('show', h.scrollTop > 500);
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
 })();
 </script>
 
