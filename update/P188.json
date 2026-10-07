@@ -3,7 +3,7 @@
   "name": "Everything",
   "version": "1.4.1",
   "size": "1.7MB",
-  "updateDate": "2026-10-01",
+  "updateDate": "2026-10-07",
   "downloadUrl": "https://pan.quark.cn/s/85de06a2226f",
   "note": "一款文件搜索工具，基于名称实时定位文件和目录。\r\n体积小巧，界面简洁易用，快速建立索引，快速搜索，同时占用极低的系统资源，实时跟踪文件变化。\r\n在搜索框输入文字，它就会只显示过滤后的文件和目录。\r\nEverything搜索只基于文件和文件夹的名称，创建数据库速度超快。"
 }
