@@ -3,7 +3,7 @@
   "name": "DotNet8",
   "version": "1.0.0",
   "size": "55.6MB",
-  "updateDate": "2026-10-07",
+  "updateDate": "2026-10-09",
   "downloadUrl": "https://pan.quark.cn/s/bd584b18cbd9",
   "note": "工坊原创项目大多依赖于微软环境.net8.0框架，系统里没有更新版本的小伙伴们可以在这里下载DotNet8的一键下载器，程序会自动检测、运行并安装，一键完成！\r\n下载器内置安装包，单击第一个按钮一键完成所有部署。\r\n如果实在无法运行且手动下载也失败的，可访问微软官方备用下载链接：https://dotnet.microsoft.com/en-us/download/dotnet/8.0"
 }

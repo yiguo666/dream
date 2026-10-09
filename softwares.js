@@ -69,18 +69,35 @@
       "customPagePath": "projects/lrcplayer.html"
     },
     {
-      "id": "621686",
-      "name": "MdViewer",
+      "id": "650379",
+      "name": "PvZ 关卡编辑器",
       "category": "🎯 原创工具",
       "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260925111911083.png",
-      "detailImages": "logo/logo_20260925111257189.png",
-      "resourcePath": "https://pan.quark.cn/s/a0dd33db3788",
+      "mainImage": "logo/logo_20261007132938331.png",
+      "detailImages": "",
+      "resourcePath": "",
       "isRecommend": false,
-      "version": "1.0.0",
-      "size": "1.53MB",
-      "environment": "Win 10 | Win 11",
-      "description": "MdViewer\r\n双击就能看 .md 文件的轻量级app，致力于让markdown文档更加简单易用。",
+      "version": "2.0.0",
+      "size": "1.19MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "更新说明：\r\n1.全新的关卡设计台：左侧编排、右侧预览，改一处立刻看到结果\r\n2.出怪编排支持逐波调整僵尸种类、数量与出场时机，旗帜波与无尽模式单独可控\r\n3.新增「设计体检」，保存前逐项检查出怪强度与卡槽可行性\r\n4.支持泳池、屋顶、浓雾、夜晚等地图类型，以及墓碑、矿车等场地元素\r\n5.特殊关卡可编：传送带、宝石迷阵、罐子、老虎机\r\n6.导出为伪装 PNG，一张图就是完整关卡，发给朋友双击即玩\r\n\r\np.s.需要已安装植物大战僵尸 1.0.0.1051 版本，并安装 .NET 8 桌面运行时（详情页下方有一键安装器）。",
+      "detailPageType": "自定义模板",
+      "detailPagePath": "projects/pvzeditor.html",
+      "customPagePath": "projects/pvzeditor.html"
+    },
+    {
+      "id": "P734",
+      "name": "PvZ 畅玩机",
+      "category": "🎯 原创工具",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20261007143005082.png",
+      "detailImages": "logo/logo_20261009122714918.png, logo/logo_20261009122718081.png",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "1.3.1",
+      "size": "2.3MB",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "双击就能玩的关卡播放器。\r\n收到朋友发来的关卡图片，不用装编辑器、不用输卡密，双击就能直接进关卡。\r\n\r\np.s.播放器完全免费，是 PvZ 关卡编辑器的配套工具；安装包不到 3MB，也不需要额外装 .NET 运行时。",
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
@@ -98,6 +115,23 @@
       "size": "55.6MB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
       "description": "工坊原创项目大多依赖于微软环境.net8.0框架，系统里没有更新版本的小伙伴们可以在这里下载DotNet8的一键下载器，程序会自动检测、运行并安装，一键完成！\r\n下载器内置安装包，单击第一个按钮一键完成所有部署。\r\n如果实在无法运行且手动下载也失败的，可访问微软官方备用下载链接：https://dotnet.microsoft.com/en-us/download/dotnet/8.0",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
+    },
+    {
+      "id": "621686",
+      "name": "MdViewer",
+      "category": "🎯 原创工具",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20260925111911083.png",
+      "detailImages": "logo/logo_20260925111257189.png",
+      "resourcePath": "https://pan.quark.cn/s/a0dd33db3788",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "1.53MB",
+      "environment": "Win 10 | Win 11",
+      "description": "MdViewer\r\n双击就能看 .md 文件的轻量级app，致力于让markdown文档更加简单易用。",
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
@@ -660,6 +694,10 @@
       {
         "name": "歌词跳转音乐播放器",
         "url": "projects/lrcplayer.html"
+      },
+      {
+        "name": "PvZ 关卡编辑器",
+        "url": "projects/pvzeditor.html"
       },
       {
         "name": "DotNet8",
