@@ -1291,12 +1291,12 @@
                     return false;
                 }
                 allProducts = ALL_SOFTWARES.products.filter(function (p) {
-                    return p.category !== '🎯 原创工具';
+                    return p.category !== '🎯 原创工坊';
                 });
 
                 if (ALL_SOFTWARES.categories && Array.isArray(ALL_SOFTWARES.categories) && ALL_SOFTWARES.categories.length > 0) {
                     categories = ['全部资源'].concat(ALL_SOFTWARES.categories.filter(function (c) {
-                        return c !== '🎯 原创工具';
+                        return c !== '🎯 原创工坊';
                     }));
                 } else {
                     const catSet = new Set();
@@ -1330,7 +1330,7 @@
             function loadRecommendations() {
                 const sideList = document.getElementById('recommendList');
 
-                const recommends = ALL_SOFTWARES.products.filter(p => p.isRecommend === true && p.category !== '🎯 原创工具');
+                const recommends = ALL_SOFTWARES.products.filter(p => p.isRecommend === true && p.category !== '🎯 原创工坊');
                 if (recommends.length === 0) {
                     document.getElementById('recommendZone').style.display = 'none';
                     document.getElementById('mobileRecommend').style.display = 'none';

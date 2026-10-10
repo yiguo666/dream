@@ -20,13 +20,13 @@
     {
       "id": "P733",
       "name": "PVZ Player",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260629192807188.png",
-      "detailImages": "logo/logo_20260914194832444.png, logo/logo_20260914194835842.png, logo/logo_20260914194838002.png,",
-      "resourcePath": "https://pan.quark.cn/s/41881feb5ec4",
+      "detailImages": "logo/logo_20260914194832444.png, logo/logo_20260914194835842.png, logo/logo_20260914194838002.png, logo/logo_20261010192216256.png, logo/logo_20261010192219375.png, logo/logo_20261010192323667.png",
+      "resourcePath": "https://pan.quark.cn/s/92a1daabe1ee",
       "isRecommend": false,
-      "version": "1.6.2",
+      "version": "1.6.3",
       "size": "64.3MB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
       "description": "更新说明：\r\n1.阵营工坊优化部分表现细节和UI、新增我的布局保存格子\r\n2.特殊关卡传送带新增坚果保龄球模式下的两张特殊新植物卡片、新增调整传输倍率功能\r\n3.禅境花园新增智能养护，新增一键修复错误花盆，新增适配一键搬运植物\r\n4.上线娱乐玩法，植物禁令和解除戴夫锁定卡\r\n5.新增推车开关和推车补充\r\n6.新增土豆雷秒出土、胆小菇不缩头、冰豆穿火炬不化\r\n7.阵容工坊优化随机出阵容逻辑，更加智能适配地图模式\r\n\r\np.s.本工具支持的是市面上1.0.0.1051的植物大战僵尸官方版本，适配Win 7 | Win 8 | Win 10 | Win 11 系统。\r\n\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。",
@@ -54,11 +54,11 @@
     {
       "id": "P466",
       "name": "歌词跳转音乐播放器",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260714233422130.png",
       "detailImages": "logo/logo_20260714233438110.png,logo/logo_20260714233440080.png,logo/logo_20260714233442078.png,logo/logo_20260727120202582.png,",
-      "resourcePath": "https://pan.quark.cn/s/b4f124c29ee3",
+      "resourcePath": "https://pan.quark.cn/s/ebf8bdd58db9",
       "isRecommend": false,
       "version": "1.7.0",
       "size": "1.13MB",
@@ -71,16 +71,16 @@
     {
       "id": "650379",
       "name": "PvZ 关卡编辑器",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20261007132938331.png",
-      "detailImages": "",
-      "resourcePath": "",
+      "detailImages": "logo/logo_20261010180832185.png, logo/logo_20261010180835304.png, logo/logo_20261010180837864.png, logo/logo_20261010180839949.png, logo/logo_20261010180842045.png, logo/logo_20261010184354284.png",
+      "resourcePath": "https://pan.quark.cn/s/1dd6fde90410",
       "isRecommend": false,
       "version": "2.0.0",
       "size": "1.19MB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "更新说明：\r\n1.全新的关卡设计台：左侧编排、右侧预览，改一处立刻看到结果\r\n2.出怪编排支持逐波调整僵尸种类、数量与出场时机，旗帜波与无尽模式单独可控\r\n3.新增「设计体检」，保存前逐项检查出怪强度与卡槽可行性\r\n4.支持泳池、屋顶、浓雾、夜晚等地图类型，以及墓碑、矿车等场地元素\r\n5.特殊关卡可编：传送带、宝石迷阵、罐子、老虎机\r\n6.导出为伪装 PNG，一张图就是完整关卡，发给朋友双击即玩\r\n\r\np.s.需要已安装植物大战僵尸 1.0.0.1051 版本，并安装 .NET 8 桌面运行时（详情页下方有一键安装器）。",
+      "description": "更新说明：\r\n1.全新的关卡设计台：左侧编排、右侧预览，改一处立刻看到结果\r\n2.出怪编排支持逐波调整僵尸种类、数量与出场时机，旗帜波与无尽模式单独可控\r\n3.新增「设计体检」，保存前逐项检查出怪强度与卡槽可行性\r\n4.支持泳池、屋顶、浓雾、夜晚等地图类型，以及墓碑、矿车等场地元素\r\n5.特殊关卡可编：传送带、宝石迷阵、罐子、老虎机\r\n6.导出为伪装 PNG文件，一张图就是完整关卡，发给朋友点击即玩\r\n\r\np.s.本软件需要已安装植物大战僵尸 1.0.0.1051 版本，并安装 .NET 8 桌面运行时（详情页下方有一键安装器）。",
       "detailPageType": "自定义模板",
       "detailPagePath": "projects/pvzeditor.html",
       "customPagePath": "projects/pvzeditor.html"
@@ -88,7 +88,7 @@
     {
       "id": "P734",
       "name": "PvZ 畅玩机",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20261007143005082.png",
       "detailImages": "logo/logo_20261009122714918.png, logo/logo_20261009122718081.png",
@@ -97,7 +97,7 @@
       "version": "1.3.1",
       "size": "2.3MB",
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "双击就能玩的关卡播放器。\r\n收到朋友发来的关卡图片，不用装编辑器、不用输卡密，双击就能直接进关卡。\r\n\r\np.s.播放器完全免费，是 PvZ 关卡编辑器的配套工具；安装包不到 3MB，也不需要额外装 .NET 运行时。",
+      "description": "单击就能畅玩各种原创的关卡。\r\n收到朋友发来的关卡文件，不用装编辑器、不用输卡密，点击就能直接进关卡。\r\n\r\np.s.畅玩机完全免费，是 PvZ 关卡编辑器的配套工具；安装包不到 3MB，也不需要额外装 .NET 运行时。",
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
@@ -105,7 +105,7 @@
     {
       "id": "P241",
       "name": "DotNet8",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260715115303505.png",
       "detailImages": "logo/logo_20260924180009901.png",
@@ -122,7 +122,7 @@
     {
       "id": "621686",
       "name": "MdViewer",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260925111911083.png",
       "detailImages": "logo/logo_20260925111257189.png",
@@ -139,7 +139,7 @@
     {
       "id": "P303",
       "name": "IcoX 图标转换器",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐⭐⭐ 原创",
       "mainImage": "logo/YI~H`}85LAZK[RS}1{IY5`T.png",
       "detailImages": "logo/]R9R4EH4~G$}JX0$RGSMPXY.png,logo/3LEQ3R)U2AG7HT0}06UX1N3.png",
@@ -292,7 +292,7 @@
     {
       "id": "P687",
       "name": "键鼠模拟器",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260731110034566.png",
       "detailImages": "logo/logo_20260731110041186.png, logo/logo_20260731110047083.png",
@@ -343,7 +343,7 @@
     {
       "id": "P350",
       "name": "大小写金额转换",
-      "category": "🎯 原创工具",
+      "category": "🎯 原创工坊",
       "weight": "⭐⭐⭐⭐⭐⭐⭐",
       "mainImage": "logo/logo_20260706181249783.png",
       "detailImages": "logo/logo_20260706181249783.png,logo/logo_20260706181257923.png,logo/logo_20260706181300226.png",
@@ -611,23 +611,6 @@
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
-    },
-    {
-      "id": "193443",
-      "name": "Cheat Engine 6.8.1",
-      "category": "🛠️ 实用工具",
-      "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20260927203526244.png",
-      "detailImages": "logo/logo_20260927202830684.png",
-      "resourcePath": "https://pan.quark.cn/s/a53f83775b2d",
-      "isRecommend": false,
-      "version": "6.8.1",
-      "size": "13.5MB",
-      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "Cheat Engine6.8.1（已汉化）是老司机专用的内存分析调试工具。\r\n\r\n快速修改游戏内存数据，可自定义参数，连接进程，逐轮筛选数值地址，并提供内存查看、指令调试、指针扫描和调试表管理能力。",
-      "detailPageType": "详情页通用",
-      "detailPagePath": "",
-      "customPagePath": ""
     }
   ],
   "announcements": [
@@ -654,7 +637,7 @@
   ],
   "categories": [
     "🎮 经典游戏",
-    "🎯 原创工具",
+    "🎯 原创工坊",
     "🛠️ 实用工具"
   ],
   "nowContent": {

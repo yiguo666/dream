@@ -595,11 +595,11 @@
 <body class="product-theme" data-accent="blue">
 
     <nav class="dw-nav">
-        <a href="index.html" class="dw-nav__brand">Dream <small>主页世界</small></a>
+        <a href="index.html" class="dw-nav__brand" aria-label="Dream 主页世界"><img class="mark" src="logo/dream-mark-original.png" alt="D"><span class="text">ream</span><small>主页世界</small></a>
         <div class="dw-nav__links">
             <a href="index.html">名片</a>
-            <a href="origin.html">原创工坊</a>
-            <a href="resource.html" class="active">资源大厅</a>
+            <a href="origin.html" id="navOrigin">原创工坊</a>
+            <a href="resource.html" id="navResource">资源大厅</a>
         </div>
     </nav>
 
@@ -842,6 +842,11 @@
                 } else {
                     document.getElementById('breadcrumb_category_node').style.display = 'none';
                 }
+
+                // 顶栏高亮跟分类走：原创工坊的作品高亮「原创工坊」，其余高亮「资源大厅」
+                const isOrigin = product.category === '🎯 原创工坊';
+                document.getElementById('navOrigin').classList.toggle('active', isOrigin);
+                document.getElementById('navResource').classList.toggle('active', !isOrigin);
 
                 const logoImg = document.getElementById('bind_logo');
                 if (product.mainImage && product.mainImage.trim() !== '') {

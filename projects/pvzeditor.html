@@ -64,78 +64,6 @@
             pointer-events: none;
         }
 
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            background: rgba(255, 255, 255, 0.75);
-            border-bottom: 1px solid var(--ed-border);
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            gap: 10px 24px;
-            box-shadow: 0 2px 12px var(--shadow-soft);
-        }
-
-        .navbar .logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--ed-main-dark);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .navbar .logo .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--ed-main), var(--ed-sun));
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(201, 162, 39, 0.25);
-        }
-
-        .navbar .logo small {
-            font-size: 0.7rem;
-            font-weight: 400;
-            color: var(--ed-text-dim);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--ed-text-2);
-            text-decoration: none;
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--ed-main-dark);
-            background: rgba(201, 162, 39, 0.08);
-        }
-
-        .nav-links a.active {
-            color: var(--ed-main-dark);
-            background: rgba(223, 179, 26, 0.15);
-        }
-
         .hero {
             max-width: 1200px;
             margin: 0 auto;
@@ -214,6 +142,34 @@
             animation: fadeInUp 0.6s var(--transition) 0.3s both;
         }
 
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            padding: 32px 24px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s var(--transition) 0.4s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--ed-main-dark);
+            display: block;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--ed-text-dim);
+            margin-top: 4px;
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -256,34 +212,6 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            flex-wrap: wrap;
-            padding: 32px 24px;
-            max-width: 900px;
-            margin: 0 auto;
-            animation: fadeInUp 0.6s var(--transition) 0.4s both;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-item .num {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--ed-main-dark);
-            display: block;
-        }
-
-        .stat-item .label {
-            font-size: 0.8rem;
-            color: var(--ed-text-dim);
-            margin-top: 4px;
         }
 
         .section {
@@ -374,7 +302,7 @@
             line-height: 1.7;
         }
 
-        /* 邮箱防收割：不明文，点击复制 */
+        /* 联系 QQ 防收割：不明文，点击复制 */
         .mail-copy {
             display: inline-block;
             padding: 3px 12px;
@@ -402,9 +330,11 @@
         }
 
         .preview-section {
-            max-width: 1000px;
+            /* ★ 2026-10-10：从 1000px 放宽到 1240px —— 它是全页最该被看清的一段，
+               之前反而比其它栏目窄 200px。上间距也收窄（紧跟首屏，不用再留一个大空档）。 */
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 60px 24px;
+            padding: 30px 24px 60px;
         }
 
         .preview-window {
@@ -448,7 +378,7 @@
 
         .viewer-stage {
             position: relative; display: flex; align-items: center; justify-content: center;
-            min-height: 340px; max-height: min(70vh, 620px);
+            min-height: 430px; max-height: min(76vh, 700px);
             padding: 24px 64px; overflow: hidden;
             background:
                 radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.08) 0%, transparent 65%),
@@ -502,14 +432,14 @@
         .viewer-thumbs::-webkit-scrollbar { height: 6px; }
         .viewer-thumbs::-webkit-scrollbar-thumb { background: rgba(201, 162, 39, 0.28); border-radius: 3px; }
         .viewer-thumb {
-            flex: none; width: 132px; padding: 0; cursor: pointer;
+            flex: none; width: 154px; padding: 0; cursor: pointer;
             border: 2px solid transparent; border-radius: 8px; overflow: hidden;
             background: #fff; opacity: 0.65; transition: all 0.25s var(--transition);
             box-shadow: 0 2px 8px rgba(42, 36, 22, 0.06);
         }
 
         .viewer-thumb img {
-            display: block; width: 100%; height: 76px;
+            display: block; width: 100%; height: 88px;
             object-fit: cover; object-position: center top;
         }
         .viewer-thumb:hover { opacity: 1; }
@@ -748,7 +678,6 @@
             .hero { padding: 60px 16px 40px; }
             .stats-bar { gap: 28px; }
             .stat-item .num { font-size: 1.4rem; }
-            .nav-links a { padding: 6px 12px; font-size: 0.78rem; }
             .section { padding: 40px 16px; }
             .section-title { font-size: 1.4rem; }
             .preview-section { padding: 40px 16px; }
@@ -795,11 +724,10 @@
             PvZ 关卡编辑器 <small>官方主页</small>
         </a>
         <div class="dw-nav__links">
-            <a href="#release">日志</a>
-            <a href="#features">功能</a>
             <a href="#preview">预览</a>
+            <a href="#features">功能</a>
             <a href="#license">授权</a>
-            <a href="#share">分享</a>
+            <a href="#release">日志</a>
             <a href="#download">下载</a>
         </div>
     </nav>
@@ -819,9 +747,6 @@
         <div class="hero-buttons">
             <a href="#download" class="btn btn-primary">
                 ⬇ 立即下载
-            </a>
-            <a href="#features" class="btn btn-secondary">
-                ✨ 了解功能
             </a>
         </div>
     </section>
@@ -845,10 +770,25 @@
         </div>
     </div>
 
-    <section class="release-section" id="release">
-        <h2 class="section-title">更新日志</h2>
-        <p class="section-desc" style="margin-bottom:32px;">编辑器一直在更新迭代，新功能与问题修复都会同步到这里</p>
-        <div class="release-card" id="releaseCard"></div>
+    <section class="preview-section" id="preview">
+        <h2 class="section-title">界面预览</h2>
+        <p class="section-desc" style="margin-bottom:32px;">左侧编排，右侧预览，所见即所得</p>
+        <div class="preview-window">
+            <div class="preview-titlebar">
+                <div class="traffic-light">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="title" id="previewTitle">PvZ 关卡编辑器</span>
+            </div>
+        <div class="viewer-stage" id="viewerStage">
+            <button class="viewer-nav prev" id="viewerPrev" type="button" aria-label="上一张">‹</button>
+            <div class="viewer-img-box" id="viewerImgBox"></div>
+            <button class="viewer-nav next" id="viewerNext" type="button" aria-label="下一张">›</button>
+            <span class="viewer-tip">🔍 点击图片看大图</span>
+            <span class="viewer-counter" id="viewerCounter">0 / 0</span>
+        </div>
+            <div class="viewer-thumbs" id="viewerThumbs"></div>
+        </div>
     </section>
 
     <section class="section" id="features">
@@ -888,106 +828,35 @@
         </div>
     </section>
 
-    <section class="preview-section" id="preview">
-        <h2 class="section-title">界面预览</h2>
-        <p class="section-desc" style="margin-bottom:32px;">左侧编排，右侧预览，所见即所得</p>
-        <div class="preview-window">
-            <div class="preview-titlebar">
-                <div class="traffic-light">
-                    <span></span><span></span><span></span>
-                </div>
-                <span class="title" id="previewTitle">PvZ 关卡编辑器</span>
-            </div>
-        <div class="viewer-stage" id="viewerStage">
-            <button class="viewer-nav prev" id="viewerPrev" type="button" aria-label="上一张">‹</button>
-            <div class="viewer-img-box" id="viewerImgBox"></div>
-            <button class="viewer-nav next" id="viewerNext" type="button" aria-label="下一张">›</button>
-            <span class="viewer-tip">🔍 点击图片看大图</span>
-            <span class="viewer-counter" id="viewerCounter">0 / 0</span>
-        </div>
-            <div class="viewer-thumbs" id="viewerThumbs"></div>
-        </div>
-    </section>
-
     <section class="section" id="license">
         <h2 class="section-title">赞助制 · 授权与激活</h2>
-        <p class="section-desc">本工具是<strong>赞助制</strong>：你赞助支持开发，作者把卡密<strong>直接发给你</strong>激活即可使用。<strong>没有自动商城、不在线售卖</strong>。卡密按有效期开通（日 / 周 / 月 / 季 / 年），到期续期，已经做好的关卡不受影响。</p>
+        <p class="section-desc">你赞助支持开发，作者把卡密直接发给你激活即可使用 —— 没有自动商城、不在线售卖。</p>
         <div class="features-grid">
             <div class="feature-card" style="border-color: var(--ed-main);">
                 <div class="icon">🎁</div>
-                <h3>怎么获得卡密（赞助制）</h3>
-                <p id="buyInfo">想使用就<strong>联系作者赞助</strong>，卡密会直接发给你，粘贴进编辑器即可激活。卡种：日 / 周 / 月 / 季 / 年。</p>
+                <h3>获得卡密（赞助制）</h3>
+                <p>联系作者赞助，卡密直接发给你。卡种：日 / 周 / 月 / 季 / 年。
+                   赞助拿卡密、换机、售后都是这一个入口：<button type="button" class="mail-copy">点击复制 QQ</button></p>
             </div>
             <div class="feature-card">
-                <div class="icon">1️⃣</div>
-                <h3>下载后直接运行</h3>
-                <p>解压后双击 <strong>PvZLevelEditor.exe</strong>。第一次启动会自动弹出激活窗口，不需要找注册入口。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">2️⃣</div>
-                <h3>填入卡密</h3>
-                <p>把卡密粘贴进激活框点确认。程序会把这张卡绑定到当前这台机器，并显示剩余时间。激活后日常做关卡<strong>不需要联网</strong>。</p>
+                <div class="icon">🔑</div>
+                <h3>下载后激活</h3>
+                <p>解压双击 <strong>PvZLevelEditor.exe</strong>，第一次启动会自动弹出激活窗，不需要找注册入口。
+                   把卡密粘进去点确认，即绑定到这台机器。激活后日常做关卡<strong>不需要联网</strong>。</p>
             </div>
             <div class="feature-card">
                 <div class="icon">⏳</div>
-                <h3>卡密有有效期</h3>
-                <p>卡密是<strong>限时授权</strong>，不是买断。到期续期即可继续制作，已经做好的关卡不受影响。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">💻</div>
-                <h3>一卡绑一台机器</h3>
-                <p>卡密与机器绑定。换电脑或激活遇到问题，带卡密联系作者处理。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">📧</div>
-                <h3>联系作者</h3>
-                <p>赞助拿卡密、换机、售后都是这一个入口：<button type="button" class="mail-copy">点击复制邮箱</button></p>
+                <h3>有效期与换机</h3>
+                <p>卡密是<strong>限时授权</strong>，不是买断，到期续期即可继续，已经做好的关卡不受影响。
+                   卡密与机器绑定，换电脑或激活遇到问题，带卡密联系作者处理。</p>
             </div>
         </div>
     </section>
 
-    <section class="section" id="share">
-        <h2 class="section-title">做好之后，怎么给朋友玩</h2>
-        <p class="section-desc">不需要对方也买编辑器 —— 一张图就够了</p>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="icon">1️⃣</div>
-                <h3>导出关卡文件</h3>
-                <p>点保存，导出成一张 PNG 图片。它看起来就是张普通图片，完整关卡数据藏在里面。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">2️⃣</div>
-                <h3>当图片发过去</h3>
-                <p>微信、QQ、群文件都行。不用打包、不用网盘、不怕被当成可疑文件拦下来。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">3️⃣</div>
-                <h3>朋友双击即玩</h3>
-                <p>对方装上免费的 <a href="tail.html?id=P734">PvZ 关卡播放器</a>，双击这张图就能直接进关卡 —— 不用编辑器，也不用卡密。</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="require">
-        <h2 class="section-title">运行要求</h2>
-        <p class="section-desc">先确认这三项，免得下完打不开</p>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="icon">🪟</div>
-                <h3>系统</h3>
-                <p>Windows 7 / 8 / 10 / 11，64 位系统。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">🧩</div>
-                <h3>.NET 8 桌面运行时</h3>
-                <p>编辑器跑在 .NET 8 上。如果双击提示缺少运行时，用<a href="tail.html?id=P241" target="_blank" rel="noopener">这个一键安装器</a>装一次即可，装完就不用再管。</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">🌻</div>
-                <h3>游戏本体</h3>
-                <p>需要已经安装植物大战僵尸 1.0.0.1051 版本，编辑器要连上游戏才能实时调试。</p>
-            </div>
-        </div>
+    <section class="release-section" id="release">
+        <h2 class="section-title">更新日志</h2>
+        <p class="section-desc" style="margin-bottom:32px;">编辑器一直在更新迭代，新功能与问题修复都会同步到这里</p>
+        <div class="release-card" id="releaseCard"></div>
     </section>
 
     <section class="download-section" id="download">
@@ -1022,7 +891,7 @@
             <div class="clause"><p><strong>5.</strong> 如您认为本软件或其展示内容侵犯了您的合法权益，请通过下方联系方式提供详细说明，我们将在核实后依法处理。</p></div>
             <div class="clause"><p><strong>6.</strong> 作者保留随时修订本免责声明的权利，修订内容将在本页面公布，恕不单独通知。</p></div>
             <div class="clause"><p><strong>7.</strong> 本免责声明的 <strong>最终解释权</strong> 归作者所有。</p></div>
-            <div class="contact">📧 电子邮箱：<button type="button" class="mail-copy">点击复制</button> &nbsp;&nbsp;|&nbsp;&nbsp; 如有异议，欢迎联系。</div>
+            <div class="contact">💬 QQ：<button type="button" class="mail-copy">点击复制</button> &nbsp;&nbsp;|&nbsp;&nbsp; 如有异议，欢迎联系。</div>
         </div>
     </div>
 
@@ -1361,10 +1230,6 @@
                         '安装包大小：' + PRODUCT.size + ' · 支持全部 Windows 系统 · 需 .NET 8 桌面运行时';
                 }
 
-                var dlines = (PRODUCT.description || '').split('\n').filter(function(p) { return p.trim() !== ''; });
-                var dlText = dlines.length > 1 ? dlines[dlines.length - 1].trim() : '';
-                if (dlText) document.getElementById('downloadDesc').textContent = dlText;
-
                 console.log('[PvZ 关卡编辑器] 加载成功，版本：' + (PRODUCT.version || '?') + '，详情图 ' + IMAGES.length + ' 张');
             }
 
@@ -1388,9 +1253,9 @@
         })();
     </script>
     <script>
-        /* 联系邮箱不明文出现在 HTML 里（防爬虫收割），运行时拼装；点击复制到剪贴板 */
+        /* 联系 QQ 不明文出现在 HTML 里（防爬虫收割），运行时拼装；点击复制到剪贴板 */
         (function () {
-            var addr = ['1771', '2322', '19'].join('') + '@' + ['qq', '.', 'com'].join('');
+            var addr = ['1771', '2322', '19'].join('');
             document.querySelectorAll('.mail-copy').forEach(function (btn) {
                 var old = btn.textContent;
                 btn.addEventListener('click', function () {
@@ -1410,7 +1275,7 @@
                         document.body.appendChild(t);
                         t.select();
                         try { document.execCommand('copy'); done(); }
-                        catch (e) { window.prompt('联系邮箱（手动复制）：', addr); }
+                        catch (e) { window.prompt('联系 QQ（手动复制）：', addr); }
                         document.body.removeChild(t);
                     }
                 });
