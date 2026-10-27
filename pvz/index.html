@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+<title>PVZ 系列 · 植物大战僵尸原创工具</title>
+<meta name="description" content="植物大战僵尸的原创工具：PVZ Player（含畅玩机）与 PvZ 关卡编辑器，以及一个由支持者组成的项目充能花田。" />
+<link rel="stylesheet" href="../assets/base.css" />
+<link rel="stylesheet" href="../assets/detail.css" />
+<style>
+  /* ===================================================================
+     PVZ 小集群入口页
+     ------------------------------------------------------------------
+     这一页是「引子」：两个软件并排，花田横跨一整行。点进去才是详情。
+     刻意不做的事：
+       · 不放「畅玩机」独立卡片 —— 它是 Player 里的一个窗口，不是单独下载的东西，
+         给它一张卡会让人以为要另外下个安装包。只在 Player 卡里提一句。
+       · 不读 softwares.js —— 这一页的内容是固定的三块，写死比取数更稳；
+         产品库那份文件留给详情页和主站，少一层依赖就少一处能对不上的地方。
+     =================================================================== */
+
+  /* 品牌标记：base.css 里没有 .logo-icon（详情页那个 🌻 一直是个裸 emoji），
+     这一页自己把它做成一颗绿色圆币，让导航左侧真的"立"起来。 */
+  .dw-nav__brand .logo-icon {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+    font-size: .95rem; flex: none; margin-right: 8px;
+    box-shadow: 0 2px 8px var(--accent-line);
+    align-self: center;
+  }
+
+  .hero-pvz { max-width: 1060px; margin: 0 auto; padding: 64px 24px 36px; text-align: center; }
+  .hero-pvz .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-pale); color: var(--accent-dark);
+    border-radius: 30px; padding: 6px 16px; font-size: .8rem; font-weight: 700;
+    margin-bottom: 18px;
+  }
+  .hero-pvz h1 { font-size: 2.3rem; font-weight: 900; color: var(--ink-deep); line-height: 1.28; }
+  .hero-pvz h1 .hl { color: var(--accent); }
+  .hero-pvz p { margin: 16px auto 0; max-width: 620px; color: var(--ink-soft); font-size: 1rem; line-height: 1.75; }
+
+  .products { max-width: 1060px; margin: 0 auto; padding: 8px 24px 32px; }
+
+  .pcard { display: flex; flex-direction: column; text-decoration: none; color: inherit; overflow: hidden; }
+  .pcard__imgbox {
+    height: 148px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(67,160,71,.10), rgba(255,179,0,.08));
+    border-radius: 12px; margin-bottom: 14px; overflow: hidden;
+  }
+  .pcard__img { max-width: 78%; max-height: 118px; object-fit: contain; }
+  .pcard__body { display: flex; flex-direction: column; flex: 1; }
+  .pcard__name { font-size: 1.15rem; font-weight: 800; color: var(--ink); }
+  .pcard__cat { font-size: .76rem; color: var(--accent); font-weight: 600; margin: 4px 0 6px; }
+  .pcard__meta { font-size: .74rem; color: var(--ink-faint); margin-bottom: 10px; }
+  .pcard__desc { font-size: .84rem; color: var(--ink-soft); line-height: 1.65; flex: 1; }
+  .pcard .dw-btn { margin-top: 14px; align-self: flex-start; }
+
+  /* 花田横幅：跨满一整行，暖黄，作为"看完两个工具之后"的去处 */
+  .charge-card {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+    background: linear-gradient(120deg, #FFFBEF 0%, #FFF1D6 100%);
+    border: 1px solid rgba(255,179,0,.30);
+    position: relative; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255,179,0,.10);
+  }
+  .charge-card::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(600px 300px at 85% 18%, rgba(255,179,0,.20), transparent 60%),
+      radial-gradient(500px 300px at 8% 92%, rgba(255,193,7,.16), transparent 60%);
+  }
+  .charge-card > * { position: relative; z-index: 1; }
+  .charge-card .cc-emoji { font-size: 2.5rem; filter: drop-shadow(0 2px 6px rgba(124,179,66,.35)); }
+  .charge-card .cc-text { flex: 1; min-width: 220px; }
+  .charge-card .cc-text h3 { font-size: 1.25rem; font-weight: 900; color: var(--ink-deep); margin-bottom: 6px; }
+  .charge-card .cc-text h3 .hl { color: #B8862B; }
+  .charge-card .cc-text p { font-size: .86rem; color: var(--ink-soft); line-height: 1.7; }
+
+  .foot-group { cursor: default; }
+  .foot-group b { color: var(--accent-dark); letter-spacing: .5px; }
+  .foot-group.copyable { cursor: pointer; }
+  .foot-group.copyable:hover b { text-decoration: underline; }
+
+  @media (max-width: 700px) {
+    .hero-pvz { padding-top: 42px; }
+    .hero-pvz h1 { font-size: 1.65rem; }
+  }
+</style>
+</head>
+<body class="product-theme" data-accent="green">
+
+<nav class="dw-nav">
+  <a href="../index.html" class="dw-nav__brand">
+    <span class="logo-icon">🌻</span>
+    PVZ 系列 <small>前往主站</small>
+  </a>
+  <div class="dw-nav__links">
+    <a href="player.html">PVZ Player</a>
+    <a href="editor.html">关卡编辑器</a>
+    <a href="charge.html">项目充能</a>
+  </div>
+</nav>
+
+<header class="hero-pvz">
+  <span class="badge">🌟 全 Windows 兼容 · 独立原创自研</span>
+  <h1>神奇的道具，把<span class="hl">植物大战僵尸</span><br>玩成你自己的样子</h1>
+  <p>一个负责把原版玩得更爽，一个负责让你自己设计关卡。下面是它们，以及一片由支持者组成的花田。</p>
+</header>
+
+<main class="products">
+  <div class="dw-grid dw-grid--2">
+
+    <a class="dw-card pcard" href="player.html">
+      <div class="pcard__imgbox">
+        <img class="pcard__img" src="../logo/logo_20260629192807188.png" alt="PVZ Player"
+             onerror="this.style.visibility='hidden'">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__name">PVZ Player</div>
+        <div class="pcard__cat">体验增强 · 含畅玩机</div>
+        <div class="pcard__meta">Win 7 / 8 / 10 / 11 · 持续更新</div>
+        <p class="pcard__desc">阵营工坊、特殊关卡传送带、禅境花园管家、娱乐玩法——想要的全在一个窗口里。畅玩机也在这里面：拿到分享码粘进去就能开打。</p>
+        <span class="dw-btn dw-btn--ghost">查看详情 →</span>
+      </div>
+    </a>
+
+    <a class="dw-card pcard" href="editor.html">
+      <div class="pcard__imgbox">
+        <img class="pcard__img" src="../logo/logo_20261007132938331.png" alt="PvZ 关卡编辑器"
+             onerror="this.style.visibility='hidden'">
+      </div>
+      <div class="pcard__body">
+        <div class="pcard__name">PvZ 关卡编辑器</div>
+        <div class="pcard__cat">关卡设计</div>
+        <div class="pcard__meta">Win 7 / 8 / 10 / 11 · 持续更新</div>
+        <p class="pcard__desc">拉波次、选地形、配出怪、改规则，设计完直接写进游戏。不用碰文件，也不用记地址。</p>
+        <span class="dw-btn dw-btn--ghost">查看详情 →</span>
+      </div>
+    </a>
+
+    <a class="dw-card charge-card" href="charge.html">
+      <span class="cc-emoji">🌱</span>
+      <div class="cc-text">
+        <h3>项目充能 · <span class="hl">一片花田</span></h3>
+        <p>每一次充能，都是给这片花田添一株。随机看到其中一部分，搜索能找到你自己的那一株。来看看这片花田吧。</p>
+      </div>
+      <span class="dw-btn">进入花田 →</span>
+    </a>
+
+  </div>
+</main>
+
+<footer class="dw-footer">
+  <p class="foot-group" id="footGroup">仅供单机娱乐 · 全部功能独立原创自研</p>
+  <p class="dw-footer__cr">&copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.</p>
+</footer>
+
+<script>
+/* 页脚群号：只读 data/groups.json —— 跟客户端、跟客户端花田页同一份文件。
+   拿不到就不显示，绝不在这里硬写一个号码（写死了下次改号就会对不上）。 */
+(function () {
+  "use strict";
+  fetch('data/groups.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      var nums = ((d && d.groups) || [])
+        .map(function (g) { return (g.number || '').trim(); })
+        .filter(Boolean);
+      if (!nums.length) return;
+
+      var el = document.getElementById('footGroup');
+      var txt = nums.join(' / ');
+      el.innerHTML = '官方群 <b>' + txt + '</b>　（点数字复制）';
+      el.classList.add('copyable');
+      el.addEventListener('click', function () {
+        var s = nums.join(' ');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(s).then(function () {
+            el.innerHTML = '已复制 <b>' + s + '</b>　（去 QQ 粘贴搜群）';
+          }, function () { el.innerHTML = '官方群 <b>' + s + '</b>'; });
+        } else {
+          el.innerHTML = '官方群 <b>' + s + '</b>';
+        }
+      });
+    })
+    .catch(function () { /* 群号读不到就不显示，不打扰 */ });
+})();
+</script>
+
+</body>
+</html>

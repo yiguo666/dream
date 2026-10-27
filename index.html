@@ -648,8 +648,11 @@ html[data-works="card"] .wall--toggable .wrow:hover {
 }
 
 html[data-works="card"] .wall--toggable .wthumb {
+    grid-row: 1;
     width: 100%; height: auto;
-    aspect-ratio: 1 / 1;
+    /* 2026-10-27：原来 1:1，一排格子跟上面的 PVZ 大卡抢戏；改 16:9 压扁，
+       整排矮掉四分之一。横版截图本来就是宽的，16:9 几乎不裁。 */
+    aspect-ratio: 16 / 9;
     border: none; border-bottom: 1px solid var(--line-soft);
     border-radius: 0;
 }
@@ -659,9 +662,13 @@ html[data-works="card"] .wall--toggable .wthumb img {
 }
 html[data-works="card"] .wall--toggable .wrow:hover .wthumb { transform: none; }
 html[data-works="card"] .wall--toggable .wrow:hover .wthumb img { transform: scale(1.07); }
-html[data-works="card"] .wall--toggable .wname { padding: 12px 14px 0; }
-html[data-works="card"] .wall--toggable .wdesc { padding: 5px 14px 0; }
-html[data-works="card"] .wall--toggable .wver  { padding: 7px 14px 12px; }
+html[data-works="card"] .wall--toggable .wname { grid-row: 2; padding: 10px 12px 0; font-size: .94rem; }
+html[data-works="card"] .wall--toggable .wdesc { grid-row: 3; padding: 4px 12px 10px; }
+html[data-works="card"] .wall--toggable .wver {
+    /* 卡片只有 180 来像素宽，版本号跟名字挤一行会把名字截断。
+       资源大厅的卡片本来就不显示版本号，这里跟它一致：想看得切回列表形态。 */
+    display: none;
+}
 
 .wk-plaque {
     display: flex; align-items: center; gap: var(--space-4);
@@ -762,6 +769,72 @@ html[data-works="card"] .wall--toggable .wver  { padding: 7px 14px 12px; }
     display: block; margin-top: 5px;
     font-family: var(--font-sans); font-size: var(--fs-xs); font-weight: 600;
     color: var(--ink-ghost); letter-spacing: .12em;
+}
+
+/* ---------- PVZ 系列横幅（2026-10-27 少主定） ----------
+   原来 PVZ Player 和关卡编辑器各占一张产品卡，跟其它作品混在工坊墙里；
+   现在 PVZ 有一整个子站（pvz/），首页只留这一条横幅当"引子"。
+   所以工坊区用 PVZ_IDS 把这两件排除掉了，别在这里再给它们单独开卡。
+
+   2026-10-27 二次定稿：原来这条用绿+黄渐变底、无阴影，夹在白卡和蓝色主推卡之间
+   显得不像一个画风。改成跟 .wall--cover .wrow 同一套卡片语言：
+   白玻璃底 + 细描边 + 同款圆角与投影，悬停同样提亮 + 描边转 accent + 上浮；
+   同时把 🌻 emoji 换成 PVZ 自己的产品图标（logo/logo_20260629192807188.png）。
+   刻意不做的事：不给它单独的 tinted 底色 —— 首页只允许主推卡是彩色块。 */
+/* 2026-10-27 三次定稿：一条细横条撑不起"第二张有排面的卡"。
+   改成跟主推卡 .wk-feature 同族的准大卡 —— 同样的「左图右文 + 白玻璃 + 细描边 + 大圆角」，
+   只是图片格 116px（主推 168px）、标题用无衬线（主推用衬线）、没有彩色块。
+   层级就靠这两处差出来：比工坊小格重，比主推卡轻。 */
+.wk-pvz {
+    display: grid; grid-template-columns: 116px minmax(0, 1fr);
+    gap: var(--space-5); align-items: center;
+    margin: var(--space-5) 0 var(--space-6); padding: 22px var(--space-5);
+    border-radius: var(--radius-lg);
+    background: var(--glass);
+    border: 1px solid var(--line-base);
+    box-shadow: 0 4px 16px var(--shadow-soft);
+    text-decoration: none; color: inherit;
+    transition: background var(--dur-base) var(--ease),
+                border-color var(--dur-base) var(--ease),
+                box-shadow var(--dur-base) var(--ease),
+                translate var(--dur-base) var(--ease);
+}
+.wk-pvz:hover {
+    background: var(--glass-strong);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow-lift);
+    translate: 0 -4px;
+}
+/* 图片格：跟 .wk-feature__img 同款（玻璃底 + 细描边 + 方形）。
+   logo 本身是透明底黄色圆盘，居中放进去即可，不拉伸。 */
+.wk-pvz__thumb {
+    display: grid; place-items: center;
+    aspect-ratio: 1 / 1; border-radius: var(--radius-sm);
+    background: var(--glass-strong); border: 1px solid var(--line-soft);
+    overflow: hidden;
+}
+.wk-pvz__thumb img {
+    display: block; width: 88%; height: 88%; object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(124,179,66,.28));
+    transition: transform var(--dur-base) var(--ease);
+}
+.wk-pvz:hover .wk-pvz__thumb img { transform: scale(1.06); }
+.wk-pvz__body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.wk-pvz__t {
+    font-size: clamp(1.15rem, 2.2vw, 1.36rem); font-weight: 900;
+    color: var(--ink-deep); letter-spacing: -.01em; line-height: 1.3;
+}
+.wk-pvz__d { font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.7; }
+/* 三枚小胶囊：一眼看出这系列里有几样东西，比纯文字多一层"集群入口"的意思 */
+.wk-pvz__chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.wk-pvz__chips i {
+    font-style: normal; font-size: .72rem; font-weight: 600;
+    color: var(--ink-soft); background: var(--glass-strong);
+    border: 1px solid var(--line-soft); border-radius: var(--radius-pill);
+    padding: 3px 10px;
+}
+.wk-pvz__go {
+    margin-top: 4px; font-size: var(--fs-sm); font-weight: 700; color: var(--accent);
 }
 
 .wall--cover {
@@ -920,102 +993,6 @@ html[data-works="card"] .wall--toggable .wver  { padding: 7px 14px 12px; }
     font-variant-numeric: tabular-nums; letter-spacing: .06em;
 }
 
-.endband {
-    max-width: 960px;
-    margin: 0 auto;
-}
-
-.endband__card {
-    background: var(--glass);
-    border: 1px solid var(--line-base);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    position: relative; overflow: hidden;
-    transition: border-color .3s;
-}
-.endband__card:hover { border-color: var(--accent-line); }
-.endband__t {
-    font-size: var(--fs-md); font-weight: 800; color: var(--ink);
-    margin-bottom: var(--space-4);
-}
-.endband__t::after { content: '.'; color: var(--accent); }
-.endband__c { font-size: var(--fs-sm); font-weight: 500; color: var(--ink-ghost); }
-
-.term {
-    position: relative; overflow: hidden;
-    display: flex; flex-direction: column;
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: var(--radius);
-    box-shadow: inset 0 0 10px rgba(0,0,0,.8), 0 8px 24px rgba(15,27,51,.10);
-    height: 320px; padding: 14px 18px;
-    font-family: Consolas, 'Courier New', monospace;
-    font-size: .78rem; color: #58a6ff; text-align: left;
-}
-.term canvas {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    opacity: .12; pointer-events: none;
-}
-
-.term__main {
-    position: relative; z-index: 1; flex: 1; min-height: 0;
-    display: grid; grid-template-columns: 1fr 176px; gap: 18px;
-}
-.term__box {
-    min-height: 0;
-    display: flex; flex-direction: column; overflow: hidden;
-}
-.term__side {
-    border-left: 1px solid rgba(88, 166, 255, .16);
-    padding-left: 16px; overflow: hidden;
-    font-size: .68rem; color: #6b7f95;
-}
-.term__side p { margin: 0 0 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.term__side b { color: #58a6ff; font-weight: 700; margin-right: 7px; }
-.term__side-t { color: #34d399 !important; font-weight: 700; margin-bottom: 9px !important; }
-.term__side-hint { color: #3d4b5c !important; white-space: normal !important; line-height: 1.55; margin-top: 12px !important; }
-.term__ln {
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    flex-shrink: 0; margin-bottom: 2px;
-}
-.term__ln.typing::after { content: '▌'; animation: termCaret .8s step-end infinite; }
-@keyframes termCaret { 50% { opacity: 0; } }
-.term__ln--alert { color: #ff3366 !important; font-weight: 700; text-shadow: 0 0 8px #ff3366; }
-.term__ln--ok    { color: #34d399 !important; text-shadow: 0 0 6px rgba(52,211,153,.4); }
-.term__warp {
-    margin-top: auto; align-self: flex-start;
-    font: 700 .74rem/1 Consolas, 'Courier New', monospace; letter-spacing: .06em;
-    color: #34d399; background: transparent; cursor: pointer;
-    border: 1px solid rgba(52,211,153,.55); border-radius: 999px;
-    padding: 6px 14px; opacity: 0; transform: translateY(6px); pointer-events: none;
-    transition: opacity .5s, transform .5s, box-shadow .3s;
-}
-.term__warp.show { opacity: 1; transform: none; pointer-events: auto; }
-.term__warp:hover { box-shadow: 0 0 14px rgba(52,211,153,.5); }
-.term__warp.flash { animation: termFlash .5s ease 2; }
-@keyframes termFlash { 50% { box-shadow: 0 0 22px rgba(52,211,153,.9); } }
-
-.term__cmd {
-    margin-top: 8px; display: flex; align-items: center; gap: 6px;
-    border-top: 1px solid rgba(88, 166, 255, .18); padding-top: 7px;
-}
-.term__ps { color: #34d399; flex-shrink: 0; font-weight: 700; }
-.term__cmd input {
-    flex: 1; min-width: 0; background: transparent; border: none; outline: none;
-    font: 500 .78rem/1.4 Consolas, 'Courier New', monospace; color: #c9d1d9;
-    caret-color: #58a6ff; padding: 0;
-}
-.term__cmd input::placeholder { color: #3d4b5c; }
-
-@media (max-width: 900px) {
-    .term { height: 280px; }
-    .term__main { grid-template-columns: 1fr; }
-    .term__side { display: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-    .term__ln.typing::after { animation: none; }
-    .term__warp.flash { animation: none; }
-}
 
 @media (max-width: 1100px) {
     .wall--cover { grid-template-columns: repeat(4, 1fr); }
@@ -1036,6 +1013,9 @@ html[data-works="card"] .wall--toggable .wver  { padding: 7px 14px 12px; }
     }
     .wk-feature { grid-template-columns: 1fr; gap: var(--space-4); }
     .wk-feature__img { max-width: 200px; }
+    /* PVZ 准大卡：窄屏改上下排，图格固定 96px，别把标题挤成一条 */
+    .wk-pvz { grid-template-columns: 1fr; gap: var(--space-4); padding: 18px; }
+    .wk-pvz__thumb { width: 96px; height: 96px; aspect-ratio: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
 
@@ -1254,6 +1234,20 @@ html[data-theme="dark"] .hero__social a.done {
 
         <div class="wk-plaque" id="wkPlaque"></div>
         <a class="wk-feature" id="wkFeature" href="#"></a>
+
+        <!-- PVZ 子站入口（静态写死，不跟工坊墙一起渲染）：
+             里面是 PVZ Player、关卡编辑器两件工具 + 一片充能花田。 -->
+        <a class="wk-pvz" href="pvz/index.html">
+            <span class="wk-pvz__thumb"><img src="logo/logo_20260629192807188.png" alt="" loading="lazy"></span>
+            <span class="wk-pvz__body">
+                <span class="wk-label" style="align-self:flex-start;">独立原创 · PVZ 系列</span>
+                <span class="wk-pvz__t">神奇的道具，一片花田</span>
+                <span class="wk-pvz__d">PVZ Player 把原版玩得更爽，含畅玩机；关卡编辑器让你自己设计关卡，做完一张图就能发给朋友。还有一片由支持者组成的花田。</span>
+                <span class="wk-pvz__chips"><i>PVZ Player</i><i>关卡编辑器</i><i>项目充能</i></span>
+                <span class="wk-pvz__go">进去看看 →</span>
+            </span>
+        </a>
+
         <div class="wall wall--toggable" id="originWall"></div>
         <p class="wk-creed" id="wkCreed"></p>
     </section>
@@ -1267,36 +1261,67 @@ html[data-theme="dark"] .hero__social a.done {
         <div class="wall wall--cover" id="resourceWall"></div>
     </section>
 
-    <section class="sec">
-        <div class="endband">
-            <div class="endband__card">
-                <h2 class="endband__t">系统终端 <span class="endband__c">· 可交互 —— 试试敲条指令</span></h2>
-                <div class="term" id="term">
-                    <canvas id="termRain"></canvas>
-                    <div class="term__main">
-                        <div class="term__box" id="termBox">
-                            <button class="term__warp" id="termWarp" type="button">⌁ 次元跃迁 // WARP</button>
-                        </div>
-                        <aside class="term__side">
-                            <p class="term__side-t">// COMMANDS</p>
-                            <p><b>help</b>指令速成</p>
-                            <p><b>warp</b>随机跃迁</p>
-                            <p><b>whoami</b>查查你是谁</p>
-                            <p><b>sun</b>要点阳光</p>
-                            <p><b>matrix</b>代码雨加浓</p>
-                            <p><b>date</b>终端报时</p>
-                            <p><b>clear</b>清屏</p>
-                            <p class="term__side-hint">↑ 输入试试，乱敲也行 —— 据说还藏着几条没写出来的。</p>
-                        </aside>
-                    </div>
-                    <div class="term__cmd">
-                        <span class="term__ps">guest@01guo:~$</span>
-                        <input id="termCmd" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="输入 help 查看指令">
-                    </div>
-                </div>
-            </div>
+    <style>
+    .ending {
+        margin-top: var(--space-12);
+        padding-top: var(--space-10);
+        border-top: 1px solid var(--line-base);
+        text-align: center;
+    }
+    .ending__quote {
+        font-family: var(--font-serif);
+        color: var(--ink-soft);
+        font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+        line-height: 2;
+        margin: 0 auto;
+        max-width: 36em;
+    }
+    .ending__quote .em { color: var(--ink-deep); font-weight: 700; }
+    .ending__nav {
+        display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+        gap: var(--space-2) var(--space-4);
+        margin-top: var(--space-8);
+    }
+    .ending__nav a {
+        color: var(--ink-mute); text-decoration: none; font-size: 0.88rem;
+        transition: color var(--dur-base) var(--ease);
+    }
+    .ending__nav a:hover { color: var(--accent); }
+    .ending__nav .dot { color: var(--ink-ghost); user-select: none; font-size: 0.8rem; }
+    .ending__mark-wrap { overflow: hidden; margin-top: var(--space-10); }
+    .ending__mark {
+        font-family: var(--font-serif);
+        font-size: clamp(3.2rem, 16vw, 12rem);
+        font-weight: 700;
+        letter-spacing: .08em;
+        line-height: 1;
+        text-indent: .08em; /* 抵消 letter-spacing 造成的视觉偏移 */
+        background: var(--grad-text);
+        -webkit-background-clip: text; background-clip: text;
+        color: transparent;
+        opacity: .18;
+        transform: translateY(20%);
+        user-select: none; pointer-events: none;
+    }
+    @media (max-width: 760px) {
+        .ending__quote br { display: none; }
+        .ending__quote { padding: 0 var(--space-4); }
+    }
+    </style>
+
+    <section class="ending" aria-label="关于 Dream">
+        <p class="ending__quote">有梦想的人注定要奔赴<span class="em">星辰大海</span>。</p>
+        <nav class="ending__nav" aria-label="站点导航">
+            <a href="origin.html">原创工坊</a><span class="dot">·</span>
+            <a href="resource.html">资源大厅</a><span class="dot">·</span>
+            <a href="projects/lrcplayer.html">歌词跳转播放器</a><span class="dot">·</span>
+            <a href="pvz/index.html">PVZ 系列</a>
+        </nav>
+        <div class="ending__mark-wrap">
+            <div class="ending__mark" aria-hidden="true">DREAM</div>
         </div>
     </section>
+
 
     <footer class="dw-footer">
         <div class="friends" id="friendLinks"><span class="friends__label">友情链接</span></div>
@@ -1313,8 +1338,17 @@ function allProducts() {
 function firstLine(s) {
     return String(s || '').split(/\r?\n/)[0].trim();
 }
+/* PVZ 的两件工具在首页不再各占一张卡 —— 它们有自己的子站（pvz/），
+   首页只留上面那条横幅当引子。
+   ★ 为什么按 id 排除、而不是给 softwares.js 换个分类：
+     换了分类，CMS「原创工坊」页就再也管理不到这两条（那边只认 🎯 原创工坊），
+     改个版本号还得去资源大厅里找。数据不动，只在这里挡一下最省事。
+   以后 PVZ 出了新工具，把 id 补进这张表就行。 */
+var PVZ_IDS = ['P733', '650379'];
+
 function pickWorks(cats, limit) {
     var list = allProducts().filter(function (p) {
+        if (PVZ_IDS.indexOf(p.id) >= 0) return false;
         return cats.indexOf(p.category) >= 0;
     });
     list.sort(function (a, b) {
@@ -1741,292 +1775,6 @@ try {
     }
 })();
 
-(function terminal() {
-    var term = document.getElementById('term');
-    var box = document.getElementById('termBox');
-    var warp = document.getElementById('termWarp');
-    var canvas = document.getElementById('termRain');
-    if (!term || !box || !canvas) return;
-    var reduced = window.matchMedia
-        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var ctx = canvas.getContext('2d');
-
-    var rainColor = '#58a6ff', rainId = null, drops = [], FS = 12;
-    var ALPHA = '0101ABCDEF<>//$#'.split('');
-    var termVisible = false;
-
-    function rainResize() {
-        var r = term.getBoundingClientRect();
-        canvas.width = (r.width > 0 ? r.width : 300);
-        canvas.height = (r.height > 0 ? r.height : 248);
-        var n = Math.max(Math.floor(canvas.width / FS), 10);
-        drops = [];
-        for (var i = 0; i < n; i++) drops.push(1);
-    }
-    function rainDraw() {
-        ctx.fillStyle = 'rgba(13, 17, 23, 0.08)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = rainColor;
-        ctx.font = FS + 'px monospace';
-        for (var i = 0; i < drops.length; i++) {
-            ctx.fillText(ALPHA[(Math.random() * ALPHA.length) | 0], i * FS, drops[i] * FS);
-            if (drops[i] * FS > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        }
-        rainId = requestAnimationFrame(rainDraw);
-    }
-    function rain(on) {
-        if (reduced) return;
-        if (on && rainId === null) { rainResize(); rainId = requestAnimationFrame(rainDraw); }
-        else if (!on && rainId !== null) { cancelAnimationFrame(rainId); rainId = null; }
-    }
-    function setRain(color, opacity) {
-        rainColor = color;
-        if (opacity) canvas.style.opacity = opacity;
-    }
-    document.addEventListener('visibilitychange', function () {
-        rain(termVisible && !document.hidden);
-    });
-
-    function line(text, cls) {
-        var d = document.createElement('div');
-        d.className = 'term__ln' + (cls ? ' ' + cls : '');
-        d.setAttribute('data-text', text);
-        d.innerText = reduced ? text : '';
-        box.insertBefore(d, warp);
-        var all = box.querySelectorAll('.term__ln');
-        if (all.length > 10) all[0].remove();
-        return d;
-    }
-    function clearLines() {
-        var all = box.querySelectorAll('.term__ln');
-        for (var i = 0; i < all.length; i++) all[i].remove();
-    }
-    function type(lines, done) {
-        if (reduced) { if (done) done(); return; }
-        var i = 0;
-        (function next() {
-            if (i >= lines.length) { if (done) done(); return; }
-            var el = lines[i++], full = el.getAttribute('data-text'), c = 0;
-            el.classList.add('typing');
-            var t = setInterval(function () {
-                if (c < full.length) { c++; el.innerText = full.slice(0, c); }
-                else {
-                    clearInterval(t);
-                    el.classList.remove('typing');
-                    setTimeout(next, 180);
-                }
-            }, 26);
-        })();
-    }
-    function typeProgress(el, base, done) {
-        if (reduced) { el.innerText = base + '100%'; if (done) done(); return; }
-        var dur = 2000 + Math.random() * 3000, t0 = Date.now();
-        (function tick() {
-            var p = Math.min((Date.now() - t0) / dur, 1);
-            el.innerText = base + Math.floor(p * 100) + '%';
-            if (p < 1) setTimeout(tick, 30 + Math.random() * 60);
-            else { el.innerText = base + '100%'; if (done) done(); }
-        })();
-    }
-
-    var INIT = [
-        '> Initialize: 01guo.com ... OK.',
-        '> Host: Dream · 畅享工坊 [x64]',
-        '> Mission: Build tools worth keeping.',
-        '> Status: Core engine running smoothly...'
-    ];
-    var ALERT = [
-        '> [CRITICAL] ANOMALOUS OVERFLOW DETECTED.',
-        '> [WARNING] SPATIAL LAYER BREACH...'
-    ];
-    var INJECT = [
-        '> Injecting: Sockets.Connect(Fourth_Dimension)...',
-        '> Compiling: NoteEngine.Sync.Optimize() -> ',
-        '> Buffer: Allocating portal stack [0x7FFF]',
-        '> Handshake: Gateway verification passed.',
-        '> Info: Initializing wormhole link...'
-    ];
-
-    function pick(a) { return a[(Math.random() * a.length) | 0]; }
-    var MISSIONS = [
-        ['> [MISSION]: 检测到一位读到了页底的来访者。',
-         '> [ACTION]: 点击「次元跃迁」，随机传送到一个页面。'],
-        ['> [MISSION]: 时空坐标校准完成。',
-         '> [ACTION]: 在下方输入 help，敲条指令试试手气。'],
-        ['> [MISSION]: 捕捉到未知维度的敲门声。',
-         '> [ACTION]: 输入 warp，随机去站内某个页面看看。']
-    ];
-
-    var DESTS = [
-        { name: '原创工坊', url: 'origin.html', tag: '每一件东西都是手搓的' },
-        { name: '资源大厅', url: 'resource.html', tag: '下载入口全在这里' },
-        { name: 'PVZ Player 详情页', url: 'projects/pvzplayer.html', tag: '阵容工坊的老巢' },
-        { name: '歌词播放器详情页', url: 'projects/lrcplayer.html', tag: '音乐的次元' }
-    ];
-    var WHOAMI = [
-        '> whoami: 一位至少翻到了页底的可疑人物。',
-        '> whoami: 深夜冲浪选手（本地时区待考）。',
-        '> whoami: 沙盒不联网，猜不出你是谁 —— 但欢迎你。'
-    ];
-    var SUN = [
-        '> ☀ +50 阳光。……你好像听到了熟悉的音效。',
-        '> ☀ +50 阳光。别惦记了，这只是个彩蛋。',
-        '> ☀ +50 阳光 —— 距离下一波僵尸还有 20 秒。'
-    ];
-    var EVENTS = [
-        '> [EVENT] 捕捉到一段野生旋律，已悄悄归档。',
-        '> [EVENT] 时间线分叉：两个你都在读这一页。',
-        '> [EVENT] 隔壁维度的猫翻了个身，无碍。',
-        '> [EVENT] 一次微小的跃迁被记录在案。'
-    ];
-
-    function showWarp() { if (warp) warp.classList.add('show'); }
-    function hideWarp() { if (warp) { warp.classList.remove('show'); } }
-
-    function cycle() {
-        clearLines();
-        hideWarp();
-        setRain('#58a6ff', '');
-
-        INJECT[2] = '> Buffer: Allocating portal stack [0x'
-            + ('0000' + ((Math.random() * 0xFFFF) | 0).toString(16).toUpperCase()).slice(-4) + ']';
-        var ls = [];
-        INIT.forEach(function (t) { ls.push(line(t)); });
-        type(ls, function () {
-            setTimeout(function () {
-                setRain('#ff3366', '');
-                var as = [];
-                ALERT.forEach(function (t) { as.push(line(t, 'term__ln--alert')); });
-                type(as, function () {
-                    setTimeout(function () {
-                        setRain('#00bcff', '0.3');
-                        clearLines();
-                        var l1 = line(INJECT[0]);
-                        var l2 = line(INJECT[1]);
-                        var rest = [];
-                        INJECT.slice(2).forEach(function (t) { rest.push(line(t)); });
-                        type([l1], function () {
-                            typeProgress(l2, INJECT[1], function () {
-                                type(rest, function () {
-                                    setTimeout(function () {
-                                        setRain('#34d399', '');
-                                        clearLines();
-                                        var ms = [];
-                                        pick(MISSIONS).forEach(function (t) { ms.push(line(t, 'term__ln--ok')); });
-                                        type(ms, function () {
-                                            showWarp();
-
-                                            if (Math.random() < .5) line(pick(EVENTS), 'term__ln--ok');
-                                            setTimeout(cycle, 20000);
-                                        });
-                                    }, 500);
-                                });
-                            });
-                        });
-                    }, 600);
-                });
-            }, 6000);
-        });
-    }
-
-    function boot() {
-        cycle();
-        rain(true);
-    }
-
-    if (reduced) {
-
-        INIT.forEach(function (t) { line(t); });
-        line(ALERT[1], 'term__ln--alert');
-        INJECT.forEach(function (t, i) {
-            line(i === 1 ? t + '100%' : t, i === 1 ? '' : (i === 0 ? '' : ''));
-        });
-        pick(MISSIONS).forEach(function (t) { line(t, 'term__ln--ok'); });
-        showWarp();
-    } else if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                termVisible = e.isIntersecting;
-                rain(termVisible && !document.hidden);
-                if (termVisible && !boot._done) { boot._done = true; boot(); }
-            });
-        }, { threshold: 0.2 }).observe(term);
-    } else {
-        termVisible = true;
-        boot();
-    }
-
-    var warping = false;
-    function doWarp() {
-        if (warping) return;
-        if (warp) {
-            warp.classList.remove('flash');
-            void warp.offsetWidth;
-            warp.classList.add('flash');
-        }
-        var cur = location.pathname.split('/').pop() || 'index.html';
-        var pool = DESTS.filter(function (d) { return d.url !== cur; });
-        var dest = pick(pool.length ? pool : DESTS);
-        warping = true;
-        line('> Portal: 跃迁坐标锁定 →【' + dest.name + '】' + dest.tag, 'term__ln--ok');
-        line('> Portal: 3… 2… 1… 抓稳了。', 'term__ln--ok');
-        setTimeout(function () { location.href = dest.url; }, 1200);
-    }
-    if (warp) warp.addEventListener('click', doWarp);
-
-    var HELP = [
-        '> ┌── 指令速成 ──────────────────────',
-        '> │ warp    随机传送到站内一个页面',
-        '> │ whoami  查查你是谁',
-        '> │ sun     要一点阳光',
-        '> │ matrix  让代码雨下得更狂',
-        '> │ date    让终端报个时',
-        '> │ clear   清屏',
-        '> └── 乱敲也算玩法，还藏着几条没写出来的。'
-    ];
-    var PVZ = [
-        '> ☀ 先种向日葵。',
-        '> 🧟 一大波僵尸正在接近……放心，这个终端挡得住。',
-        '> 🌻 从 2009 年一路玩到现在的人，应该不止我一个。'
-    ];
-    var cmdInput = document.getElementById('termCmd');
-    function execCommand(raw) {
-        var c = (raw || '').trim().toLowerCase();
-        if (!c) return;
-        line('guest@01guo:~$ ' + raw);
-        if (c === 'help') { HELP.forEach(function (t) { line(t); }); return; }
-        if (c === 'warp' || c === 'portal' || c === '跃迁') { doWarp(); return; }
-        if (c === 'clear' || c === 'cls') { clearLines(); return; }
-        if (c === 'whoami') { line(pick(WHOAMI), 'term__ln--ok'); return; }
-        if (c === 'sun' || c === '阳光') { line(pick(SUN), 'term__ln--ok'); return; }
-        if (c === 'matrix') {
-            setRain('#34d399', '0.22');
-            setTimeout(function () { setRain('#58a6ff', ''); }, 6000);
-            line('> Rain: 已加大 —— 一时半会儿停不下来。');
-            return;
-        }
-        if (c === 'date' || c === 'time') { line('> Local time: ' + new Date().toLocaleString('zh-CN')); return; }
-
-        if (c === 'dream') { line('> Dream: 这里的一切由 Dream 手写 —— 无外包，无套壳。', 'term__ln--ok'); return; }
-        if (c === 'pvz' || c === '植物大战僵尸') { line(pick(PVZ), 'term__ln--ok'); return; }
-        if (c === 'ls' || c === 'dir') { line('> dream/  origin/  resource/  …（假装这是目录）'); return; }
-        if (c === 'cat') { line('> 🐱 喵。'); return; }
-        if (c === 'exit' || c === 'quit') { line('> exit: 试试关掉标签页 —— 开玩笑的，别走。'); return; }
-        if (c === 'ping' || c === 'ping 01guo.com') { line('> PONG. 0.04ms —— 本地沙盒，快得离谱。'); return; }
-        if (c.indexOf('sudo') === 0) { line('> Nice try. 这里没有 root，只有 Dream。', 'term__ln--alert'); return; }
-        line('> ' + c + ': command not found —— 试试 help。', 'term__ln--alert');
-    }
-    if (cmdInput) {
-        cmdInput.addEventListener('keydown', function (e) {
-            e.stopPropagation();
-            if (e.key === 'Enter') {
-                execCommand(cmdInput.value);
-                cmdInput.value = '';
-            }
-        });
-    }
-})();
 </script>
 
 <script>

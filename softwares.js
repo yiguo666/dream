@@ -86,23 +86,6 @@
       "customPagePath": "projects/pvzeditor.html"
     },
     {
-      "id": "P734",
-      "name": "PvZ 畅玩机",
-      "category": "🎯 原创工坊",
-      "weight": "⭐⭐⭐⭐⭐",
-      "mainImage": "logo/logo_20261007143005082.png",
-      "detailImages": "logo/logo_20261009122714918.png, logo/logo_20261009122718081.png",
-      "resourcePath": "",
-      "isRecommend": false,
-      "version": "1.3.1",
-      "size": "2.3MB",
-      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
-      "description": "单击就能畅玩各种原创的关卡。\r\n收到朋友发来的关卡文件，不用装编辑器、不用输卡密，点击就能直接进关卡。\r\n\r\np.s.畅玩机完全免费，是 PvZ 关卡编辑器的配套工具；安装包不到 3MB，也不需要额外装 .NET 运行时。",
-      "detailPageType": "详情页通用",
-      "detailPagePath": "",
-      "customPagePath": ""
-    },
-    {
       "id": "P241",
       "name": "DotNet8",
       "category": "🎯 原创工坊",
@@ -631,8 +614,8 @@
       "jumpUrl": "https://01guo.com/"
     },
     {
-      "siteName": "nox",
-      "jumpUrl": ""
+      "siteName": "PVZ Player",
+      "jumpUrl": "https://PVZ.01guo.com/"
     }
   ],
   "categories": [
@@ -688,6 +671,10 @@
       }
     ],
     "milestones": [
+      {
+        "date": "2026-10-27",
+        "text": "PVZ Plyaer大更新迭代，纪念成为UP主第1000天"
+      },
       {
         "date": "2026-09-23",
         "text": "歌词跳转播放器上线扭蛋机玩法"

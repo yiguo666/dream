@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+<title>项目充能 · 一片花田</title>
+<meta name="description" content="植物大战僵尸系列的项目充能墙：每一位支持过这个项目的人，都是花田里的一株。往下滚是全部记录，搜索能找到你自己的那一株。" />
+<link rel="stylesheet" href="../assets/base.css" />
+<style>
+  :root{ --c-bg-1:#FBF8F2; --c-bg-2:#F2E9D9; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--c-bg-2)}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Noto Sans SC','Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;
+    color:var(--ink);min-height:100vh;background:transparent;
+  }
+
+  /* ===== 底层壁纸：一张前院草坪，压在玻璃底下 =====
+     max-width/height 必须放开：base.css 有 img{max-width:100%}，
+     会把 118% 压回 100%，右边就露出一条空白。 */
+  .bg-wall{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+  .bg-wall img{
+    position:absolute;left:-5%;top:-5%;width:110%;height:110%;
+    max-width:none;max-height:none;
+    object-fit:cover;object-position:30% 62%;display:block;
+    filter:blur(6.5px) saturate(.88) brightness(1.02) contrast(1.02);
+    transform-origin:50% 55%;will-change:transform;
+    animation:bgDrift 72s ease-in-out infinite alternate;
+  }
+  @keyframes bgDrift{
+    0%   { transform:scale(1.05) translate3d(0,0,0); }
+    50%  { transform:scale(1.09) translate3d(-1.1%,-1.3%,0); }
+    100% { transform:scale(1.06) translate3d(1.0%,1.1%,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .bg-wall img{animation:none;transform:scale(1.05)}
+  }
+
+  /* 玻璃：一道斜光 + 顶部给标题留的净区 + 整体只罩一层薄雾 */
+  .bg-veil{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      linear-gradient(116deg, rgba(255,255,255,.26) 0%, rgba(255,255,255,0) 34%, rgba(255,255,255,.09) 58%, rgba(255,255,255,0) 78%),
+      linear-gradient(180deg, rgba(251,248,242,.90) 0px, rgba(251,248,242,.50) 160px, rgba(251,248,242,0) 320px),
+      linear-gradient(180deg, rgba(251,248,242,.52) 0%, rgba(251,248,242,.46) 42%, rgba(246,238,222,.54) 76%, rgba(246,238,222,.88) 100%);
+  }
+
+  /* 极简顶栏：不悬浮、不抢戏 */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;position:relative;z-index:2}
+  .topbar a.back{display:inline-flex;align-items:center;gap:8px;color:var(--accent-dark);text-decoration:none;font-weight:800;font-size:1rem}
+  .topbar a.back .logo-icon{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-bright));font-size:.85rem;box-shadow:0 2px 8px var(--accent-line)}
+  .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .search-thin{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.72);border:1px solid var(--accent-line);border-radius:30px;padding:6px 12px;min-width:0}
+  .search-thin .ic{opacity:.5;font-size:.85rem}
+  .search-thin input{border:none;background:transparent;outline:none;color:var(--ink);font-size:.82rem;width:130px;min-width:0;font-family:inherit}
+  .search-thin input::placeholder{color:var(--ink-ghost)}
+  .search-go{flex:none;border:none;cursor:pointer;font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:.05em;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-bright));padding:7px 14px;border-radius:30px;box-shadow:0 3px 10px var(--accent-line);transition:transform .18s ease}
+  .search-go:hover{transform:translateY(-1px)}
+  .search-go:active{transform:translateY(0)}
+  .hint{font-size:.78rem;color:var(--ink-soft);min-height:1em}
+  .soft-link{color:var(--accent);font-size:.8rem;font-weight:600;text-decoration:none;border-bottom:1px dotted var(--accent-line);cursor:pointer}
+
+  /* 静默的题献 */
+  .dedication{text-align:center;padding:26px 22px 6px;position:relative;z-index:2}
+  .dedication h1{font-family:Georgia,'Songti SC','Noto Serif SC',serif;font-size:2.2rem;font-weight:700;color:var(--ink-deep);letter-spacing:.04em}
+  .dedication .ded-text{font-family:Georgia,'Songti SC','Noto Serif SC',serif;font-style:italic;font-size:1.02rem;color:var(--ink-soft);margin-top:10px;letter-spacing:.02em}
+  .dedication .meta{font-size:.74rem;color:var(--ink-mute);margin-top:10px;letter-spacing:.4px}
+
+  /* 名单下面收尾：只留档位图例 */
+  .ground-note{text-align:center;padding:22px 0 0;position:relative;z-index:2}
+  .legend-line{font-size:.76rem;color:var(--ink-soft);display:inline-flex;gap:16px;flex-wrap:wrap;justify-content:center}
+  .legend-line .it{display:inline-flex;align-items:center;gap:6px}
+  .legend-line .sw{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,.05)}
+
+  /* ===== 一片花田：名字一株一株滚过，正中那株亮起 ===== */
+  .wall{max-width:760px;margin:26px auto 0;padding:0 22px;position:relative;z-index:2}
+  .wall-kicker{text-align:center;font-size:.72rem;letter-spacing:.14em;color:var(--accent-dark);font-weight:700}
+  .stage{
+    position:relative;height:430px;overflow:hidden;margin-top:12px;
+    border-radius:20px;border:1px solid var(--accent-line);
+    background:rgba(255,255,255,.42);
+    -webkit-backdrop-filter:blur(14px) saturate(1.1);
+    backdrop-filter:blur(12px) saturate(1.1);
+    box-shadow:0 18px 50px rgba(120,104,78,.12);
+  }
+  .track-mask{
+    position:absolute;inset:0;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 13%,#000 87%,transparent 100%);
+    mask-image:linear-gradient(to bottom,transparent 0,#000 13%,#000 87%,transparent 100%);
+  }
+  .track{position:absolute;left:0;right:0;top:0;will-change:transform}
+
+  .track .row{height:64px;display:flex;align-items:center;padding:0 24px;opacity:.62;transition:opacity .3s ease, transform .3s ease}
+  .track .content{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:6px 16px;border-radius:999px;border:1px solid transparent;
+    transition:background .3s ease, border-color .3s ease;
+  }
+  .track .row.focus{opacity:1;transform:scale(1.04)}
+  .track .row.focus .content{background:rgba(255,179,0,.12);border-color:var(--accent-line)}
+  .track .ring{
+    width:44px;height:44px;border-radius:50%;flex:none;
+    border:3px solid var(--c);background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    opacity:.55;transform:scale(.9);
+    transition:opacity .28s ease, transform .28s ease, box-shadow .28s ease;
+  }
+  .track .nm{font-size:1.04rem;font-weight:600;color:var(--ink);letter-spacing:.3px;white-space:nowrap}
+  .track .tier{font-size:.72rem;color:var(--ink-soft);opacity:.85;transition:color .28s ease, opacity .28s ease}
+  /* 期号：安静地贴在名字右边，跟档位同一档灰度，不跟名字抢 */
+  .track .period{font-size:.72rem;color:var(--ink-soft);opacity:.8;white-space:nowrap}
+  /* 次数：只有充过一次以上的人才出现，做成小胶囊，一眼看出"这位来过好几回" */
+  .track .times{font-size:.68rem;font-weight:700;color:var(--accent-dark);background:rgba(255,179,0,.16);
+    border-radius:999px;padding:2px 8px;white-space:nowrap}
+  .track .badge{font-size:.82rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.12))}
+  .track .row.focus .ring{opacity:1;transform:scale(1);box-shadow:0 0 0 4px var(--g), 0 8px 22px var(--g)}
+  .track .row.focus .nm{color:var(--ink-deep)}
+  .track .row.focus .tier{color:var(--accent-dark);opacity:1}
+  .track .row.focus .period{color:var(--accent-dark);opacity:1}
+
+  .track .row.dim{opacity:.10}
+  .track .row.hit{opacity:1}
+  .track .row.hit .content{background:rgba(255,179,0,.10);border-color:var(--accent-line)}
+  .track .row.hit .ring{opacity:1;transform:scale(1);box-shadow:0 0 0 4px var(--g)}
+  .track .row.hit .nm{color:var(--ink-deep)}
+  .track .row.hit .tier{color:var(--accent-dark);opacity:1}
+  .track .row.hit .period{color:var(--accent-dark);opacity:1}
+
+  /* 名单短到不用滚时（比如只列了两位）：全部点亮、不设"正中那株"，
+     否则一屏两人却永远只有一个人是亮的，看着像另一个被关掉了。 */
+  .track.static .row{opacity:1;transform:none}
+  .track.static .row .ring{opacity:1;transform:scale(1)}
+  .track.static .row .nm{color:var(--ink-deep)}
+  .track.static .row .tier{color:var(--accent-dark);opacity:1}
+  .track.static .row .period{color:var(--accent-dark);opacity:1}
+
+  .stage-hint{text-align:center;margin-top:12px;font-size:.76rem;color:var(--ink-mute)}
+
+  footer{text-align:center;padding:28px 22px 44px;color:var(--ink-mute);font-size:.78rem;line-height:1.7;position:relative;z-index:2}
+  footer a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent-line)}
+
+  @media (max-width:600px){
+    .dedication h1{font-size:1.6rem}
+    .search-thin input{width:88px}
+    .wall{margin-top:24px}
+    .stage{height:392px}
+    .track .row{padding:0 20px}
+    .track .content{gap:10px}
+    .track .nm{font-size:.96rem}
+    .bg-wall img{filter:blur(5px) saturate(.70) brightness(1.03);object-position:34% 60%}
+    .bg-veil{background:
+      linear-gradient(180deg, rgba(251,248,242,.92) 0px, rgba(251,248,242,.54) 140px, rgba(251,248,242,0) 290px),
+      linear-gradient(180deg, rgba(251,248,242,.36) 0%, rgba(251,248,242,.16) 42%, rgba(246,238,222,.34) 76%, rgba(246,238,222,.88) 100%)}
+  }
+</style>
+</head>
+<body class="product-theme" data-accent="amber">
+
+<div class="bg-wall" aria-hidden="true"><img src="bg-lawn.jpg" alt="" /></div>
+<div class="bg-veil" aria-hidden="true"></div>
+
+<nav class="topbar">
+  <a class="back" href="index.html"><span class="logo-icon">🌻</span>PVZ 系列</a>
+  <div class="top-actions">
+    <label class="search-thin">
+      <span class="ic">🔎</span>
+      <input id="q" type="text" placeholder="找找你的名字…" autocomplete="off" />
+    </label>
+    <button class="search-go" id="searchBtn" type="button">搜索</button>
+    <span class="hint" id="hint"></span>
+  </div>
+</nav>
+
+<main>
+  <div class="dedication">
+    <h1>一片花田</h1>
+    <p class="ded-text">感谢每一个为这片花田添绿的人。</p>
+    <p class="meta" id="meta"></p>
+  </div>
+
+  <section class="wall" id="wall">
+    <p class="wall-kicker" id="wallKicker">全部记录</p>
+    <div class="stage" id="stage">
+      <div class="track-mask"><div class="track" id="track"></div></div>
+    </div>
+    <p class="stage-hint" id="stageHint">鼠标悬停会停下 · 只列真正进了花田的人</p>
+
+    <!-- 档位图例放在名单下面：先让人看名字，再解释那些颜色代表什么。
+         页头只留标题和一句题献，重心才不会全堆在上面。 -->
+    <div class="ground-note">
+      <div class="legend-line" id="legendLine"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div id="footHint"></div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var hint = document.getElementById('hint');
+
+  /* 档位口径（价格 / 颜色 / 圆环大小）属于**页面样式**，不是名单数据。
+     CMS 只负责写 data/patrons.json 里的「谁、哪一档、第一次上墙是哪天」；
+     改价格、调配色留在这里，CMS 保存不会把它覆盖掉。 */
+  var TIERS = [
+    { key:'year',   name:'年卡', price:'¥88', color:'#F5C66B', size:66 },
+    { key:'season', name:'季卡', price:'¥25', color:'#8FD8CE', size:58 },
+    { key:'month',  name:'月卡', price:'¥10', color:'#A8D96A', size:50 },
+    { key:'week',   name:'周卡', price:'¥3',  color:'#C7E39A', size:42,
+      promo:'赞助活动折扣期间，只赠送周卡卡密，不上榜单' }
+  ];
+
+  function boot(D, GRP){
+  var UPDATED = new Date(D.updated);
+  var DAY = 86400000;
+  function daysBetween(a,b){ return Math.floor((b - a)/DAY); }
+  function rgba(hex, a){
+    var h = hex.replace('#','');
+    if(h.length === 3) h = h.split('').map(function(x){return x+x}).join('');
+    var r = parseInt(h.substr(0,2),16), g = parseInt(h.substr(2,2),16), b = parseInt(h.substr(4,2),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  var tierMap = {};
+  D.tiers.forEach(function(t){ tierMap[t.key] = t; });
+
+  /* 花田收录规则（少主定）：周卡不记录；月卡仅非活动优惠期才有待遇，活动月卡也不记录；
+     季卡/年卡正常。p.promo 表示该次充能发生在活动优惠期（如活动月卡）。 */
+  var TIER_ORDER = { week:1, month:2, season:3, year:4 };
+  function onWall(p){
+    var t = tierMap[p.t];
+    if(!t) return false;
+    if(TIER_ORDER[p.t] < 2) return false;
+    if(t.promo) return false;
+    if(p.promo) return false;
+    return true;
+  }
+  /* ---------- 按名字聚合成"一株花" ----------
+     数据里是"每期一条记录"（同一人在第 1 期、第 3 期各充一次 = 两条），
+     花田里一株花就是一个人：期号写最近一次，次数写共几次。
+     先逐条过 onWall 再聚合 —— 活动月卡那种"不该上墙的一次"不能把人整株拉上去。 */
+  var byName = {}, eligible = [];
+  D.people.forEach(function(p){
+    p.period = p.period | 0;
+    p.isNew = daysBetween(new Date(p.first), UPDATED) <= 30;
+    if(!onWall(p)) return;
+
+    var k = (p.n || '').toLowerCase();
+    var g = byName[k];
+    if(!g){
+      g = byName[k] = { n:p.n, first:p.first, times:0, periods:[], last:null, isNew:false };
+      eligible.push(g);
+    }
+    g.times++;
+    if(g.periods.indexOf(p.period) < 0) g.periods.push(p.period);
+    if(p.first && (!g.first || p.first < g.first)) g.first = p.first;
+    if(p.isNew) g.isNew = true;
+    /* 最近一期的那条决定这株花显示哪一档：升级成年卡之后就该显示年卡 */
+    if(!g.last || p.period > g.last.period ||
+       (p.period === g.last.period && String(p.first) > String(g.last.first))) g.last = p;
+  });
+  eligible.forEach(function(g){
+    g.t = g.last ? g.last.t : 'month';
+    g.period = g.periods.reduce(function(a, b){ return Math.max(a, b); }, 0);
+    g.periodLabel = g.period > 0 ? ('第 ' + g.period + ' 期') : '';
+  });
+
+  var maxPeriod = D.people.reduce(function(a, p){ return Math.max(a, p.period | 0); }, 0);
+  document.getElementById('meta').textContent =
+    (maxPeriod > 0 ? '当前第 ' + maxPeriod + ' 期 · ' : '') + '更新于 ' + (D.updated||'') + ' · 名单只增不减';
+  document.getElementById('wallKicker').textContent = '全部记录 · 更新于 ' + (D.updated||'');
+  /* 群号只有一个来源：data/groups.json（CMS「官方群组」页导出的那份）。
+     没有这份文件时页面不硬编号码，留一句提示。 */
+  (function(){
+    var G = GRP;
+    var nums = (G && G.groups ? G.groups : [])
+      .map(function(x){ return (x.number || '').trim(); })
+      .filter(Boolean);
+    var foot = document.getElementById('footHint');
+
+    if(nums.length){
+      foot.innerHTML = '官方群：<b style="color:var(--accent-dark)">' + nums.join(' / ') + '</b>　（点一下复制群号）';
+      foot.style.cursor = 'pointer';
+      foot.title = '点击复制群号';
+      foot.addEventListener('click', function(){
+        var txt = nums.join(' ');
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(txt).then(function(){
+            foot.innerHTML = '已复制 <b>' + txt + '</b>　（回游戏/群里粘贴就好）';
+          }, function(){
+            foot.innerHTML = '群号：<b>' + txt + '</b>';
+          });
+        } else {
+          foot.innerHTML = '群号：<b>' + txt + '</b>';
+        }
+      });
+    } else {
+      foot.textContent = '官方群号还没同步，稍后刷新看看。';
+    }
+  })();
+
+  var SPROUT_SVG =
+    '<svg viewBox="0 0 48 48" width="62%" height="62%" aria-hidden="true">' +
+      '<path d="M24 44 V22" stroke="#5a8c3a" stroke-width="2.2" stroke-linecap="round" fill="none"/>' +
+      '<path d="M24 26 C16 24, 10 18, 12 10 C20 12, 24 18, 24 26 Z" fill="#7CB342"/>' +
+      '<path d="M24 22 C32 20, 38 14, 36 6 C28 10, 24 16, 24 22 Z" fill="#9CCC65"/>' +
+    '</svg>';
+
+  /* ---------------- 全部记录：滚动 ---------------- */
+  var track = document.getElementById('track');
+  var stage = document.getElementById('stage');
+  var wallSection = document.getElementById('wall');
+
+  function makeRow(p){
+    var t = tierMap[p.t] || { color:'#CDD8FF', name:'' };
+    var el = document.createElement('div');
+    el.className = 'row';
+    el.style.setProperty('--c', t.color);
+    el.style.setProperty('--g', rgba(t.color, 0.35));
+    el.dataset.name = p.n;
+    el.innerHTML =
+      '<span class="content">' +
+        '<span class="ring">' + SPROUT_SVG + '</span>' +
+        '<span class="nm">' + p.n + '</span>' +
+        (p.periodLabel ? '<span class="period">' + p.periodLabel + '</span>' : '') +
+        '<span class="tier">赠予 · ' + t.name + '</span>' +
+        (p.times > 1 ? '<span class="times">共 ' + p.times + ' 次</span>' : '') +
+        (p.isNew ? '<span class="badge" title="新芽：第一次上墙 30 天内">🌱</span>' : '') +
+      '</span>';
+    return el;
+  }
+
+  var ROW_H = 64;
+  var H = stage.clientHeight;
+  var copyH = Math.max(1, eligible.length * ROW_H);
+
+  /* 名单够长才循环滚动。只列了两三位时不复制、也不滚 ——
+     否则同一批名字在屏幕里叠三四遍，看着像页面出错了。 */
+  var scrollable = copyH > H;
+  var copies = scrollable ? Math.max(2, Math.ceil((H * 2) / copyH) + 1) : 1;
+
+  var frag = document.createDocumentFragment();
+  for(var c = 0; c < copies; c++){
+    eligible.forEach(function(p){ frag.appendChild(makeRow(p)); });
+  }
+  track.appendChild(frag);
+
+  if(!scrollable){
+    document.getElementById('stageHint').textContent = '只列真正进了花田的人';
+    track.classList.add('static');
+    track.style.top = Math.max(0, (H - copyH) / 2) + 'px';   // 短名单竖着居中，别贴着顶
+  }
+
+  var rows = Array.prototype.slice.call(track.children);
+  var offset = 0;
+  var speed = 44;
+  var hoverPaused = false;
+  var searchMode = false;
+  var focusedIndex = -1;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var last = performance.now();
+
+  stage.addEventListener('mouseenter', function(){ hoverPaused = true; });
+  stage.addEventListener('mouseleave', function(){ hoverPaused = false; });
+
+  function frame(now){
+    var dt = Math.min(50, now - last);
+    last = now;
+
+    if(scrollable && !hoverPaused && !reduce && !searchMode){
+      offset += speed * dt / 1000;
+      if(offset >= copyH) offset -= copyH;
+    }
+    track.style.transform = 'translateY(' + (-offset).toFixed(2) + 'px)';
+
+    if(scrollable && !searchMode){
+      var center = H / 2, best = -1, bestAd = Infinity;
+      for(var i = 0; i < rows.length; i++){
+        var rc = i * ROW_H + ROW_H / 2 - offset;
+        if(rc < -ROW_H || rc > H + ROW_H) continue;
+        var ad = Math.abs(rc - center);
+        if(ad < bestAd){ bestAd = ad; best = i; }
+      }
+      if(best !== focusedIndex){
+        if(focusedIndex >= 0) rows[focusedIndex].classList.remove('focus');
+        if(best >= 0) rows[best].classList.add('focus');
+        focusedIndex = best;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  window.addEventListener('resize', function(){ H = stage.clientHeight; });
+
+  /* ---------------- 一个搜索框，管这一个名单 ---------------- */
+  var q = document.getElementById('q');
+
+  function exitSearch(){
+    searchMode = false;
+    rows.forEach(function(el){ el.classList.remove('hit', 'dim'); });
+    focusedIndex = -1;
+  }
+
+  function applyFilter(){
+    var v = q.value.trim();
+
+    if(!v){ exitSearch(); hint.textContent = ''; return; }
+
+    searchMode = true;
+    rows.forEach(function(el){ el.classList.remove('focus'); });
+    focusedIndex = -1;
+
+    var firstHit = -1, seen = {}, unique = 0;
+    rows.forEach(function(el, i){
+      var hit = el.dataset.name.indexOf(v) >= 0;
+      el.classList.toggle('hit', hit);
+      el.classList.toggle('dim', !hit);
+      if(hit){
+        if(firstHit < 0) firstHit = i;
+        if(!seen[el.dataset.name]){ seen[el.dataset.name] = 1; unique++; }
+      }
+    });
+
+    hint.textContent = unique
+      ? ('名单里找到了 ' + unique + ' 位')
+      : '花田里暂时没见着这个名字';
+
+    if(firstHit >= 0){
+      offset = firstHit * ROW_H + ROW_H / 2 - H / 2;
+      offset = ((offset % copyH) + copyH) % copyH;
+      track.style.transform = 'translateY(' + (-offset).toFixed(2) + 'px)';
+    }
+  }
+
+  function runSearch(){
+    if(!q.value.trim()){ q.focus(); return; }
+    applyFilter();
+
+    // 名单在下面：搜到了就把这一段送到眼前，别让人自己找
+    if(typeof wallSection.scrollIntoView !== 'function') return;
+    var r = wallSection.getBoundingClientRect();
+    if(r.top > window.innerHeight - 90 || r.bottom < 120){
+      wallSection.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }
+  }
+
+  /* 只在点「搜索」或回车时才筛；清空输入框即恢复 */
+  q.addEventListener('input', function(){
+    if(!q.value.trim()) applyFilter();
+  });
+  q.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); runSearch(); }
+  });
+  document.getElementById('searchBtn').addEventListener('click', runSearch);
+
+  /* ---------------- 图例 ---------------- */
+  var ll = document.getElementById('legendLine');
+  D.tiers.forEach(function(t){
+    if(!eligible.some(function(p){ return p.t === t.key; })) return;
+    var it = document.createElement('span'); it.className='it';
+    var sw = document.createElement('span'); sw.className='sw'; sw.style.background=t.color;
+    var tx = document.createElement('span');
+    tx.textContent = '赠予 · ' + t.name + ' ' + t.price + (t.promo ? '（活动期只赠卡密，不上榜）' : '');
+    it.appendChild(sw); it.appendChild(tx);
+    ll.appendChild(it);
+  });
+  }   /* boot 结束 */
+
+  /* 数据只有一个出处：CMS 导出的 data/patrons.json 与 data/groups.json。
+     ★ 不再引 assets/*.js —— 那套字段名（people/n/t）跟 CMS 契约（patrons/name/tier）
+     是两套，两套并存迟早对不上。这里只做一次映射，别在别处再抄。 */
+  Promise.all([
+    fetch('data/patrons.json', { cache: 'no-cache' }).then(function(r){
+      if(!r.ok) throw new Error('patrons ' + r.status);
+      return r.json();
+    }),
+    fetch('data/groups.json', { cache: 'no-cache' }).then(function(r){
+      return r.ok ? r.json() : null;
+    }).catch(function(){ return null; })
+  ]).then(function(res){
+    var raw = res[0] || {};
+    boot({
+      updated: raw.updated || '',
+      tiers: TIERS,
+      people: (raw.patrons || []).map(function(p){
+        return { n: p.name, t: p.tier, first: p.first, period: parseInt(p.period, 10) || 0 };
+      })
+    }, res[1]);
+  }).catch(function(){
+    hint.textContent = '花田数据没加载到，稍后刷新看看。';
+  });
+})();
+</script>
+</body>
+</html>

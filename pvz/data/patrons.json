@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "updated": "2026-10-27",
+  "patrons": [
+    {
+      "name": "NOX",
+      "period": 1,
+      "first": "2026-10-27",
+      "tier": "month"
+    },
+    {
+      "name": "游龙.潜影",
+      "period": 1,
+      "first": "2026-10-27",
+      "tier": "month"
+    }
+  ]
+}
