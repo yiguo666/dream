@@ -1443,7 +1443,7 @@
                 btn.addEventListener('click', function () { copyText(n); });
             }
 
-            fetch('data/groups.json', { cache: 'no-cache' })
+            fetch('data/groups.json?t=' + Date.now(), { cache: 'no-cache' })
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .then(function (d) {
                     var n = ((d && d.groups) || [])

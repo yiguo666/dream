@@ -163,7 +163,7 @@
    拿不到就不显示，绝不在这里硬写一个号码（写死了下次改号就会对不上）。 */
 (function () {
   "use strict";
-  fetch('data/groups.json', { cache: 'no-cache' })
+  fetch('data/groups.json?t=' + Date.now(), { cache: 'no-cache' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (d) {
       var nums = ((d && d.groups) || [])

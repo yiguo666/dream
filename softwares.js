@@ -31,8 +31,8 @@
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
       "description": "更新说明：\r\n1.阵营工坊优化部分表现细节和UI、新增我的布局保存格子\r\n2.特殊关卡传送带新增坚果保龄球模式下的两张特殊新植物卡片、新增调整传输倍率功能\r\n3.禅境花园新增智能养护，新增一键修复错误花盆，新增适配一键搬运植物\r\n4.上线娱乐玩法，植物禁令和解除戴夫锁定卡\r\n5.新增推车开关和推车补充\r\n6.新增土豆雷秒出土、胆小菇不缩头、冰豆穿火炬不化\r\n7.阵容工坊优化随机出阵容逻辑，更加智能适配地图模式\r\n\r\np.s.本工具支持的是市面上1.0.0.1051的植物大战僵尸官方版本，适配Win 7 | Win 8 | Win 10 | Win 11 系统。\r\n\r\nWindows 7 特别提示： 使用兼容版前，请确保已安装 KB2533623 系统补丁，否则可能无法正常启动。",
       "detailPageType": "自定义模板",
-      "detailPagePath": "projects/pvzplayer.html",
-      "customPagePath": "projects/pvzplayer.html"
+      "detailPagePath": "pvz/player.html",
+      "customPagePath": "pvz/player.html"
     },
     {
       "id": "P870",
@@ -82,8 +82,8 @@
       "environment": "Win 7 | Win 8 | Win 10 | Win 11",
       "description": "更新说明：\r\n1.全新的关卡设计台：左侧编排、右侧预览，改一处立刻看到结果\r\n2.出怪编排支持逐波调整僵尸种类、数量与出场时机，旗帜波与无尽模式单独可控\r\n3.新增「设计体检」，保存前逐项检查出怪强度与卡槽可行性\r\n4.支持泳池、屋顶、浓雾、夜晚等地图类型，以及墓碑、矿车等场地元素\r\n5.特殊关卡可编：传送带、宝石迷阵、罐子、老虎机\r\n6.导出为伪装 PNG文件，一张图就是完整关卡，发给朋友点击即玩\r\n\r\np.s.本软件需要已安装植物大战僵尸 1.0.0.1051 版本，并安装 .NET 8 桌面运行时（详情页下方有一键安装器）。",
       "detailPageType": "自定义模板",
-      "detailPagePath": "projects/pvzeditor.html",
-      "customPagePath": "projects/pvzeditor.html"
+      "detailPagePath": "pvz/editor.html",
+      "customPagePath": "pvz/editor.html"
     },
     {
       "id": "P241",
@@ -663,7 +663,7 @@
       },
       {
         "name": "PvZ 关卡编辑器",
-        "url": "projects/pvzeditor.html"
+        "url": "pvz/editor.html"
       },
       {
         "name": "DotNet8",

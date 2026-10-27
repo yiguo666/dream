@@ -474,11 +474,11 @@
      ★ 不再引 assets/*.js —— 那套字段名（people/n/t）跟 CMS 契约（patrons/name/tier）
      是两套，两套并存迟早对不上。这里只做一次映射，别在别处再抄。 */
   Promise.all([
-    fetch('data/patrons.json', { cache: 'no-cache' }).then(function(r){
+    fetch('data/patrons.json?t=' + Date.now(), { cache: 'no-cache' }).then(function(r){
       if(!r.ok) throw new Error('patrons ' + r.status);
       return r.json();
     }),
-    fetch('data/groups.json', { cache: 'no-cache' }).then(function(r){
+    fetch('data/groups.json?t=' + Date.now(), { cache: 'no-cache' }).then(function(r){
       return r.ok ? r.json() : null;
     }).catch(function(){ return null; })
   ]).then(function(res){
