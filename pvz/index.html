@@ -166,17 +166,23 @@
   fetch('data/groups.json?t=' + Date.now(), { cache: 'no-cache' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (d) {
-      var nums = ((d && d.groups) || [])
-        .map(function (g) { return (g.number || '').trim(); })
+      // 已解散(closed)的不显示；已满员(full)标注「（已满）」，正常(active)原样
+      var groups = ((d && d.groups) || [])
+        .filter(function (g) { return (g.status || 'active') !== 'closed'; })
+        .map(function (g) {
+          var n = (g.number || '').trim();
+          if (!n) return null;
+          return { number: n, label: n + ((g.status || '') === 'full' ? '（已满）' : '') };
+        })
         .filter(Boolean);
-      if (!nums.length) return;
+      if (!groups.length) return;
 
       var el = document.getElementById('footGroup');
-      var txt = nums.join(' / ');
+      var txt = groups.map(function (g) { return g.label; }).join(' / ');
       el.innerHTML = '官方群 <b>' + txt + '</b>　（点数字复制）';
       el.classList.add('copyable');
       el.addEventListener('click', function () {
-        var s = nums.join(' ');
+        var s = groups.map(function (g) { return g.number; }).join(' ');
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(s).then(function () {
             el.innerHTML = '已复制 <b>' + s + '</b>　（去 QQ 粘贴搜群）';
