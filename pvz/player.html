@@ -307,6 +307,15 @@
             gap: 20px;
         }
 
+        /* 九宫格：桌面端锁定 3 列，让 9 张卡整齐成 3×3，并放大间距留出呼吸感。
+           不锁列时 auto-fit 在 1200px 会塞进 4 列，9 张会变成 4+4+1，末行孤卡难看。 */
+        @media (min-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+        }
+
         .feature-card {
             background: var(--pvz-bg-card);
             backdrop-filter: blur(12px);
@@ -811,14 +820,14 @@
     <section class="hero">
         <div class="hero-badge">
             <span class="dot"></span>
-            全 Windows 系统兼容 · 完全免费
+            全 Windows 系统兼容
         </div>
         <h1>
             让经典<span class="hl-green">植物大战僵尸</span><br>
             焕发<span class="hl-sun">全新生命力</span>
         </h1>
         <p class="subtitle" id="heroDesc">
-            PvZ Player 是专为植物大战僵尸打造的增强体验工具。阵营工坊、传送带控制、禅境花园管家——所有你想要的，一个工具全搞定。
+            完全免费 · 长期更新
         </p>
         <div class="hero-buttons">
             <a href="#download" class="btn btn-primary">
@@ -888,6 +897,21 @@
                 <div class="icon">🌻</div>
                 <h3>禅境花园管家</h3>
                 <p>你的后花园定制管理，一键打理植物、锁定稀有品种，禅意满满的一天。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🛒</div>
+                <h3>戴夫商店</h3>
+                <p>戴夫的秘密商店开张啦！稀有道具、限定卡牌与专属增益应有尽有。逛一逛，给草坪添点新花样。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">👗</div>
+                <h3>百变衣柜</h3>
+                <p>支持皮肤与资源替换，给植物和场景换上新装。自由搭配配色与造型，打造你独一无二的花园。</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💾</div>
+                <h3>存档管理</h3>
+                <p>一键备份、恢复与迁移存档，再也不怕进度丢失。多套存档随心切换，安心畅玩每一局。</p>
             </div>
         </div>
     </section>
@@ -1236,8 +1260,8 @@
 
                 document.getElementById('statVersion').textContent = PRODUCT.version || 'v1.0.0';
 
-                var heroText = (PRODUCT.description || '').split('\n')[0].trim();
-                if (heroText) document.getElementById('heroDesc').textContent = heroText;
+                // hero 副标题为固定标语（完全免费 · 长期更新），不再取 PRODUCT.description 第一行，
+                // 避免"更新日志"的首条更新说明被顶到首屏副标题位置。
 
                 var raw = PRODUCT.detailImages || '';
                 IMAGES = raw.split(/[,，]/).map(function(s) { return s.trim(); })
