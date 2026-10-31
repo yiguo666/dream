@@ -594,6 +594,23 @@
       "detailPageType": "详情页通用",
       "detailPagePath": "",
       "customPagePath": ""
+    },
+    {
+      "id": "982702",
+      "name": "Player_PvZ · 兼容性修复启动器",
+      "category": "🎯 原创工坊",
+      "weight": "⭐⭐⭐⭐⭐",
+      "mainImage": "logo/logo_20261031143510848.png",
+      "detailImages": "logo/logo_20261031143549187.png, logo/logo_20261031143558720.png",
+      "resourcePath": "",
+      "isRecommend": false,
+      "version": "1.0.0",
+      "size": "",
+      "environment": "Win 7 | Win 8 | Win 10 | Win 11",
+      "description": "",
+      "detailPageType": "详情页通用",
+      "detailPagePath": "",
+      "customPagePath": ""
     }
   ],
   "announcements": [
