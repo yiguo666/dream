@@ -4,19 +4,34 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
 <title>PVZ 系列 · 植物大战僵尸原创工具</title>
-<meta name="description" content="植物大战僵尸的原创工具：PVZ Player（含畅玩机）与 PvZ 关卡编辑器，以及一个由支持者组成的项目充能花田。" />
+<meta name="description" content="植物大战僵尸的原创工具：PVZ Player（含畅玩机）、PvZ 关卡编辑器与 Player_PvZ 兼容性修复启动器，以及一个由支持者组成的项目充能花田。" />
 <link rel="stylesheet" href="../assets/base.css" />
 <link rel="stylesheet" href="../assets/detail.css" />
 <style>
   /* ===================================================================
-     PVZ 小集群入口页
+     PVZ 系列 · 站点首页
      ------------------------------------------------------------------
-     这一页是「引子」：两个软件并排，花田横跨一整行。点进去才是详情。
+     这一页是 PVZ 系列的站点首页，部署在主站的子目录（01guo.com/pvz/）。
+     ★ 曾计划整体搬到独立子域名 pvz.01guo.com，后来放弃（前因后果见同目录 README）。
+     排法不受影响：仍按"首页"来排，不按"入口页"来排 —— 首屏讲清这是什么，
+     紧接着三条产品行（图 / 正文 / 事实栏），最后是花田与页脚。
+
+     三行的顺序是"主角 -> 进阶 -> 配套"：Player 是大多数人装的那一个，
+     编辑器是有想法才装的，启动器是碰上启动不了才装的。所以启动器排在最后，
+     既不抢主角的位置，也不会让人以为非装不可。
+
      刻意不做的事：
        · 不放「畅玩机」独立卡片 —— 它是 Player 里的一个窗口，不是单独下载的东西，
-         给它一张卡会让人以为要另外下个安装包。只在 Player 卡里提一句。
-       · 不读 softwares.js —— 这一页的内容是固定的三块，写死比取数更稳；
-         产品库那份文件留给详情页和主站，少一层依赖就少一处能对不上的地方。
+         给它一张卡会让人以为要另外下个安装包。只在 Player 行里提一句。
+       · 不加"教程 / FAQ / 作品墙"这类空板块 —— 现在没内容，加了就是壳子。
+         作品墙在主站，这里只留一个出口。
+       · 启动器不重复描述 dgVoodoo 怎么配 —— 那是它自己的"高级设置"窗口干的事，
+         首页只说"它替你办了哪几件事"。
+       · 导航里不列「项目充能」—— 同一页中部就有一张专门的花田卡，
+         导航再列一遍是同一件事说两次；少于三项的导航反而更干净，
+         390 宽的手机也不用把导航折成两行。
+       · 不写死版本号和日期。数字由 softwares.js 与 update/*.json 填；
+         JS 没跑起来时显示"—"和一句中性文案，而不是一个会过期的旧日期。
      =================================================================== */
 
   /* 品牌标记：base.css 里没有 .logo-icon（详情页那个 🌻 一直是个裸 emoji），
@@ -30,7 +45,20 @@
     align-self: center;
   }
 
-  .hero-pvz { max-width: 1060px; margin: 0 auto; padding: 64px 24px 36px; text-align: center; }
+  /* 导航最右那颗「主站 ↗」：跟站内三个锚点不是一类东西，单独做成一粒描边胶囊 */
+  .dw-nav__links .nav-away {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-left: 6px; padding: 5px 12px;
+    border: 1px solid var(--line-base); border-radius: var(--radius-pill);
+    font-size: .78rem; color: var(--ink-mute);
+  }
+  .dw-nav__links .nav-away::after { display: none; }
+  .dw-nav__links .nav-away:hover {
+    color: var(--accent-dark); border-color: var(--accent-line);
+    background: var(--accent-pale);
+  }
+
+  .hero-pvz { max-width: 1040px; margin: 0 auto; padding: 62px 24px 34px; text-align: center; }
   .hero-pvz .badge {
     display: inline-flex; align-items: center; gap: 8px;
     background: var(--accent-pale); color: var(--accent-dark);
@@ -41,31 +69,145 @@
   .hero-pvz h1 .hl { color: var(--accent); }
   .hero-pvz p { margin: 16px auto 0; max-width: 620px; color: var(--ink-soft); font-size: 1rem; line-height: 1.75; }
 
-  .products { max-width: 1060px; margin: 0 auto; padding: 8px 24px 32px; }
-
-  .pcard { display: flex; flex-direction: column; text-decoration: none; color: inherit; overflow: hidden; }
-  .pcard__imgbox {
-    height: 148px; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(67,160,71,.10), rgba(255,179,0,.08));
-    border-radius: 12px; margin-bottom: 14px; overflow: hidden;
+  /* ---------------- 产品行 ----------------
+     两个产品横过来排（图 / 正文 / 事实栏），不并排成两张卡：
+     并排时 148px 的方图放在 390px 的框里，左右各空一百多像素，整页看着又薄又散。
+     横排之后右栏可以正经放「版本 / 体积 / 平台」，信息密度一次到位。 */
+  .products {
+    max-width: 1040px; margin: 0 auto; padding: 6px 24px 40px;
+    display: flex; flex-direction: column; gap: 18px;
   }
-  .pcard__img { max-width: 78%; max-height: 118px; object-fit: contain; }
-  .pcard__body { display: flex; flex-direction: column; flex: 1; }
-  .pcard__name { font-size: 1.15rem; font-weight: 800; color: var(--ink); }
-  .pcard__cat { font-size: .76rem; color: var(--accent); font-weight: 600; margin: 4px 0 6px; }
-  .pcard__meta { font-size: .74rem; color: var(--ink-faint); margin-bottom: 10px; }
-  .pcard__desc { font-size: .84rem; color: var(--ink-soft); line-height: 1.65; flex: 1; }
-  .pcard .dw-btn { margin-top: 14px; align-self: flex-start; }
 
-  /* 花田横幅：跨满一整行，暖黄，作为"看完两个工具之后"的去处 */
+  .prow {
+    --thumb: linear-gradient(160deg, #FFFFFF 0%, #F3F8FF 62%, #E9F2FF 100%);
+    position: relative; display: grid;
+    grid-template-columns: 168px minmax(0, 1fr) 178px;
+    align-items: center; gap: 28px;
+    padding: 24px 26px;
+    text-decoration: none; color: inherit;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+    border: 1px solid var(--line-base);
+    border-radius: 22px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.95),
+      0 2px 6px rgba(28,52,94,.05),
+      0 22px 44px -30px rgba(28,52,94,.34);
+    overflow: hidden;
+    transition: transform .32s var(--ease), box-shadow .32s var(--ease), border-color .32s var(--ease);
+  }
+  /* 顶边细线悬停时从左长出来：一排产品扫下去就知道鼠标停在哪一行 */
+  .prow::before {
+    content: ""; position: absolute; top: 0; left: 0; height: 3px; width: 0;
+    background: var(--accent);
+    transition: width .5s var(--ease);
+  }
+  .prow:hover::before, .prow:focus-visible::before { width: 100%; }
+  .prow:hover, .prow:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--accent-line);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.95),
+      0 4px 10px rgba(28,52,94,.07),
+      0 30px 56px -30px rgba(28,52,94,.40);
+  }
+
+  /* 关卡编辑器在详情页是暖黄的，这里把颜色带上首页 —— 点进去不会"换了个站" */
+  .prow--amber {
+    --accent: #FFB300;
+    --accent-dark: #9A6A00;
+    --accent-pale: #FFF6E2;
+    --accent-line: rgba(255,179,0,.32);
+    --accent-bright: #FFC94A;
+    --thumb: linear-gradient(160deg, #FFFFFF 0%, #FFFAF0 62%, #FFF2D9 100%);
+  }
+
+  /* 启动器是"修问题"的东西，给一支冷静的青蓝：三个产品三种身份色，
+     扫一眼就知道自己在看哪一行，但它们共用同一套卡片骨架。 */
+  .prow--sky {
+    --accent: #2C93B5;
+    --accent-dark: #1B6A85;
+    --accent-pale: #E8F5F9;
+    --accent-line: rgba(44,147,181,.30);
+    --accent-bright: #5BB6D0;
+    --thumb: linear-gradient(160deg, #FFFFFF 0%, #F2FAFD 62%, #E6F4F9 100%);
+  }
+
+  .prow__thumb {
+    width: 168px; height: 168px; border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--thumb);
+    border: 1px solid rgba(28,52,94,.06);
+    overflow: hidden; flex: none;
+  }
+  .prow__thumb img {
+    width: 100%; height: 100%; object-fit: contain;
+    padding: 11%; box-sizing: border-box;
+    filter: drop-shadow(0 8px 16px rgba(28,52,94,.14));
+    transition: transform .4s var(--ease);
+  }
+  .prow:hover .prow__thumb img { transform: scale(1.045); }
+
+  .prow__body { min-width: 0; display: block; }
+  .prow__name {
+    display: block;
+    font-size: 1.3rem; font-weight: 800; color: var(--ink-deep);
+    letter-spacing: -.01em; line-height: 1.3;
+  }
+  .prow__cat {
+    display: inline-block;
+    margin-top: 8px; padding: 3px 11px; border-radius: var(--radius-pill);
+    background: var(--accent-pale); color: var(--accent-dark);
+    font-size: .74rem; font-weight: 700; letter-spacing: .02em;
+  }
+  .prow__desc {
+    margin: 12px 0 0; font-size: .9rem; line-height: 1.72;
+    color: var(--ink-soft); max-width: 46em;
+    text-wrap: pretty;          /* 让浏览器把尾行的孤字提上来，别让「址。」单独一行 */
+  }
+  .prow__live {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-top: 13px; font-size: .78rem; color: var(--ink-faint);
+  }
+  .prow__live .live-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 2px 9px; border-radius: var(--radius-pill);
+    background: var(--accent-pale); color: var(--accent-dark);
+    font-weight: 700; font-size: .72rem;
+  }
+  .prow__live .live-tag::before {
+    content: ""; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 3px var(--accent-line);
+  }
+
+  /* 事实栏：版本 / 体积 / 平台 + 行动按钮，一条虚线跟正文分开 */
+  .prow__rail {
+    display: flex; flex-direction: column; gap: 11px;
+    padding-left: 24px; border-left: 1px dashed var(--line-base);
+  }
+  .rail-item { display: flex; align-items: baseline; gap: 8px; }
+  .rail-item i {
+    font-style: normal; font-size: .7rem; letter-spacing: .1em;
+    color: var(--ink-ghost); flex: none;
+  }
+  .rail-item b {
+    font-size: .86rem; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .prow__btn { margin-top: 6px; width: 100%; padding: 9px 0; font-size: .82rem; }
+  .prow:hover .prow__btn { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+  /* ---------------- 花田横幅：暖黄，作为"看完两个工具之后"的去处 ---------------- */
   .charge-card {
-    grid-column: 1 / -1;
     display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+    padding: 22px 26px; border-radius: 22px;
     background: linear-gradient(120deg, #FFFBEF 0%, #FFF1D6 100%);
     border: 1px solid rgba(255,179,0,.30);
     position: relative; overflow: hidden;
     box-shadow: 0 10px 30px rgba(255,179,0,.10);
+    text-decoration: none; color: inherit;
+    transition: transform .32s var(--ease), box-shadow .32s var(--ease);
   }
+  .charge-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(255,179,0,.20); }
   .charge-card::before {
     content: ""; position: absolute; inset: 0; pointer-events: none;
     background:
@@ -83,84 +225,251 @@
   .foot-group b { color: var(--accent-dark); letter-spacing: .5px; }
   .foot-group.copyable { cursor: pointer; }
   .foot-group.copyable:hover b { text-decoration: underline; }
+  /* 友情链接直接用 base.css 的 .friends（跟主站 footer 同一条规矩、同一套胶囊），
+     这里只补一下它跟上面那行群号的间距。原来那个「← 回到 Dream 主站」的
+     文字链接已经去掉：导航右上角有「主站 ↗」，底部再写一遍就是同一个出口开两次。 */
+  .dw-footer .friends { margin-top: 12px; }
 
+  /* ---------------- 断点：由宽到窄 ----------------
+     同特异性下后出现的规则胜出，插错顺序会静默覆盖，别倒过来写。 */
+  @media (max-width: 900px) {
+    .prow { grid-template-columns: 112px minmax(0, 1fr); gap: 20px; padding: 20px; }
+    .prow__thumb { width: 112px; height: 112px; border-radius: 16px; }
+    .prow__rail {
+      grid-column: 1 / -1;
+      flex-direction: row; flex-wrap: wrap; align-items: center;
+      gap: 8px 24px;
+      padding: 14px 0 0; border-left: 0;
+      border-top: 1px dashed var(--line-base);
+    }
+    .prow__btn { width: auto; margin-top: 0; margin-left: auto; padding: 9px 22px; }
+  }
   @media (max-width: 700px) {
-    .hero-pvz { padding-top: 42px; }
+    .hero-pvz { padding-top: 40px; }
     .hero-pvz h1 { font-size: 1.65rem; }
+    /* 品牌小字只是注解，窄屏收掉，否则品牌+链接一挤就换行、导航凭空长高一倍 */
+    .dw-nav__brand small { display: none; }
+  }
+  @media (max-width: 560px) {
+    /* 1.65rem 时首行「神奇的道具，把植物大战僵尸」差几像素放不下，
+       会把「尸」单独挤到下一行 —— 收到 1.5rem 正好一整行 */
+    .hero-pvz h1 { font-size: 1.5rem; }
+    .products { padding-left: 16px; padding-right: 16px; }
+    .prow { grid-template-columns: 88px minmax(0, 1fr); gap: 14px 16px; align-items: start; }
+    .prow__thumb { width: 88px; height: 88px; border-radius: 14px; }
+    .prow__rail { grid-column: 1 / -1; }
+    .prow__name { font-size: 1.15rem; }
+    .prow__rail { gap: 6px 18px; }
+    .prow__btn { margin-left: 0; width: 100%; }
+    .charge-card { padding: 20px; gap: 14px; }
   }
 </style>
 </head>
 <body class="product-theme" data-accent="green">
 
 <nav class="dw-nav">
-  <a href="../index.html" class="dw-nav__brand">
+  <a href="index.html" class="dw-nav__brand">
     <span class="logo-icon">🌻</span>
-    PVZ 系列 <small>前往主站</small>
+    PVZ 系列 <small>植物大战僵尸 · 原创工具</small>
   </a>
   <div class="dw-nav__links">
     <a href="player.html">PVZ Player</a>
     <a href="editor.html">关卡编辑器</a>
-    <a href="charge.html">项目充能</a>
+    <a href="launcher.html">修复启动器</a>
+    <a href="../index.html" class="nav-away">主站 ↗</a>
   </div>
 </nav>
 
 <header class="hero-pvz">
   <span class="badge">🌟 全 Windows 兼容 · 独立原创自研</span>
   <h1>神奇的道具，把<span class="hl">植物大战僵尸</span><br>玩成你自己的样子</h1>
-  <p>一个负责把原版玩得更爽，一个负责让你自己设计关卡。下面是它们，以及一片由支持者组成的花田。</p>
+  <p>一个负责把原版玩得更爽，一个负责让你自己设计关卡，还有一个专门收拾启动不了的老毛病。下面是它们，以及一片由支持者组成的花田。</p>
 </header>
 
 <main class="products">
-  <div class="dw-grid dw-grid--2">
 
-    <a class="dw-card pcard" href="player.html">
-      <div class="pcard__imgbox">
-        <img class="pcard__img" src="../logo/logo_20260629192807188.png" alt="PVZ Player"
-             onerror="this.style.visibility='hidden'">
-      </div>
-      <div class="pcard__body">
-        <div class="pcard__name">PVZ Player</div>
-        <div class="pcard__cat">体验增强 · 含畅玩机</div>
-        <div class="pcard__meta">Win 7 / 8 / 10 / 11 · 持续更新</div>
-        <p class="pcard__desc">阵营工坊、特殊关卡传送带、禅境花园管家、娱乐玩法——想要的全在一个窗口里。畅玩机也在这里面：拿到分享码粘进去就能开打。</p>
-        <span class="dw-btn dw-btn--ghost">查看详情 →</span>
-      </div>
-    </a>
+  <!-- PVZ Player ------------------------------------------------ -->
+  <a class="prow" href="player.html" data-pid="P733">
+    <span class="prow__thumb">
+      <img src="../logo/logo_20260629192807188.png" alt="PVZ Player"
+           onerror="this.parentNode.style.visibility='hidden'">
+    </span>
+    <span class="prow__body">
+      <span class="prow__name">PVZ Player</span>
+      <span class="prow__cat">体验增强 · 含畅玩机</span>
+      <p class="prow__desc">阵营工坊、特殊关卡传送带、禅境花园管家、娱乐玩法——想要的全在一个窗口里。畅玩机也在这里面：拿到分享码粘进去就能开打。</p>
+      <span class="prow__live">
+        <span class="live-tag">最新</span>
+        <span class="live-txt">持续更新 · 支持 Win 7 – 11</span>
+      </span>
+    </span>
+    <span class="prow__rail">
+      <span class="rail-item"><i>版本</i><b data-field="version">—</b></span>
+      <span class="rail-item"><i>体积</i><b data-field="size">—</b></span>
+      <span class="rail-item"><i>平台</i><b data-field="env">Win 7 – 11</b></span>
+      <span class="dw-btn prow__btn">查看详情 →</span>
+    </span>
+  </a>
 
-    <a class="dw-card pcard" href="editor.html">
-      <div class="pcard__imgbox">
-        <img class="pcard__img" src="../logo/logo_20261007132938331.png" alt="PvZ 关卡编辑器"
-             onerror="this.style.visibility='hidden'">
-      </div>
-      <div class="pcard__body">
-        <div class="pcard__name">PvZ 关卡编辑器</div>
-        <div class="pcard__cat">关卡设计</div>
-        <div class="pcard__meta">Win 7 / 8 / 10 / 11 · 持续更新</div>
-        <p class="pcard__desc">拉波次、选地形、配出怪、改规则，设计完直接写进游戏。不用碰文件，也不用记地址。</p>
-        <span class="dw-btn dw-btn--ghost">查看详情 →</span>
-      </div>
-    </a>
+  <!-- PvZ 关卡编辑器 -------------------------------------------- -->
+  <a class="prow prow--amber" href="editor.html" data-pid="650379">
+    <span class="prow__thumb">
+      <img src="../logo/logo_20261007132938331.png" alt="PvZ 关卡编辑器"
+           onerror="this.parentNode.style.visibility='hidden'">
+    </span>
+    <span class="prow__body">
+      <span class="prow__name">PvZ 关卡编辑器</span>
+      <span class="prow__cat">关卡设计</span>
+      <p class="prow__desc">拉波次、选地形、配出怪、改规则，设计完直接写进游戏。不用碰文件，也不用记地址。</p>
+      <span class="prow__live">
+        <span class="live-tag">最新</span>
+        <span class="live-txt">持续更新 · 支持 Win 7 – 11</span>
+      </span>
+    </span>
+    <span class="prow__rail">
+      <span class="rail-item"><i>版本</i><b data-field="version">—</b></span>
+      <span class="rail-item"><i>体积</i><b data-field="size">—</b></span>
+      <span class="rail-item"><i>平台</i><b data-field="env">Win 7 – 11</b></span>
+      <span class="dw-btn prow__btn">查看详情 →</span>
+    </span>
+  </a>
 
-    <a class="dw-card charge-card" href="charge.html">
-      <span class="cc-emoji">🌱</span>
-      <div class="cc-text">
-        <h3>项目充能 · <span class="hl">一片花田</span></h3>
-        <p>每一次充能，都是给这片花田添一株。随机看到其中一部分，搜索能找到你自己的那一株。来看看这片花田吧。</p>
-      </div>
-      <span class="dw-btn">进入花田 →</span>
-    </a>
+  <!-- Player_PvZ · 兼容性修复启动器 ------------------------------
+       它有自己的详情页 launcher.html（版本、体积、下载同样读 softwares.js）。
+       这里不写版本号/体积，让事实栏继续从库里读 —— 库里的体积还是空的，
+       就显示"—"，不编一个数字出来。 -->
+  <a class="prow prow--sky" href="launcher.html" data-pid="982702">
+    <span class="prow__thumb">
+      <img src="../logo/logo_20261031143510848.png" alt="Player_PvZ 兼容性修复启动器"
+           onerror="this.parentNode.style.visibility='hidden'">
+    </span>
+    <span class="prow__body">
+      <span class="prow__name">Player_PvZ · 兼容性修复启动器</span>
+      <span class="prow__cat">启动器 · 免安装</span>
+      <p class="prow__desc">窗口卡在角落、全屏发糊？它一键接手：原版窗口居中，或交给 dgVoodoo 2 铺满屏幕。Alt+M 缩下去，Ctrl+Alt+Q 随时退出，不改 exe、不碰存档。</p>
+      <span class="prow__live">
+        <span class="live-tag">配套</span>
+        <span class="live-txt">免安装 · 自动识别游戏目录</span>
+      </span>
+    </span>
+    <span class="prow__rail">
+      <span class="rail-item"><i>版本</i><b data-field="version">—</b></span>
+      <span class="rail-item"><i>体积</i><b data-field="size">—</b></span>
+      <span class="rail-item"><i>平台</i><b data-field="env">Win 7 – 11</b></span>
+      <span class="dw-btn prow__btn">查看详情 →</span>
+    </span>
+  </a>
 
-  </div>
+  <!-- 花田 ------------------------------------------------------ -->
+  <a class="charge-card" href="charge.html">
+    <span class="cc-emoji">🌱</span>
+    <div class="cc-text">
+      <h3>项目充能 · <span class="hl">一片花田</span></h3>
+      <p>每一次充能，都是给这片花田添一株。随机看到其中一部分，搜索能找到你自己的那一株。来看看这片花田吧。</p>
+    </div>
+    <span class="dw-btn">进入花田 →</span>
+  </a>
+
 </main>
 
 <footer class="dw-footer">
   <p class="foot-group" id="footGroup">仅供单机娱乐 · 全部功能独立原创自研</p>
+  <div class="friends" id="friendLinks"><span class="friends__label">友情链接</span></div>
   <p class="dw-footer__cr">&copy; 2026 Designed by <strong>Dream</strong>. All Rights Reserved.</p>
 </footer>
 
+<!-- 产品库：填事实栏的数字用。必须先于下面的脚本加载。 -->
+<script src="../softwares.js"></script>
+
 <script>
-/* 页脚群号：只读 data/groups.json —— 跟客户端、跟客户端花田页同一份文件。
-   拿不到就不显示，绝不在这里硬写一个号码（写死了下次改号就会对不上）。 */
+/* ------------------------------------------------------------------
+   1) 产品事实栏 + 「最新」一行
+   ------------------------------------------------------------------
+   版本 / 体积 / 平台 —— 从 softwares.js 读（CMS 写的就是这份）。
+   日期与一句话 —— 从 update/{id}.json 读（CMS 保存时写的就是这份）。
+   两份都是站点既有的唯一出处，这里不抄任何数字。
+
+   读不到怎么办：事实栏保持"—"，最新一行保持中性文案。
+   宁可不显示，也不显示一个会悄悄过期的旧日期。
+   ------------------------------------------------------------------ */
+(function () {
+  "use strict";
+
+  var rows = document.querySelectorAll('.prow[data-pid]');
+  if (!rows.length) return;
+
+  // softwares.js 用 const 声明在顶层，别的脚本里是裸标识符，不在 window 上
+  var byId = {};
+  if (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES && ALL_SOFTWARES.products) {
+    var list = ALL_SOFTWARES.products;
+    for (var i = 0; i < list.length; i++) byId[list[i].id] = list[i];
+  }
+
+  function envOf(p) {
+    // "Win 7 | Win 8 | Win 10 | Win 11" → "Win 7 – 11"
+    // 只在首尾是同一个系统系列时才缩写，否则原样拼，绝不猜
+    var s = String(p.environment || '').trim();
+    if (!s) return '';
+    var parts = s.split('|').map(function (x) { return x.trim(); }).filter(Boolean);
+    if (parts.length > 2) {
+      var a = parts[0].match(/^(Win\s*)(\d+)$/i);
+      var b = parts[parts.length - 1].match(/^(Win\s*)(\d+)$/i);
+      if (a && b && a[1] === b[1]) return a[1] + a[2] + ' – ' + b[2];
+    }
+    return parts.join(' / ');
+  }
+
+  function leadLine(note) {
+    // 更新说明的第一句「有信息」的话：跳过"更新说明：""p.s."这类纯标签行
+    var lines = String(note || '').split(/\r?\n/);
+    for (var i = 0; i < lines.length; i++) {
+      var l = lines[i].trim();
+      if (!l) continue;
+      if (/^(p\.s\.|更新说明|更新|新增|关于|注意)[:：]?$/.test(l)) continue;
+      l = l.replace(/^\d+[.、]\s*/, '');
+      return l.length > 34 ? l.slice(0, 34) + '…' : l;
+    }
+    return '';
+  }
+
+  function mmdd(d) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || '');
+    return m ? m[2] + '-' + m[3] : '';
+  }
+
+  Array.prototype.forEach.call(rows, function (row) {
+    var pid = row.getAttribute('data-pid');
+    var p = byId[pid];
+
+    if (p) {
+      var set = function (field, text) {
+        var el = row.querySelector('[data-field="' + field + '"]');
+        if (el && text) el.textContent = text;
+      };
+      set('version', p.version ? 'v' + p.version : '');
+      set('size', p.size);
+      set('env', envOf(p));
+    }
+
+    // 更新记录：读不到就当没有，保留中性兜底文案
+    fetch('../update/' + pid + '.json?t=' + Date.now(), { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (u) {
+        if (!u) return;
+        var txt = [mmdd(u.updateDate), leadLine(u.note)].filter(Boolean).join(' · ');
+        var el = row.querySelector('.live-txt');
+        if (el && txt) el.textContent = txt;
+      })
+      .catch(function () { /* 读不到就不动，保持中性文案 */ });
+  });
+})();
+
+/* ------------------------------------------------------------------
+   2) 页脚群号：只读 data/groups.json
+   ------------------------------------------------------------------
+   跟 PVZ Player 客户端、跟花田页读的是同一份文件。
+   拿不到就不显示，绝不在这里硬写一个号码（写死了下次改号就会对不上）。
+   ------------------------------------------------------------------ */
 (function () {
   "use strict";
   fetch('data/groups.json?t=' + Date.now(), { cache: 'no-cache' })
@@ -193,6 +502,34 @@
       });
     })
     .catch(function () { /* 群号读不到就不显示，不打扰 */ });
+})();
+</script>
+
+<script>
+/* 友情链接：数据来自主站 softwares.js 的 friendLinks（CMS 里那张友链表，改那里这里就变）。
+   跳过"当前目录自己的那条"：在 /pvz/ 各页只留指回主站的「dream」，指回 /pvz/ 的「PVZ Player」不再列一遍。
+   按"域名 + 目录"比对，别只看域名 —— 主站和 /pvz/ 同域，只看域名会两条一起跳过、页脚消失。 */
+(function () {
+    "use strict";
+    var box = document.getElementById('friendLinks');
+    if (!box) return;
+    var all = (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks) || [];
+    /* 把 URL 归一成"域名 + 所在目录"：/pvz/player.html 与 /pvz/ 都归成 host/pvz/。 */
+    function dirKey(u) {
+        try {
+            var x = new URL(u, location.href);
+            return (x.hostname + x.pathname.replace(/\/[^\/]*$/, '/')).toLowerCase();
+        } catch (e) { return ''; }
+    }
+    var here = dirKey(location.href);
+    var list = all.filter(function (f) {
+        if (!f || !f.siteName || !f.jumpUrl || !String(f.jumpUrl).trim()) return false;
+        return dirKey(f.jumpUrl) !== here;
+    });
+    if (!list.length) { box.style.display = 'none'; return; }
+    box.insertAdjacentHTML('beforeend', list.map(function (f) {
+        return '<a href="' + f.jumpUrl + '" target="_blank" rel="noopener">' + f.siteName + '</a>';
+    }).join(''));
 })();
 </script>
 

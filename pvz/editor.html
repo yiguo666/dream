@@ -689,27 +689,37 @@
             cursor: pointer;
         }
 
-        .footer .back-home {
-            display: inline-flex;
+/* 友情链接：跟主站 footer 同一条规矩、同一套胶囊，配色跟随本页主题。
+           原来这儿是个「← PVZ 系列」的大按钮 —— 品牌位已经能回系列首页，
+           底部再放一个就是同一个动作说两遍。 */
+        .footer .friends {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             align-items: center;
-            gap: 6px;
-            margin-bottom: 18px;
-            padding: 10px 28px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--ed-main-dark);
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--ed-border);
-            border-radius: 30px;
-            box-shadow: 0 2px 10px var(--shadow-soft);
-            transition: all 0.3s ease;
+            gap: 10px;
+            margin-bottom: 16px;
         }
-        .footer .back-home:hover {
-            color: #33290E;
-            background: linear-gradient(135deg, var(--ed-main), var(--ed-main-dark));
-            border-color: transparent;
-            box-shadow: 0 8px 24px rgba(201, 162, 39, 0.3);
-            transform: translateY(-2px);
+        .footer .friends__label {
+            font-size: 0.78rem;
+            color: var(--ed-text-dim);
+            opacity: 0.85;
+            letter-spacing: 0.08em;
+        }
+        .footer .friends a {
+            font-size: 0.8rem;
+            color: var(--ed-text-dim);
+            text-decoration: none;
+            padding: 5px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--ed-border);
+            background: rgba(255, 255, 255, 0.72);
+            transition: color 0.25s, border-color 0.25s, background 0.25s;
+        }
+        .footer .friends a:hover {
+            color: var(--ed-main-dark);
+            border-color: var(--ed-main-dark);
+            background: #fff;
         }
 
         .footer-links {
@@ -804,7 +814,7 @@
 <body class="product-theme" data-accent="amber">
 
     <nav class="dw-nav">
-        <a href="../index.html" class="dw-nav__brand">
+        <a href="index.html" class="dw-nav__brand">
             <span class="logo-icon">🧱</span>
             PvZ 关卡编辑器 <small>官方主页</small>
         </a>
@@ -997,7 +1007,7 @@
     </section>
 
     <footer class="footer">
-        <a class="back-home" href="index.html">← PVZ 系列</a>
+    <div class="friends" id="friendLinks"><span class="friends__label">友情链接</span></div>
         <p>© 2026 All Projects Made by Dream &nbsp;|&nbsp; 全部功能独立原创自研</p>
         <p class="footer-sub">
             <a href="javascript:void(0)" id="disclaimerLink">免责声明</a>
@@ -1480,5 +1490,33 @@
         });
     })();
     </script>
+<script>
+/* 友情链接：数据来自主站 softwares.js 的 friendLinks（CMS 里那张友链表，改那里这里就变）。
+   跳过"当前目录自己的那条"：在 /pvz/ 各页只留指回主站的「dream」，指回 /pvz/ 的「PVZ Player」不再列一遍。
+   按"域名 + 目录"比对，别只看域名 —— 主站和 /pvz/ 同域，只看域名会两条一起跳过、页脚消失。 */
+(function () {
+    "use strict";
+    var box = document.getElementById('friendLinks');
+    if (!box) return;
+    var all = (typeof ALL_SOFTWARES !== 'undefined' && ALL_SOFTWARES.friendLinks) || [];
+    /* 把 URL 归一成"域名 + 所在目录"：/pvz/player.html 与 /pvz/ 都归成 host/pvz/。 */
+    function dirKey(u) {
+        try {
+            var x = new URL(u, location.href);
+            return (x.hostname + x.pathname.replace(/\/[^\/]*$/, '/')).toLowerCase();
+        } catch (e) { return ''; }
+    }
+    var here = dirKey(location.href);
+    var list = all.filter(function (f) {
+        if (!f || !f.siteName || !f.jumpUrl || !String(f.jumpUrl).trim()) return false;
+        return dirKey(f.jumpUrl) !== here;
+    });
+    if (!list.length) { box.style.display = 'none'; return; }
+    box.insertAdjacentHTML('beforeend', list.map(function (f) {
+        return '<a href="' + f.jumpUrl + '" target="_blank" rel="noopener">' + f.siteName + '</a>';
+    }).join(''));
+})();
+</script>
+
 </body>
 </html>

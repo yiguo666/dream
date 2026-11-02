@@ -96,6 +96,20 @@
     --shadow-hover: rgba(74, 144, 226, 0.14);
     --shadow-lift: 0 8px 36px var(--shadow-hover);
 
+    /* ---------- 卡片材质（2026-11-02 加） ----------
+       为什么单独抽三个令牌：全站大卡（首页主推/PVZ/作品墙、工坊页作品卡）
+       要的是同一种"厚度"——面渐变 + 顶边内高光 + 两级投影。
+       写死颜色的话，深色主题得给每条规则再补一份；抽成令牌只换四个值。
+       命名：--card-top/bottom 是面，--card-rim 是内高光，--lift-1/2 是常态/悬停投影。 */
+    --card-top:    rgba(255, 255, 255, 0.96);
+    --card-bottom: rgba(243, 248, 255, 0.92);
+    --card-rim:    rgba(255, 255, 255, 0.92);
+    --lift-1: 0 1px 2px rgba(31, 58, 110, 0.05), 0 10px 22px -14px rgba(31, 58, 110, 0.22);
+    --lift-2: 0 2px 6px rgba(31, 58, 110, 0.06), 0 28px 50px -24px rgba(31, 58, 110, 0.34);
+
+    /* 渐变为按钮/进度条兜底：data-skin="now" 没有单独定义，缺了会变成透明 */
+    --grad-accent: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+
     /* ---------- 动效曲线 ---------- */
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -348,6 +362,48 @@ button {
 .dw-nav__links a:hover::after,
 .dw-nav__links a.active::after {
     width: 100%;
+}
+
+/* ---------- 4.1.1 两页站：分段切换 ----------
+   只剩「名片 / 原创工坊」两个页面后，顶部那排不再承担"多栏目导航"，
+   它退化成一次视图切换。所以把它做成一个带描边的控件（分段器），
+   而不是"缺了两个标签的导航条" —— 视觉上读作一整体，就不会显得残缺。 */
+.dw-seg {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-full);
+    background: var(--glass-weak);
+}
+
+.dw-seg__i {
+    padding: 5px 15px;
+    border-radius: var(--radius-full);
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--dur-base) var(--ease),
+                background var(--dur-base) var(--ease),
+                box-shadow var(--dur-base) var(--ease);
+}
+
+.dw-seg__i:hover { color: var(--accent); }
+
+.dw-seg__i.is-on {
+    color: #fff;
+    background: var(--accent);
+    box-shadow: 0 2px 8px var(--accent-line);
+}
+
+.dw-seg__i.is-on:hover { color: #fff; }
+
+@media (max-width: 560px) {
+    .dw-seg__i { padding: 4px 11px; font-size: 0.79rem; }
 }
 
 /* ---------- 4.2 版心 ---------- */

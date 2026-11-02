@@ -596,10 +596,9 @@
 
     <nav class="dw-nav">
         <a href="index.html" class="dw-nav__brand" aria-label="Dream 主页世界"><img class="mark" src="logo/dream-mark-original.png" alt="D"><span class="text">ream</span><small>主页世界</small></a>
-        <div class="dw-nav__links">
-            <a href="index.html">名片</a>
-            <a href="origin.html" id="navOrigin">原创工坊</a>
-            <a href="resource.html" id="navResource">资源大厅</a>
+        <div class="dw-seg" role="group" aria-label="页面切换">
+            <a href="index.html" class="dw-seg__i">名片</a>
+            <a href="origin.html" class="dw-seg__i is-on">原创工坊</a>
         </div>
     </nav>
 
@@ -611,17 +610,14 @@
     <div class="container">
 
         <ul class="breadcrumbs-nav" id="bind_breadcrumbs">
-            <li><a href="resource.html">全部资源</a></li>
-            <li id="breadcrumb_category_node" style="display: none;">
-                <a href="resource.html" id="bind_breadcrumb_cat_text">分类</a>
-            </li>
+            <li><a href="origin.html">原创工坊</a></li>
             <li><span class="current-node" id="bind_breadcrumb_name">加载中...</span></li>
         </ul>
 
         <div id="fatalErrorWall" class="fatal-error-wall">
             <h2>❌ 资源同步链路破损</h2>
             <p id="errorMessageSlot">未能在当前资源池中捕获该软件的标示凭证。</p>
-            <a href="resource.html" class="btn" style="background:#475569; text-decoration:none; border-radius:8px; padding:10px 24px; color:#fff; font-weight:600; font-size:0.85rem; border:1.5px solid #475569; transition:all 0.25s ease;">返回主大厅</a>
+            <a href="origin.html" class="btn" style="background:#475569; text-decoration:none; border-radius:8px; padding:10px 24px; color:#fff; font-weight:600; font-size:0.85rem; border:1.5px solid #475569; transition:all 0.25s ease;">回原创工坊</a>
         </div>
         <div id="templateWrapper" class="template-wrapper">
             <div class="showcase-header">
@@ -671,7 +667,7 @@
 
                 <div class="btn-group">
                     <button id="btnToggleDownload" class="btn">立即获取资源</button>
-                    <a href="#" class="btn btn-secondary" onclick="history.back(); return false;">返回资源大厅</a>
+                    <a href="origin.html" class="btn btn-secondary">返回原创工坊</a>
                 </div>
             </div>
 
@@ -809,7 +805,7 @@
 
             function init() {
                 if (!targetId) {
-                    showFatalError("❌ 详情页传参指针丢失，请从大厅重新进入。");
+                    showFatalError("❌ 详情页传参指针丢失，请从原创工坊重新进入。");
                     return;
                 }
                 if (typeof ALL_SOFTWARES === 'undefined' || !ALL_SOFTWARES.products) {
@@ -833,20 +829,9 @@
                 document.getElementById('bind_environment').innerText = product.environment || '全平台';
 
                 document.getElementById('bind_breadcrumb_name').innerText = product.name;
-                if (product.category) {
-                    const catNode = document.getElementById('breadcrumb_category_node');
-                    const catText = document.getElementById('bind_breadcrumb_cat_text');
-                    catText.innerText = product.category;
-                    catText.href = `resource.html?category=${encodeURIComponent(product.category)}`;
-                    catNode.style.display = 'inline-flex';
-                } else {
-                    document.getElementById('breadcrumb_category_node').style.display = 'none';
-                }
-
-                // 顶栏高亮跟分类走：原创工坊的作品高亮「原创工坊」，其余高亮「资源大厅」
-                const isOrigin = product.category === '🎯 原创工坊';
-                document.getElementById('navOrigin').classList.toggle('active', isOrigin);
-                document.getElementById('navResource').classList.toggle('active', !isOrigin);
+                /* 分类那一级去掉了：大厅下线后只剩「原创工坊」一个来源，
+                   再列一遍就是「原创工坊 / 原创工坊 / 作品名」。
+                   分类本身在标题旁已经有徽章，不用重复。 */
 
                 const logoImg = document.getElementById('bind_logo');
                 if (product.mainImage && product.mainImage.trim() !== '') {

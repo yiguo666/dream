@@ -143,6 +143,14 @@ html[data-theme="dark"] {
     --shadow-hover: rgba(0, 0, 0, 0.48);
 
     --shine: rgba(255, 255, 255, 0.10);
+
+    /* 卡片材质（深色）：面降成极淡白，投影换纯黑，内高光收细 */
+    --card-top:    rgba(255, 255, 255, 0.075);
+    --card-bottom: rgba(255, 255, 255, 0.020);
+    --card-rim:    rgba(255, 255, 255, 0.10);
+    --lift-1: 0 1px 2px rgba(0, 0, 0, 0.45), 0 10px 22px -14px rgba(0, 0, 0, 0.55);
+    --lift-2: 0 2px 6px rgba(0, 0, 0, 0.45), 0 28px 50px -24px rgba(0, 0, 0, 0.70);
+
     color-scheme: dark;
 }
 
@@ -666,14 +674,21 @@ html[data-works="card"] .wall--toggable .wname { grid-row: 2; padding: 10px 12px
 html[data-works="card"] .wall--toggable .wdesc { grid-row: 3; padding: 4px 12px 10px; }
 html[data-works="card"] .wall--toggable .wver {
     /* 卡片只有 180 来像素宽，版本号跟名字挤一行会把名字截断。
-       资源大厅的卡片本来就不显示版本号，这里跟它一致：想看得切回列表形态。 */
+       想看得切回列表形态。 */
     display: none;
 }
 
 .wk-plaque {
+    position: relative;
     display: flex; align-items: center; gap: var(--space-4);
     padding-bottom: var(--space-4); margin-bottom: var(--space-5);
     border-bottom: 1px solid var(--line-base);
+}
+/* 底线左段压一道 accent，右段化开 —— 比整条实线轻，视线从印章顺着走到主推卡 */
+.wk-plaque::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent 48%);
+    opacity: .55; pointer-events: none;
 }
 .wk-seal {
     flex: none; width: 42px; height: 42px;
@@ -696,26 +711,53 @@ html[data-works="card"] .wall--toggable .wver {
     font-size: var(--fs-xs); color: var(--ink-ghost); letter-spacing: .08em;
 }
 
+/* 2026-11-02 重做：原来 168px 图 + 一列文字，右边空出六百多像素，
+   整张卡薄得像张打印纸。现在三栏——图 / 正文 / 参数栏：
+   参数栏把「版本 · 体积 · 平台」竖排，右半边变成有用信息，卡片也有了收边。
+   （宽屏看参数栏，窄屏参数栏收起、同一组数据改用胶囊露出，只出现一次。） */
 .wk-feature {
-    display: grid; grid-template-columns: 168px 1fr;
-    gap: var(--space-6); align-items: center;
-    padding: var(--space-5); margin-bottom: var(--space-6);
-    background: var(--glass); border: 1px solid var(--line-base);
-    border-radius: var(--radius-lg);
+    display: grid; grid-template-columns: 184px minmax(0, 1fr) 172px;
+    gap: var(--space-6); align-items: stretch;
+    padding: 22px; margin-bottom: var(--space-6);
+    background:
+        radial-gradient(circle at 10% -22%, var(--accent-pale), transparent 54%),
+        linear-gradient(160deg, var(--card-top), var(--card-bottom));
+    border: 1px solid var(--line-base);
+    border-radius: 26px;
     text-decoration: none; color: inherit;
     position: relative; overflow: hidden;
-    transition: border-color .3s, box-shadow .3s, translate .3s;
+    box-shadow: inset 0 1px 0 var(--card-rim), var(--lift-1);
+    transition: border-color var(--dur-base) var(--ease),
+                box-shadow var(--dur-base) var(--ease),
+                translate var(--dur-base) var(--ease);
 }
 .wk-feature:hover {
-    border-color: var(--accent-line); box-shadow: var(--shadow-lift); translate: 0 -3px;
+    border-color: var(--accent-line);
+    box-shadow: inset 0 1px 0 var(--card-rim), var(--lift-2);
+    translate: 0 -4px;
 }
 .wk-feature__img {
-    display: block;
-    aspect-ratio: 1 / 1; border-radius: var(--radius-sm); overflow: hidden;
-    background: var(--glass-strong); border: 1px solid var(--line-soft);
+    display: block; position: relative;
+    /* width:100% + min-width:0：图格是网格项，默认 min-width:auto 会拿图片的
+       固有宽度当最小宽度，撑破 168/184 的轨道，压到右边的标题上 */
+    width: 100%; min-width: 0;
+    /* aspect-ratio 只在高度不定时生效；网格默认 stretch 会把它拉成竖长条，
+       所以这里显式居中（行高由右侧文字决定，图始终是正方形） */
+    align-self: center;
+    aspect-ratio: 1 / 1; border-radius: 20px; overflow: hidden;
+    background: radial-gradient(circle at 32% 24%, var(--glass-strong), var(--accent-pale));
+    border: 1px solid var(--line-soft);
+    box-shadow: 0 18px 30px -20px rgba(31, 58, 110, 0.55),
+                inset 0 0 0 1px var(--card-rim);
+}
+html[data-theme="dark"] .wk-feature__img {
+    box-shadow: 0 18px 30px -20px rgba(0, 0, 0, 0.8), inset 0 0 0 1px var(--card-rim);
 }
 
-.wk-feature__body,
+.wk-feature__body {
+    display: flex; flex-direction: column; justify-content: center;
+    min-width: 0; padding: 2px 0;
+}
 .wk-feature__name,
 .wk-feature__desc,
 .wk-feature__meta { display: block; }
@@ -725,31 +767,68 @@ html[data-works="card"] .wall--toggable .wver {
 }
 .wk-feature:hover .wk-feature__img img { transform: scale(1.06); }
 .wk-label {
-    display: inline-block; padding: 3px 10px;
+    display: inline-block; align-self: flex-start; padding: 3px 10px;
     font-size: var(--fs-xs); font-weight: 700; letter-spacing: .14em;
     color: var(--accent);
     border: 1px solid var(--accent-line); border-radius: var(--radius-pill);
 }
 .wk-feature__name {
-    font-family: var(--font-serif); font-size: clamp(1.3rem, 3vw, 1.7rem);
-    font-weight: 700; letter-spacing: -.01em; line-height: 1.2;
-    margin: 11px 0 5px; color: var(--ink);
+    font-family: var(--font-serif); font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 700; letter-spacing: -.02em; line-height: 1.16;
+    margin: 13px 0 8px; color: var(--ink-deep);
 }
 
 .wk-feature__desc {
-    font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.75;
+    font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.85;
+    max-width: 44ch;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
+    /* 兜底：作为 flex 子项时 -webkit-box 会被 blockify，clamp 失效，靠 max-height 截 */
+    max-height: 3.8em;
 }
 .wk-feature__meta {
-    margin-top: 9px; font-size: var(--fs-xs); color: var(--ink-ghost);
-    font-variant-numeric: tabular-nums;
+    /* 宽屏由右侧参数栏承担，这里默认不显示：同一组数据不出现两遍 */
+    display: none;
+    flex-wrap: wrap; gap: 6px; margin-top: 13px;
 }
+.wk-feature__meta i {
+    font-style: normal; font-size: .72rem; font-weight: 600;
+    color: var(--ink-mute); font-variant-numeric: tabular-nums;
+    padding: 3px 10px; border-radius: var(--radius-pill);
+    background: var(--glass-strong); border: 1px solid var(--line-base);
+}
+/* 原来是一行蓝字，跟旁边的参数行抢不到注意力。
+   改成实心胶囊：整张卡一眼只看得到一个"下一步"。 */
 .wk-go {
-    display: inline-block; margin-top: 13px;
-    font-size: var(--fs-sm); font-weight: 700; color: var(--accent);
+    display: inline-flex; align-items: center; gap: 6px;
+    width: fit-content; margin-top: 18px;
+    padding: 9px 18px; border-radius: var(--radius-pill);
+    background: var(--grad-accent); color: #fff;
+    font-size: var(--fs-sm); font-weight: 700;
+    box-shadow: 0 12px 22px -14px var(--accent-line);
+    transition: box-shadow var(--dur-base) var(--ease);
 }
-.wk-go::after { content: ' →'; transition: none; }
+.wk-go::after { content: '→'; transition: transform var(--dur-base) var(--ease); }
+.wk-feature:hover .wk-go { box-shadow: 0 16px 26px -12px var(--accent-line); }
+.wk-feature:hover .wk-go::after { transform: translateX(4px); }
+
+/* ---------- 主推卡右侧参数栏 ---------- */
+.wk-feature__rail {
+    display: flex; flex-direction: column; justify-content: center; gap: 14px;
+    padding-left: var(--space-5); min-width: 0;
+    border-left: 1px dashed var(--line-base);
+}
+.wk-rail__i { display: block; min-width: 0; }
+.wk-rail__i b {
+    display: block; font-size: var(--fs-base); font-weight: 800;
+    color: var(--ink-deep); font-variant-numeric: tabular-nums;
+    line-height: 1.35;
+}
+.wk-rail__i i {
+    display: block; margin-top: 3px;
+    font-style: normal; font-size: 10.5px; letter-spacing: .16em;
+    color: var(--ink-ghost);
+}
 
 .wk-no {
     font-style: normal; font-size: 11px; font-weight: 700;
@@ -771,70 +850,129 @@ html[data-works="card"] .wall--toggable .wver {
     color: var(--ink-ghost); letter-spacing: .12em;
 }
 
-/* ---------- PVZ 系列横幅（2026-10-27 少主定） ----------
-   原来 PVZ Player 和关卡编辑器各占一张产品卡，跟其它作品混在工坊墙里；
-   现在 PVZ 有一整个子站（pvz/），首页只留这一条横幅当"引子"。
-   所以工坊区用 PVZ_IDS 把这两件排除掉了，别在这里再给它们单独开卡。
+/* ---------- PVZ 世界：专题带（2026-11-02） ----------
+   原来这里是跟主推卡同族的「准大卡」，把 PVZ Player 和关卡编辑器打包成"一件作品"。
+   问题在于它占的是作品位、讲的却是"一个子站"：首页于是同时出现两种身份，
+   9 件作品被切成三档（主推 / PVZ 组 / 其余），怎么看都别扭。
 
-   2026-10-27 二次定稿：原来这条用绿+黄渐变底、无阴影，夹在白卡和蓝色主推卡之间
-   显得不像一个画风。改成跟 .wall--cover .wrow 同一套卡片语言：
-   白玻璃底 + 细描边 + 同款圆角与投影，悬停同样提亮 + 描边转 accent + 上浮；
-   同时把 🌻 emoji 换成 PVZ 自己的产品图标（logo/logo_20260629192807188.png）。
-   刻意不做的事：不给它单独的 tinted 底色 —— 首页只允许主推卡是彩色块。 */
-/* 2026-10-27 三次定稿：一条细横条撑不起"第二张有排面的卡"。
-   改成跟主推卡 .wk-feature 同族的准大卡 —— 同样的「左图右文 + 白玻璃 + 细描边 + 大圆角」，
-   只是图片格 116px（主推 168px）、标题用无衬线（主推用衬线）、没有彩色块。
-   层级就靠这两处差出来：比工坊小格重，比主推卡轻。 */
-.wk-pvz {
-    display: grid; grid-template-columns: 116px minmax(0, 1fr);
-    gap: var(--space-5); align-items: center;
-    margin: var(--space-5) 0 var(--space-6); padding: 22px var(--space-5);
+   现在它是一条紧挨主推卡的次级横卡：主推讲"这一件"、它讲"那一片"，
+   上下排开轻重自明。PVZ 三件工具不进下面的橱窗，这里是它们在主页唯一的入口。
+   比例取 90px 左右（图标 50 + 上下 20）—— 比"提示条"站得稳，又压不住主推。 */
+.wk-world {
+    display: flex; align-items: center; gap: var(--space-4);
+    margin: 0 0 var(--space-6); padding: 20px var(--space-5);
     border-radius: var(--radius-lg);
-    background: var(--glass);
-    border: 1px solid var(--line-base);
-    box-shadow: 0 4px 16px var(--shadow-soft);
+    /* 与主推卡同一个手法：左上角一团很淡的主题色晕开，条子才不会像"分隔线" */
+    background:
+        radial-gradient(circle at 6% -10%, rgba(124, 179, 66, .16), transparent 44%),
+        var(--glass);
+    border: 1px solid rgba(124, 179, 66, .30);
     text-decoration: none; color: inherit;
-    transition: background var(--dur-base) var(--ease),
-                border-color var(--dur-base) var(--ease),
-                box-shadow var(--dur-base) var(--ease),
+    transition: border-color var(--dur-base) var(--ease),
+                background var(--dur-base) var(--ease),
                 translate var(--dur-base) var(--ease);
 }
-.wk-pvz:hover {
-    background: var(--glass-strong);
-    border-color: var(--accent-line);
-    box-shadow: var(--shadow-lift);
-    translate: 0 -4px;
+.wk-world:hover {
+    border-color: rgba(124, 179, 66, .58);
+    background:
+        radial-gradient(circle at 6% -10%, rgba(124, 179, 66, .24), transparent 48%),
+        rgba(124, 179, 66, .07);
+    translate: 0 -2px;
 }
-/* 图片格：跟 .wk-feature__img 同款（玻璃底 + 细描边 + 方形）。
-   logo 本身是透明底黄色圆盘，居中放进去即可，不拉伸。 */
-.wk-pvz__thumb {
-    display: grid; place-items: center;
-    aspect-ratio: 1 / 1; border-radius: var(--radius-sm);
-    background: var(--glass-strong); border: 1px solid var(--line-soft);
+.wk-world__mark {
+    flex: none; width: 50px; height: 50px; border-radius: 50%;
+    display: grid; place-items: center; overflow: hidden;
+    background: radial-gradient(circle at 34% 28%, #F6FBEE, rgba(124, 179, 66, .18));
+    border: 1px solid rgba(124, 179, 66, .32);
+}
+.wk-world__mark img { display: block; width: 88%; height: 88%; object-fit: contain; }
+.wk-world__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wk-world__t {
+    font-size: 1rem; font-weight: 800; color: var(--ink-deep); letter-spacing: -.005em;
+}
+.wk-world__d { font-size: 12.5px; color: var(--ink-ghost); }
+.wk-world__go {
+    margin-left: auto; flex: none;
+    font-size: var(--fs-sm); font-weight: 700; color: #5E8C32;
+    transition: translate var(--dur-base) var(--ease);
+}
+.wk-world:hover .wk-world__go { translate: 3px 0; }
+
+/* 深色下绿色要提亮：#5E8C32 压在近黑底上几乎看不见 */
+html[data-theme="dark"] .wk-world { border-color: rgba(124, 179, 66, .42); }
+html[data-theme="dark"] .wk-world:hover { border-color: rgba(124, 179, 66, .68); }
+html[data-theme="dark"] .wk-world__go { color: #97C459; }
+
+/* ---------- 工坊墙：给"一排白条"加厚度（2026-11-02） ----------
+   行模式不做位移（整行抖动很廉价），只在左侧长出一条 accent 竖条；
+   卡片模式改成缩略图压渐变遮罩 + "查看 →"。两套形态都挂现有钩子，没改结构。 */
+.wall--toggable .wthumb {
+    position: relative;
+    box-shadow: 0 8px 16px -10px rgba(31, 58, 110, 0.45);
+}
+.wall--toggable .wrow:hover .wthumb {
+    box-shadow: 0 12px 20px -10px rgba(31, 58, 110, 0.50);
+}
+.wall--toggable .wrow::before {
+    content: ''; position: absolute; left: 0; top: 50%; translate: 0 -50%;
+    width: 3px; height: 0; border-radius: 0 3px 3px 0;
+    background: var(--grad-accent);
+    transition: height var(--dur-base) var(--ease);
+}
+.wall--toggable .wrow:hover::before { height: 62%; }
+
+html[data-works="card"] .wall--toggable .wrow {
+    background: linear-gradient(160deg, var(--card-top), var(--card-bottom));
+    box-shadow: inset 0 1px 0 var(--card-rim), var(--lift-1);
+}
+html[data-works="card"] .wall--toggable .wrow:hover {
+    box-shadow: inset 0 1px 0 var(--card-rim), var(--lift-2);
+}
+html[data-works="card"] .wall--toggable .wrow::before { display: none; }
+html[data-works="card"] .wall--toggable .wthumb { position: relative; box-shadow: none; }
+html[data-works="card"] .wall--toggable .wthumb::after {
+    content: '查看 →'; position: absolute; inset: auto 0 0 0;
+    padding: 30px 12px 9px; text-align: right;
+    font-size: .72rem; font-weight: 700; color: #fff; letter-spacing: .04em;
+    background: linear-gradient(to top, rgba(12, 30, 60, .62), transparent);
+    opacity: 0; transition: opacity var(--dur-base) var(--ease);
+}
+html[data-works="card"] .wall--toggable .wrow:hover .wthumb::after { opacity: 1; }
+
+/* 卡片阵按 3 列定死（auto-fill 在 1052px 会排成 5+1，末行一张很别扭）。
+   图标是方形 logo，不是横版截图 —— 用 4:3 画板 + contain，别切掉一圈。 */
+html[data-works="card"] .wall--toggable {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+}
+html[data-works="card"] .wall--toggable .wthumb {
+    aspect-ratio: 4 / 3;
+    /* 画板几乎纯白：这些 logo 一半是白底图，画板带色就会在图标周围显出一个白方块 */
+    background: radial-gradient(circle at 34% 20%, #FFFFFF, #F4F9FF);
+}
+html[data-works="card"] .wall--toggable .wthumb img {
+    object-fit: contain; padding: 10%; box-sizing: border-box;
+}
+/* 深色下画板还是浅色（产品图标压在深底上像发光贴纸），压暗一档当"印刷样张" */
+html[data-theme="dark"][data-works="card"] .wall--toggable .wthumb {
+    background: radial-gradient(circle at 34% 20%, #E9F0FA, #D8E3F0);
+}
+html[data-works="card"] .wall--toggable .wname {
+    grid-row: 2;
+    padding: 12px 16px 0; font-size: .95rem; font-weight: 700; line-height: 1.45;
+    min-height: 2.9em;                 /* 名字长短不一，先把两行位置占住 */
+    white-space: normal;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
 }
-.wk-pvz__thumb img {
-    display: block; width: 88%; height: 88%; object-fit: contain;
-    filter: drop-shadow(0 2px 6px rgba(124,179,66,.28));
-    transition: transform var(--dur-base) var(--ease);
-}
-.wk-pvz:hover .wk-pvz__thumb img { transform: scale(1.06); }
-.wk-pvz__body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.wk-pvz__t {
-    font-size: clamp(1.15rem, 2.2vw, 1.36rem); font-weight: 900;
-    color: var(--ink-deep); letter-spacing: -.01em; line-height: 1.3;
-}
-.wk-pvz__d { font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.7; }
-/* 三枚小胶囊：一眼看出这系列里有几样东西，比纯文字多一层"集群入口"的意思 */
-.wk-pvz__chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
-.wk-pvz__chips i {
-    font-style: normal; font-size: .72rem; font-weight: 600;
-    color: var(--ink-soft); background: var(--glass-strong);
-    border: 1px solid var(--line-soft); border-radius: var(--radius-pill);
-    padding: 3px 10px;
-}
-.wk-pvz__go {
-    margin-top: 4px; font-size: var(--fs-sm); font-weight: 700; color: var(--accent);
+html[data-works="card"] .wall--toggable .wdesc {
+    grid-row: 3;
+    padding: 3px 16px 15px;
+    font-size: 12.5px; line-height: 1.6;
+    white-space: normal;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: 3.3em;          /* 同上：网格子项会被 blockify，clamp 靠不住 */
 }
 
 .wall--cover {
@@ -995,6 +1133,10 @@ html[data-works="card"] .wall--toggable .wver {
 
 
 @media (max-width: 1100px) {
+    /* 主推卡：三栏退回两栏，参数栏收起，同一组数据换胶囊显示 */
+    .wk-feature { grid-template-columns: 168px minmax(0, 1fr); }
+    .wk-feature__rail { display: none; }
+    .wk-feature__meta { display: flex; }
     .wall--cover { grid-template-columns: repeat(4, 1fr); }
     .hero { grid-template-columns: auto 1fr; }
     .ms-panel { grid-column: 1 / -1; }
@@ -1004,7 +1146,9 @@ html[data-works="card"] .wall--toggable .wver {
     .wrow { grid-template-columns: 48px 1fr; }
     .wdesc, .wver { display: none; }
     html[data-works="card"] .wall--toggable {
-        grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+        /* 橱窗只有 3 张：退成两列会剩一格空位（3 = 2+1），
+           那格空得像排错版；三列并排刚好是一排"橱窗"，到手机断点再改单列。 */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: var(--space-3);
     }
     .wall--cover {
@@ -1013,9 +1157,21 @@ html[data-works="card"] .wall--toggable .wver {
     }
     .wk-feature { grid-template-columns: 1fr; gap: var(--space-4); }
     .wk-feature__img { max-width: 200px; }
-    /* PVZ 准大卡：窄屏改上下排，图格固定 96px，别把标题挤成一条 */
-    .wk-pvz { grid-template-columns: 1fr; gap: var(--space-4); padding: 18px; }
-    .wk-pvz__thumb { width: 96px; height: 96px; aspect-ratio: auto; }
+    .wk-go { margin-top: 14px; }
+    /* PVZ 世界带：窄屏把说明收掉，只留「叫啥 + 去哪」，图标跟着缩一档 */
+    .wk-world { padding: 13px var(--space-4); gap: var(--space-3); }
+    .wk-world__mark { width: 38px; height: 38px; }
+    .wk-world__d { display: none; }
+}
+/* 手机：两列卡片会把 4:3 画板压成 150px 宽的小方块，改一列，图标才看得清 */
+@media (max-width: 560px) {
+    html[data-works="card"] .wall--toggable {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-3);
+    }
+    html[data-works="card"] .wall--toggable .wthumb { aspect-ratio: 16 / 9; }
+    html[data-works="card"] .wall--toggable .wthumb img { padding: 6% 16%; }
+    html[data-works="card"] .wall--toggable .wname { min-height: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
 
@@ -1132,10 +1288,9 @@ html[data-theme="dark"] .hero__social a.done {
 
 <nav class="dw-nav">
     <a href="index.html" class="dw-nav__brand" aria-label="Dream 主页世界"><img class="mark" src="logo/dream-mark-original.png" alt="D"><span class="text">ream</span><small>主页世界</small></a>
-    <div class="dw-nav__links">
-        <a href="index.html" class="active">名片</a>
-        <a href="origin.html">原创工坊</a>
-        <a href="resource.html">资源大厅</a>
+    <div class="dw-seg" role="group" aria-label="页面切换">
+        <a href="index.html" class="dw-seg__i is-on" aria-current="page">名片</a>
+        <a href="origin.html" class="dw-seg__i">原创工坊</a>
     </div>
     <button class="dw-nav__mode" id="darkBtn" type="button" title="白天 / 黑夜">🌙 黑夜</button>
 </nav>
@@ -1235,30 +1390,23 @@ html[data-theme="dark"] .hero__social a.done {
         <div class="wk-plaque" id="wkPlaque"></div>
         <a class="wk-feature" id="wkFeature" href="#"></a>
 
-        <!-- PVZ 子站入口（静态写死，不跟工坊墙一起渲染）：
-             里面是 PVZ Player、关卡编辑器两件工具 + 一片充能花田。 -->
-        <a class="wk-pvz" href="pvz/index.html">
-            <span class="wk-pvz__thumb"><img src="logo/logo_20260629192807188.png" alt="" loading="lazy"></span>
-            <span class="wk-pvz__body">
-                <span class="wk-label" style="align-self:flex-start;">独立原创 · PVZ 系列</span>
-                <span class="wk-pvz__t">神奇的道具，一片花田</span>
-                <span class="wk-pvz__d">PVZ Player 把原版玩得更爽，含畅玩机；关卡编辑器让你自己设计关卡，做完一张图就能发给朋友。还有一片由支持者组成的花田。</span>
-                <span class="wk-pvz__chips"><i>PVZ Player</i><i>关卡编辑器</i><i>项目充能</i></span>
-                <span class="wk-pvz__go">进去看看 →</span>
+        <!-- PVZ 世界：专题带，不占作品位，紧挨在主推卡下面。
+             主推讲"这一件"、带子讲"那一片"，两个入口上下排开，轻重一眼分得清；
+             它也是 PVZ 三件工具在主页唯一的入口（那三件不进下面的橱窗）。 -->
+        <a class="wk-world" href="pvz/index.html">
+            <span class="wk-world__mark" aria-hidden="true"><img src="logo/logo_20260629192807188.png" alt="" loading="lazy"></span>
+            <span class="wk-world__body">
+                <span class="wk-world__t">PVZ 世界</span>
+                <span class="wk-world__d">三件工具都在那边，还有一片由支持者组成的花田。</span>
             </span>
+            <span class="wk-world__go">进去看看 →</span>
         </a>
 
+        <!-- 橱窗到此为止：下面 3 张是精选，其余 5 件只在工坊页出现（见 WALL_SHOW）。
+             这里不再写"还有几件"—— 标题右边已经有「进入工坊」。 -->
         <div class="wall wall--toggable" id="originWall"></div>
-        <p class="wk-creed" id="wkCreed"></p>
-    </section>
 
-    <section class="sec">
-        <div class="sec__h">
-            <h2 class="sec__t">资源大厅 <span class="sec__c">· 精选归档</span></h2>
-            <span class="sec__n">精选归档 · 持续补充</span>
-            <a class="dw-more-link" href="resource.html">前往大厅</a>
-        </div>
-        <div class="wall wall--cover" id="resourceWall"></div>
+        <p class="wk-creed" id="wkCreed"></p>
     </section>
 
     <style>
@@ -1313,7 +1461,6 @@ html[data-theme="dark"] .hero__social a.done {
         <p class="ending__quote">有梦想的人注定要奔赴<span class="em">星辰大海</span>。</p>
         <nav class="ending__nav" aria-label="站点导航">
             <a href="origin.html">原创工坊</a><span class="dot">·</span>
-            <a href="resource.html">资源大厅</a><span class="dot">·</span>
             <a href="projects/lrcplayer.html">歌词跳转播放器</a><span class="dot">·</span>
             <a href="pvz/index.html">PVZ 系列</a>
         </nav>
@@ -1338,13 +1485,25 @@ function allProducts() {
 function firstLine(s) {
     return String(s || '').split(/\r?\n/)[0].trim();
 }
-/* PVZ 的两件工具在首页不再各占一张卡 —— 它们有自己的子站（pvz/），
-   首页只留上面那条横幅当引子。
-   ★ 为什么按 id 排除、而不是给 softwares.js 换个分类：
-     换了分类，CMS「原创工坊」页就再也管理不到这两条（那边只认 🎯 原创工坊），
-     改个版本号还得去资源大厅里找。数据不动，只在这里挡一下最省事。
+/* 摘要：跳过"更新说明："这类纯标签行 —— 否则卡面上只剩这三个字。
+   与 origin.html 的 leadLine 同口径（那边一份、这里一份，别合并成模块：
+   两个页面各自独立加载，抽公共文件只为省 12 行不值得）。 */
+function leadLine(s) {
+    var lines = String(s || '').split(/\r?\n/);
+    for (var i = 0; i < lines.length; i++) {
+        var l = lines[i].trim().replace(/^[\u2713\u25cf\u00b7\-\s]+/, '');
+        if (l.length < 4) continue;
+        if (/^(更新说明|更新|新增|修复)[:：]?$/.test(l)) continue;
+        return l;
+    }
+    return '';
+}
+/* PVZ 三件工具：主页不给它们卡片位 —— 它们有自己的专题带（pvz/index.html）。
+   这里只做一件事：把这三条从「精选」里排除，免得 PVZ 既占橱窗又在带子里出现两遍。
+   ★ 为什么不给 softwares.js 换个分类：换了分类，CMS「原创工坊」页就再也管理不到
+     这几条（那边只认 🎯 原创工坊），改个版本号就找不到地方。数据不动，只在这里排座次。
    以后 PVZ 出了新工具，把 id 补进这张表就行。 */
-var PVZ_IDS = ['P733', '650379'];
+var PVZ_IDS = ['P733', '650379', '982702'];
 
 function pickWorks(cats, limit) {
     var list = allProducts().filter(function (p) {
@@ -1356,8 +1515,16 @@ function pickWorks(cats, limit) {
     });
     return list.slice(0, limit);
 }
-var ORIGIN   = pickWorks(['🎯 原创工坊'], 6);
-var RESOURCE = pickWorks(['🎮 经典游戏', '🛠️ 实用工具'], 12);
+var ORIGIN_CAT = '🎯 原创工坊';
+/* 全部原创 —— 只用来报数（匾额上的「在册 N 件」、收尾条的「还有 N 件」）。 */
+var ORIGIN_ALL = allProducts().filter(function (p) { return p.category === ORIGIN_CAT; });
+
+/* ★ 主页是橱窗，不是目录（2026-11-02）：
+   9 件全铺在主页，origin.html 就成了同一份内容的第二遍 —— 谁还会点进去。
+   所以只露主推 1 件 + 精选 WALL_SHOW 件，其余只在工坊页（区块标题右侧有入口）。
+   想多摆几件就改这个数（3 的倍数才排得满：卡片阵是 3 列）。 */
+var WALL_SHOW = 3;
+var ORIGIN   = pickWorks([ORIGIN_CAT], 1 + WALL_SHOW);
 
 function imgTag(p) {
     return '<img src="' + (p.mainImage || 'logo/default.png') + '" alt="" loading="lazy"'
@@ -1387,7 +1554,7 @@ function renderWall(elId, list, opt) {
         return '<a class="wrow" href="' + detailHref(p) + '">'
              +   '<span class="wthumb">' + imgTag(p) + '</span>'
              +   '<span class="wname">' + no + em + p.name + '</span>'
-             +   '<span class="wdesc">' + firstLine(p.description) + '</span>'
+             +   '<span class="wdesc">' + leadLine(p.description) + '</span>'
              +   '<span class="wver">' + (p.version ? 'v' + p.version : '') + '</span>'
              + '</a>';
     }).join('');
@@ -1408,7 +1575,7 @@ function renderWall(elId, list, opt) {
         plaque.innerHTML =
               '<span class="wk-seal" aria-hidden="true">造</span>'
             + '<span>'
-            +   '<span class="wk-plaque__t">在册 ' + ORIGIN.length + ' 件 · 全部自研</span>'
+            +   '<span class="wk-plaque__t">在册 ' + (ORIGIN_ALL.length || ORIGIN.length) + ' 件 · 全部自研</span>'
             +   '<span class="wk-plaque__s">'
             +     (est ? 'EST. ' + est + ' · ' : '') + '独立开发 · 逐件手作'
             +   '</span>'
@@ -1418,22 +1585,37 @@ function renderWall(elId, list, opt) {
     var feat = document.getElementById('wkFeature');
     var top = ORIGIN[0];
     if (feat && top) {
-        var meta = [top.version ? 'v' + top.version : '', top.size, top.environment]
-            .filter(function (x) { return x && String(x).trim(); }).join(' · ');
+        /* 同一组数据两副形态：宽屏进右侧参数栏，窄屏变成正文里的胶囊。
+           只渲染一次、位置由 CSS 决定，避免 JS 里再判一遍屏宽。 */
+        var metaParts = [top.version ? 'v' + top.version : '', top.size, top.environment]
+            .filter(function (x) { return x && String(x).trim(); });
+        function railItem(val, key) {
+            return '<span class="wk-rail__i"><b>' + (val || '—') + '</b><i>' + key + '</i></span>';
+        }
         feat.href = detailHref(top);
         feat.innerHTML =
               '<span class="wk-feature__img">' + imgTag(top) + '</span>'
             + '<span class="wk-feature__body">'
             +   '<span class="wk-label">本期主推 · No.01</span>'
             +   '<span class="wk-feature__name">' + top.name + '</span>'
-            +   '<span class="wk-feature__desc">' + firstLine(top.description) + '</span>'
-            +   '<span class="wk-feature__meta">' + meta + '</span>'
+            +   '<span class="wk-feature__desc">' + leadLine(top.description) + '</span>'
+            +   '<span class="wk-feature__meta">'
+            +     metaParts.map(function (x) { return '<i>' + x + '</i>'; }).join('')
+            +   '</span>'
             +   '<span class="wk-go">了解这件作品</span>'
+            + '</span>'
+            + '<span class="wk-feature__rail">'
+            +   railItem(top.version ? 'v' + top.version : '', '当前版本')
+            +   railItem(top.size, '安装体积')
+            +   railItem(top.environment, '运行平台')
             + '</span>';
     } else if (feat) {
         feat.style.display = 'none';
     }
 
+    /* 墙 = 主推之后的那几件精选。编号从 No.02 接着主推的 No.01 走，
+       读者看到的是「橱窗里第 2、3、4 件」，而不是「9 件里的第几件」。
+       没摆上来的作品在主页一个字都不提 —— 让「点进工坊才看得到」成为去那页的理由。 */
     renderWall('originWall', ORIGIN.slice(1), { no: 2 });
 
     var creed = document.getElementById('wkCreed');
@@ -1443,7 +1625,6 @@ function renderWall(elId, list, opt) {
         creed.innerHTML = '「' + q.text + '」<b>— ' + (q.attribution || '') + '</b>';
     }
 })();
-renderWall('resourceWall', RESOURCE, { cat: true });
 
 (function renderMilestones() {
     var box = document.getElementById('milestones');
@@ -1641,6 +1822,14 @@ if ('IntersectionObserver' in window) {
         el.classList.add('in');
     });
 }
+/* 兜底：6 秒后把还没进过视口的一并显示。
+   观察器在 iframe / 后台标签页 / 某些内嵌浏览器里可能一次都不回调，
+   而这些元素默认 opacity:0 —— 不兜底就是"整块内容永远看不见"。 */
+setTimeout(function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.wrow, .msh'), function (el) {
+        el.classList.add('in');
+    });
+}, 6000);
 
 var curForm = 'row';
 
@@ -1703,7 +1892,10 @@ function setFrame(k) {
 
 setTone('a');
 setFrame('1');
-setForm('row');
+/* 2026-11-02：工坊墙默认用卡片阵。清单拍在列表里像一张表，
+   排成 3 列才像"墙"；点头像仍会随机切回列表形态（那是刻意留的花样）。
+   主页现在是橱窗（主推 + 3 张精选），卡片阵比列表更能撑住这一块的分量。 */
+setForm('card');
 setFont('book');
 
 try {
