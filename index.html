@@ -716,9 +716,13 @@ html[data-works="card"] .wall--toggable .wver {
    参数栏把「版本 · 体积 · 平台」竖排，右半边变成有用信息，卡片也有了收边。
    （宽屏看参数栏，窄屏参数栏收起、同一组数据改用胶囊露出，只出现一次。） */
 .wk-feature {
-    display: grid; grid-template-columns: 184px minmax(0, 1fr) 172px;
-    gap: var(--space-6); align-items: stretch;
-    padding: 22px; margin-bottom: var(--space-6);
+    display: grid; grid-template-columns: 140px minmax(0, 1fr) 172px;
+    gap: var(--space-5); align-items: stretch;
+    /* 2026-11-02 三块体量对齐：主推 230→208→174，PVZ 带 92→126→162，作品卡 341→313。
+       原来主推 230、带子只有 92，中间塌出一个坑，下面卡片又 341 —— 读者看到的是
+       一个大块、一条缝、一排大格子。现在三段是连续的缓坡，不再是断崖。
+       歌词播放器（主推）高度只比 PVZ 带稍大一点，靠收窄图块列 + padding 实现。 */
+    padding: 16px; margin-bottom: var(--space-5);
     background:
         radial-gradient(circle at 10% -22%, var(--accent-pale), transparent 54%),
         linear-gradient(160deg, var(--card-top), var(--card-bottom));
@@ -733,6 +737,10 @@ html[data-works="card"] .wall--toggable .wver {
 }
 .wk-feature:hover {
     border-color: var(--accent-line);
+    /* 与 PVZ 带同手法：hover 时左上角主题色晕开更明显，给"一点点渐变特效" */
+    background:
+        radial-gradient(circle at 12% -30%, var(--accent-pale), transparent 66%),
+        linear-gradient(160deg, var(--card-top), var(--card-bottom));
     box-shadow: inset 0 1px 0 var(--card-rim), var(--lift-2);
     translate: 0 -4px;
 }
@@ -749,6 +757,11 @@ html[data-works="card"] .wall--toggable .wver {
     border: 1px solid var(--line-soft);
     box-shadow: 0 18px 30px -20px rgba(31, 58, 110, 0.55),
                 inset 0 0 0 1px var(--card-rim);
+}
+/* 图块常驻一层极淡对角高光，让"渐变玻璃"质感可见（一点点特效，不抢戏） */
+.wk-feature__img::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .28), transparent 48%);
 }
 html[data-theme="dark"] .wk-feature__img {
     box-shadow: 0 18px 30px -20px rgba(0, 0, 0, 0.8), inset 0 0 0 1px var(--card-rim);
@@ -775,16 +788,16 @@ html[data-theme="dark"] .wk-feature__img {
 .wk-feature__name {
     font-family: var(--font-serif); font-size: clamp(1.5rem, 2.5vw, 2rem);
     font-weight: 700; letter-spacing: -.02em; line-height: 1.16;
-    margin: 13px 0 8px; color: var(--ink-deep);
+    margin: 8px 0 4px; color: var(--ink-deep);
 }
 
 .wk-feature__desc {
-    font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.85;
+    font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.7;
     max-width: 44ch;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
     /* 兜底：作为 flex 子项时 -webkit-box 会被 blockify，clamp 失效，靠 max-height 截 */
-    max-height: 3.8em;
+    max-height: 3.5em;
 }
 .wk-feature__meta {
     /* 宽屏由右侧参数栏承担，这里默认不显示：同一组数据不出现两遍 */
@@ -801,8 +814,8 @@ html[data-theme="dark"] .wk-feature__img {
    改成实心胶囊：整张卡一眼只看得到一个"下一步"。 */
 .wk-go {
     display: inline-flex; align-items: center; gap: 6px;
-    width: fit-content; margin-top: 18px;
-    padding: 9px 18px; border-radius: var(--radius-pill);
+    width: fit-content; margin-top: 10px;
+    padding: 8px 16px; border-radius: var(--radius-pill);
     background: var(--grad-accent); color: #fff;
     font-size: var(--fs-sm); font-weight: 700;
     box-shadow: 0 12px 22px -14px var(--accent-line);
@@ -857,11 +870,14 @@ html[data-theme="dark"] .wk-feature__img {
 
    现在它是一条紧挨主推卡的次级横卡：主推讲"这一件"、它讲"那一片"，
    上下排开轻重自明。PVZ 三件工具不进下面的橱窗，这里是它们在主页唯一的入口。
-   比例取 90px 左右（图标 50 + 上下 20）—— 比"提示条"站得稳，又压不住主推。 */
+
+   ★ 2026-11-02 第二次调：光把高度抬到 128 没用 —— 里面的东西只有一小枚 66px 圆标和两行字，
+     内容只占三成，读出来是"被撑高的空框"。现在换成 108px 圆角方图块（和主推的方图同族），
+     高 160、内容占七成，两块才像一问一答，而不是"一张卡 + 一条缝"。 */
 .wk-world {
-    display: flex; align-items: center; gap: var(--space-4);
-    margin: 0 0 var(--space-6); padding: 20px var(--space-5);
-    border-radius: var(--radius-lg);
+    display: flex; align-items: center; gap: var(--space-5);
+    margin: 0 0 var(--space-5); padding: 26px var(--space-5);
+    border-radius: 26px;
     /* 与主推卡同一个手法：左上角一团很淡的主题色晕开，条子才不会像"分隔线" */
     background:
         radial-gradient(circle at 6% -10%, rgba(124, 179, 66, .16), transparent 44%),
@@ -880,17 +896,17 @@ html[data-theme="dark"] .wk-feature__img {
     translate: 0 -2px;
 }
 .wk-world__mark {
-    flex: none; width: 50px; height: 50px; border-radius: 50%;
+    flex: none; width: 108px; height: 108px; border-radius: 24px;
     display: grid; place-items: center; overflow: hidden;
     background: radial-gradient(circle at 34% 28%, #F6FBEE, rgba(124, 179, 66, .18));
     border: 1px solid rgba(124, 179, 66, .32);
 }
-.wk-world__mark img { display: block; width: 88%; height: 88%; object-fit: contain; }
-.wk-world__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wk-world__mark img { display: block; width: 82%; height: 82%; object-fit: contain; }
+.wk-world__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .wk-world__t {
-    font-size: 1rem; font-weight: 800; color: var(--ink-deep); letter-spacing: -.005em;
+    font-size: 1.15rem; font-weight: 800; color: var(--ink-deep); letter-spacing: -.005em;
 }
-.wk-world__d { font-size: 12.5px; color: var(--ink-ghost); }
+.wk-world__d { font-size: 13px; color: var(--ink-ghost); margin-top: 2px; }
 .wk-world__go {
     margin-left: auto; flex: none;
     font-size: var(--fs-sm); font-weight: 700; color: #5E8C32;
@@ -946,7 +962,10 @@ html[data-works="card"] .wall--toggable {
     gap: var(--space-4);
 }
 html[data-works="card"] .wall--toggable .wthumb {
-    aspect-ratio: 4 / 3;
+    /* 4:3 时单卡 341 高，比主推（208）还高，一进页面就觉得"下面更重"。
+       收到 3:2 让三段体量递减：主推 208 → 带子 126 → 卡片 313（单块宽 340，
+       面积只有主推的 1/3，读起来仍是最后一级）。 */
+    aspect-ratio: 3 / 2;
     /* 画板几乎纯白：这些 logo 一半是白底图，画板带色就会在图标周围显出一个白方块 */
     background: radial-gradient(circle at 34% 20%, #FFFFFF, #F4F9FF);
 }
@@ -1134,7 +1153,7 @@ html[data-works="card"] .wall--toggable .wdesc {
 
 @media (max-width: 1100px) {
     /* 主推卡：三栏退回两栏，参数栏收起，同一组数据换胶囊显示 */
-    .wk-feature { grid-template-columns: 168px minmax(0, 1fr); }
+    .wk-feature { grid-template-columns: 152px minmax(0, 1fr); }
     .wk-feature__rail { display: none; }
     .wk-feature__meta { display: flex; }
     .wall--cover { grid-template-columns: repeat(4, 1fr); }
@@ -1159,8 +1178,8 @@ html[data-works="card"] .wall--toggable .wdesc {
     .wk-feature__img { max-width: 200px; }
     .wk-go { margin-top: 14px; }
     /* PVZ 世界带：窄屏把说明收掉，只留「叫啥 + 去哪」，图标跟着缩一档 */
-    .wk-world { padding: 13px var(--space-4); gap: var(--space-3); }
-    .wk-world__mark { width: 38px; height: 38px; }
+    .wk-world { padding: 20px var(--space-4); gap: var(--space-3); }
+    .wk-world__mark { width: 72px; height: 72px; border-radius: 18px; }
     .wk-world__d { display: none; }
 }
 /* 手机：两列卡片会把 4:3 画板压成 150px 宽的小方块，改一列，图标才看得清 */
@@ -1397,7 +1416,7 @@ html[data-theme="dark"] .hero__social a.done {
             <span class="wk-world__mark" aria-hidden="true"><img src="logo/logo_20260629192807188.png" alt="" loading="lazy"></span>
             <span class="wk-world__body">
                 <span class="wk-world__t">PVZ 世界</span>
-                <span class="wk-world__d">三件工具都在那边，还有一片由支持者组成的花田。</span>
+                <span class="wk-world__d">那边是 Dream 站长做的 PVZ Player 系列工具，还有一片由支持者组成的花田。</span>
             </span>
             <span class="wk-world__go">进去看看 →</span>
         </a>
